@@ -100,15 +100,33 @@ body {
 }
 
 /* RTL Typography & Direction */
-html[dir="rtl"] body {
-  font-family: var(--font-arabic-body);
-}
+[dir="rtl"],
+html[dir="rtl"],
+body.lang-ar {
+  direction: rtl;
+  text-align: start;
 
-html[dir="rtl"] h1,
-html[dir="rtl"] h2,
-html[dir="rtl"] .font-editorial {
-  font-family: var(--font-arabic-heading), var(--font-arabic-body);
-  letter-spacing: 0;
+  body, input, textarea, select, button {
+    font-family: var(--font-arabic-body);
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .font-editorial,
+  .brand-arabic,
+  .page-title,
+  .hero-headline,
+  .breakdown-title,
+  .section-title,
+  .cat-title,
+  .modal-title {
+    font-family: var(--font-arabic-heading), var(--font-arabic-body);
+    letter-spacing: 0 !important;
+  }
+
+  /* Reset letter-spacing in Arabic to maintain connected cursive shaping */
+  *, span, a, p, button, input, label {
+    letter-spacing: normal !important;
+  }
 }
 
 /* Editorial Headings */

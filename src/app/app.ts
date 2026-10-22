@@ -24,8 +24,9 @@ export class App {
   toast = inject(ToastService);
 
   toggleLanguage(): void {
-    this.i18n.toggleLanguage();
-    const isAr = this.i18n.currentLang() === 'ar';
+    const nextLang: AppLanguage = this.i18n.currentLang() === 'fr' ? 'ar' : 'fr';
+    this.preferences.setLanguage(nextLang);
+    const isAr = nextLang === 'ar';
     this.toast.show(
       isAr ? 'تم تفعيل اللغة العربية (RTL)' : 'Langue française activée (LTR)'
     );

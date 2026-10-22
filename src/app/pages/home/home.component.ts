@@ -56,7 +56,7 @@ import { I18nService } from '../../services/i18n.service';
             class="hero-editorial-img"
           />
           <div class="hero-caption">
-            <span>Édition Tunisienne · Trousseau de Mariage</span>
+            <span>{{ i18n.currentLang() === 'ar' ? 'طبعة تونسية · جهاز العروس والبيت الجديد' : 'Édition Tunisienne · Trousseau de Mariage' }}</span>
           </div>
         </div>
       </section>

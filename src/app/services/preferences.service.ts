@@ -17,18 +17,6 @@ export class PreferencesService {
     effect(() => {
       const prefs = this.preferences();
       this.storage.setItem(this.STORAGE_KEY, prefs);
-      // Synchronize language if changed via preferences
-      if (prefs.language !== this.i18n.currentLang()) {
-        this.i18n.setLanguage(prefs.language);
-      }
-    });
-
-    // Also listen to i18n language change and sync preferences
-    effect(() => {
-      const lang = this.i18n.currentLang();
-      if (this.preferences().language !== lang) {
-        this.updatePreferences({ language: lang });
-      }
     });
   }
 
