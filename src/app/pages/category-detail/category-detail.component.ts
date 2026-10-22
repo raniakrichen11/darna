@@ -6,11 +6,12 @@ import { ShoppingListService } from '../../services/shopping-list.service';
 import { I18nService } from '../../services/i18n.service';
 import { ToastService } from '../../services/toast.service';
 import { CatalogItem } from '../../models/catalog.model';
+import { ArticlePreviewModalComponent } from '../../components/article-preview-modal/article-preview-modal.component';
 
 @Component({
   selector: 'app-category-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ArticlePreviewModalComponent],
   template: `
     <div class="category-detail-page" [attr.dir]="i18n.dir()">
       <!-- Back Link -->
@@ -72,14 +73,26 @@ import { CatalogItem } from '../../models/catalog.model';
         <div class="items-boutique-grid">
           @for (item of filteredCategoryItems(); track item.id) {
             <div class="boutique-item-card card">
+              <!-- Real image preview header -->
+              <div class="item-card-image-box" (click)="openArticlePreview(item)" role="button" tabindex="0">
+                <img
+                  [src]="catalogService.getItemImage(item)"
+                  [alt]="i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr"
+                  class="item-card-real-img"
+                />
+                <div class="image-preview-overlay">
+                  <span class="preview-badge">🔍 {{ i18n.currentLang() === 'ar' ? 'عرض الصورة والتفاصيل' : 'Aperçu & Détails' }}</span>
+                </div>
+                @if (item.isTraditional) {
+                  <span class="badge-traditional-corner">
+                    🇹🇳 {{ i18n.t('catalog.traditional_label') }}
+                  </span>
+                }
+              </div>
+
               <div class="item-card-header">
                 <div class="item-icon-circle">{{ item.icon || '🛍️' }}</div>
                 <div class="item-badges-column">
-                  @if (item.isTraditional) {
-                    <span class="badge badge-traditional">
-                      🇹🇳 {{ i18n.t('catalog.traditional_label') }}
-                    </span>
-                  }
                   @if (shoppingList.isCatalogItemInList(item.id)) {
                     <span class="badge badge-success">
                       ✓ {{ i18n.t('action.added') }}
@@ -88,7 +101,7 @@ import { CatalogItem } from '../../models/catalog.model';
                 </div>
               </div>
 
-              <h3 class="item-card-title">
+              <h3 class="item-card-title clickable-title" (click)="openArticlePreview(item)">
                 {{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}
               </h3>
 
@@ -134,6 +147,13 @@ import { CatalogItem } from '../../models/catalog.model';
           <a routerLink="/catalog" class="btn btn-primary">Retour au catalogue</a>
         </div>
       }
+
+      <!-- Article Photo Preview Modal -->
+      <app-article-preview-modal
+        [item]="previewItem()"
+        (close)="closeArticlePreview()"
+        (addToShoppingList)="onAddItem($event)"
+      ></app-article-preview-modal>
     </div>
   `,
   styles: [`
@@ -274,6 +294,78 @@ import { CatalogItem } from '../../models/catalog.model';
       padding: var(--space-lg);
       gap: 12px;
 
+      .item-card-image-box {
+        position: relative;
+        width: 100%;
+        height: 180px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: var(--color-bg-sand);
+        cursor: pointer;
+        border: 1px solid var(--color-border);
+        margin-bottom: 4px;
+
+        .item-card-real-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        &:hover .item-card-real-img {
+          transform: scale(1.06);
+        }
+
+        .image-preview-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(48, 41, 39, 0.35);
+          opacity: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: opacity 0.2s ease;
+
+          .preview-badge {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            color: var(--color-primary);
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-sm);
+          }
+        }
+
+        &:hover .image-preview-overlay {
+          opacity: 1;
+        }
+
+        .badge-traditional-corner {
+          position: absolute;
+          top: 10px;
+          inset-inline-start: 10px;
+          background: rgba(113, 59, 72, 0.9);
+          backdrop-filter: blur(4px);
+          color: #fff;
+          font-size: 0.7rem;
+          font-weight: 700;
+          padding: 3px 8px;
+          border-radius: var(--radius-full);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+      }
+
+      .clickable-title {
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: var(--color-primary);
+        }
+      }
+
       .item-card-header {
         display: flex;
         justify-content: space-between;
@@ -363,6 +455,15 @@ export class CategoryDetailComponent {
 
   categoryId = signal<string>('');
   selectedSubcategory = signal<string>('all');
+  previewItem = signal<CatalogItem | undefined>(undefined);
+
+  openArticlePreview(item: CatalogItem): void {
+    this.previewItem.set(item);
+  }
+
+  closeArticlePreview(): void {
+    this.previewItem.set(undefined);
+  }
 
   constructor() {
     this.route.paramMap.subscribe(params => {

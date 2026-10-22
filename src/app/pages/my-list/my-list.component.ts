@@ -5,15 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { ShoppingListService } from '../../services/shopping-list.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { I18nService } from '../../services/i18n.service';
+import { CatalogService } from '../../services/catalog.service';
 import { PdfExportService } from '../../services/pdf-export.service';
 import { ToastService } from '../../services/toast.service';
 import { ShoppingListItem, CategoryGroup } from '../../models/shopping-list.model';
+import { CatalogItem } from '../../models/catalog.model';
 import { ItemModalComponent } from '../../components/item-modal/item-modal.component';
+import { ArticlePreviewModalComponent } from '../../components/article-preview-modal/article-preview-modal.component';
 
 @Component({
   selector: 'app-my-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, ItemModalComponent],
+  imports: [CommonModule, RouterLink, FormsModule, ItemModalComponent, ArticlePreviewModalComponent],
   template: `
     <div class="my-list-page" [attr.dir]="i18n.dir()">
       <!-- Page Header -->
@@ -283,6 +286,19 @@ import { ItemModalComponent } from '../../components/item-modal/item-modal.compo
                       <div class="row-actions">
                         <button
                           type="button"
+                          class="action-icon-btn preview-btn"
+                          (click)="openArticlePreview(item)"
+                          [title]="i18n.currentLang() === 'ar' ? 'عرض صورة المقال' : 'Aperçu photo de cet article'"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                          </svg>
+                        </button>
+
+                        <button
+                          type="button"
                           class="action-icon-btn"
                           (click)="openEditModal(item)"
                           [title]="i18n.t('action.edit')"
@@ -332,6 +348,12 @@ import { ItemModalComponent } from '../../components/item-modal/item-modal.compo
           (close)="closeModal()"
         ></app-item-modal>
       }
+
+      <!-- Article Photo Preview Modal -->
+      <app-article-preview-modal
+        [item]="previewArticleItem()"
+        (close)="closeArticlePreview()"
+      ></app-article-preview-modal>
     </div>
   `,
   styles: [`
@@ -798,6 +820,7 @@ export class MyListComponent {
   shoppingList = inject(ShoppingListService);
   preferences = inject(PreferencesService);
   i18n = inject(I18nService);
+  catalogService = inject(CatalogService);
   pdfExport = inject(PdfExportService);
   toast = inject(ToastService);
 
@@ -808,7 +831,35 @@ export class MyListComponent {
 
   showItemModal = signal<boolean>(false);
   modalItem = signal<ShoppingListItem | undefined>(undefined);
+  previewArticleItem = signal<CatalogItem | undefined>(undefined);
   isExporting = signal<boolean>(false);
+
+  openArticlePreview(listItem: ShoppingListItem): void {
+    if (listItem.catalogItemId) {
+      const catItem = this.catalogService.getItemById(listItem.catalogItemId);
+      if (catItem) {
+        this.previewArticleItem.set(catItem);
+        return;
+      }
+    }
+    const name = this.shoppingList.getItemDisplayName(listItem);
+    this.previewArticleItem.set({
+      id: listItem.id,
+      categoryId: listItem.categoryId,
+      subcategoryId: listItem.subcategoryId || '',
+      nameFr: listItem.customNameFr || name,
+      nameAr: listItem.customNameAr || name,
+      descriptionFr: listItem.notes || 'Article enregistré dans votre trousseau de mariage tunisien.',
+      descriptionAr: listItem.notes || 'مقال محفوظ في جهاز العروس التونسية.',
+      suggestedQuantity: listItem.quantity,
+      estimatedUnitPrice: listItem.estimatedUnitPrice || listItem.actualUnitPrice,
+      isTraditional: false
+    });
+  }
+
+  closeArticlePreview(): void {
+    this.previewArticleItem.set(undefined);
+  }
 
   filteredCategoryGroups = computed(() => {
     const query = this.searchQuery().trim().toLowerCase();

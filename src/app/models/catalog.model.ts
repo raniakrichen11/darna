@@ -26,5 +26,6 @@ export interface CatalogItem {
   suggestedQuantity: number;
   estimatedUnitPrice?: number; // In TND
   icon?: string;
+  image?: string;
   isTraditional?: boolean;
 }
