@@ -12,8 +12,40 @@ export class CatalogService {
   readonly categories = signal<CatalogCategory[]>(CATALOG_CATEGORIES);
   readonly items = signal<CatalogItem[]>(CATALOG_ITEMS);
 
+  private normalizeCategoryId(id: string): string {
+    const raw = (id || '').trim().toLowerCase();
+    const aliasMap: Record<string, string> = {
+      'cat-cuisine': 'cuisine-ustensiles',
+      'cuisine': 'cuisine-ustensiles',
+      'kitchen': 'cuisine-ustensiles',
+      'cat-vaisselle': 'vaisselle-service',
+      'vaisselle': 'vaisselle-service',
+      'tableware': 'vaisselle-service',
+      'cat-chambre': 'chambre-literie',
+      'chambre': 'chambre-literie',
+      'bedroom': 'chambre-literie',
+      'cat-bain': 'salle-de-bain',
+      'bain': 'salle-de-bain',
+      'bath': 'salle-de-bain',
+      'cat-salon': 'salon-decoration',
+      'salon': 'salon-decoration',
+      'living': 'salon-decoration',
+      'cat-electro': 'electromenager',
+      'electro': 'electromenager',
+      'appliances': 'electromenager',
+      'cat-vetements': 'vetements-accessoires',
+      'vetements': 'vetements-accessoires',
+      'apparel': 'vetements-accessoires',
+      'cat-trousseau': 'trousseau-mariee',
+      'trousseau': 'trousseau-mariee',
+      'bridal': 'trousseau-mariee'
+    };
+    return aliasMap[raw] || raw;
+  }
+
   getCategoryById(id: string): CatalogCategory | undefined {
-    return this.categories().find(c => c.id === id);
+    const targetId = this.normalizeCategoryId(id);
+    return this.categories().find(c => c.id === targetId || c.id === id);
   }
 
   getItemById(id: string): CatalogItem | undefined {
@@ -21,7 +53,8 @@ export class CatalogService {
   }
 
   getItemsByCategory(categoryId: string): CatalogItem[] {
-    return this.items().filter(i => i.categoryId === categoryId);
+    const targetId = this.normalizeCategoryId(categoryId);
+    return this.items().filter(i => i.categoryId === targetId || i.categoryId === categoryId);
   }
 
   searchItems(query: string, categoryId?: string): CatalogItem[] {

@@ -4,6 +4,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { I18nService } from './services/i18n.service';
 import { PreferencesService } from './services/preferences.service';
 import { ShoppingListService } from './services/shopping-list.service';
+import { CatalogService } from './services/catalog.service';
 import { PwaService } from './services/pwa.service';
 import { ToastService } from './services/toast.service';
 import { PrintViewComponent } from './components/print-view/print-view.component';
@@ -20,6 +21,7 @@ export class App {
   i18n = inject(I18nService);
   preferences = inject(PreferencesService);
   shoppingList = inject(ShoppingListService);
+  catalogService = inject(CatalogService);
   pwa = inject(PwaService);
   toast = inject(ToastService);
 
@@ -43,6 +45,12 @@ export class App {
       ? 'مرحباً بكِ في دارنا 🕊️'
       : (lang === 'en' ? 'Welcome to Darna 🕊️' : 'Bienvenue sur Darna 🕊️');
     this.toast.show(msg);
+  }
+
+  scrollToTop(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   async onInstallClick(): Promise<void> {

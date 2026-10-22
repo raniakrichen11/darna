@@ -503,6 +503,9 @@ export class CategoryDetailComponent {
       const id = params.get('categoryId') || '';
       this.categoryId.set(id);
       this.selectedSubcategory.set('all');
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
   }
 
