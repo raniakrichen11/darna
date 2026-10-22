@@ -759,6 +759,32 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         max-width: 420px;
       }
     }
+
+    /* Mobile Responsive Enhancements */
+    @media (max-width: 600px) {
+      .catalog-page {
+        gap: var(--space-lg);
+      }
+
+      .boutique-category-card .cat-footer-preview {
+        padding: 14px;
+        gap: 10px;
+      }
+
+      .items-boutique-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .boutique-item-card {
+        padding: 14px;
+        gap: 10px;
+
+        .item-card-image-box {
+          height: 160px;
+        }
+      }
+    }
   `]
 })
 export class CatalogComponent {

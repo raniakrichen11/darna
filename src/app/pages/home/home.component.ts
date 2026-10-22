@@ -691,6 +691,93 @@ import { I18nService } from '../../services/i18n.service';
         color: var(--color-text-muted);
       }
     }
+
+    /* Mobile Responsive Home Enhancements */
+    @media (max-width: 640px) {
+      .home-page {
+        gap: var(--space-lg);
+      }
+
+      .hero-editorial {
+        gap: var(--space-md);
+        padding: var(--space-xs) 0 var(--space-md);
+
+        .hero-headline {
+          font-size: 1.85rem;
+          line-height: 1.2;
+        }
+
+        .hero-subtext {
+          font-size: 0.92rem;
+          line-height: 1.6;
+          margin-bottom: 20px;
+        }
+
+        .hero-action-buttons {
+          flex-direction: column;
+          width: 100%;
+
+          .btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+
+      .overview-strip {
+        padding: 16px 14px;
+        gap: 14px;
+
+        .strip-progress-block {
+          .progress-counts {
+            gap: 10px;
+            font-size: 0.78rem;
+          }
+        }
+
+        .strip-budget-block {
+          gap: 10px;
+        }
+      }
+
+      .recent-activity-section {
+        padding: 16px 14px;
+
+        .section-title-row {
+          margin-bottom: 12px;
+        }
+      }
+
+      .recent-row {
+        gap: 10px;
+        padding: 12px 0;
+
+        .custom-check-btn {
+          width: 26px;
+          height: 26px;
+        }
+
+        .recent-item-info {
+          .recent-name {
+            font-size: 0.92rem;
+            word-break: break-word;
+          }
+
+          .recent-meta {
+            font-size: 0.75rem;
+          }
+        }
+
+        .recent-status {
+          flex-shrink: 0;
+
+          .badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+          }
+        }
+      }
+    }
   `]
 })
 export class HomeComponent {

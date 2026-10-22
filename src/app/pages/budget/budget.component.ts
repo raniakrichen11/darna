@@ -554,6 +554,90 @@ import { ToastService } from '../../services/toast.service';
           color: var(--color-terracotta);
         }
       }
+
+      /* Mobile Responsive Category Bar Row */
+      @media (max-width: 580px) {
+        padding: 12px;
+        gap: 8px;
+
+        .bar-top {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 6px;
+
+          .cat-label-wrap {
+            width: 100%;
+            .cat-label {
+              font-size: 0.92rem;
+              word-break: break-word;
+            }
+          }
+
+          .cat-amounts {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: baseline;
+            gap: 6px;
+            font-size: 0.88rem;
+          }
+        }
+
+        .bar-sub {
+          font-size: 0.74rem;
+        }
+      }
+    }
+
+    /* Mobile Responsive Budget Page Elements */
+    @media (max-width: 640px) {
+      .budget-page {
+        gap: var(--space-lg);
+      }
+
+      .budget-target-card {
+        padding: 16px;
+        gap: 14px;
+
+        .target-input-row {
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+
+          .input-wrap {
+            width: 100%;
+
+            .budget-num-input {
+              width: 100%;
+              font-size: 1.15rem;
+            }
+          }
+
+          .btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+
+      .breakdown-section {
+        padding: 16px 14px;
+        gap: 14px;
+
+        .breakdown-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+
+          .badge-cat-count {
+            align-self: flex-start;
+          }
+        }
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
     }
   `]
 })

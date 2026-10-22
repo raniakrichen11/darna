@@ -351,6 +351,36 @@ import { I18nService } from '../../services/i18n.service';
         }
       }
     }
+
+    @media (max-width: 540px) {
+      .article-image-hero {
+        height: 220px;
+      }
+
+      .article-modal-body {
+        padding: 16px;
+        gap: 14px;
+      }
+
+      .article-title {
+        font-size: 1.35rem;
+      }
+
+      .specs-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .article-modal-actions {
+        flex-direction: column-reverse;
+        gap: 8px;
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
   `]
 })
 export class ArticlePreviewModalComponent {

@@ -49,6 +49,11 @@
   align-items: center;
   gap: var(--space-md);
   height: 72px;
+
+  @media (max-width: 480px) {
+    height: 62px;
+    gap: 8px;
+  }
 }
 
 /* Brand Link */
@@ -115,6 +120,29 @@
       color: var(--color-text-muted);
       margin-top: 2px;
       font-weight: 600;
+    }
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+
+    .brand-monogram {
+      width: 34px;
+      height: 34px;
+      font-size: 1.15rem;
+    }
+
+    .brand-text {
+      .brand-title {
+        font-size: 1.15rem;
+        .brand-arabic {
+          font-size: 1.05rem;
+        }
+      }
+
+      .brand-tagline {
+        display: none;
+      }
     }
   }
 }
@@ -226,6 +254,16 @@
       background: var(--color-surface);
       color: var(--color-primary);
       box-shadow: 0 1px 4px rgba(48, 41, 39, 0.12);
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 2px;
+    gap: 1px;
+
+    .lang-seg-btn {
+      padding: 4px 8px;
+      font-size: 0.72rem;
     }
   }
 }

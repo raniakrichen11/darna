@@ -259,6 +259,24 @@ import { I18nService } from '../../services/i18n.service';
         padding: 10px 20px;
       }
     }
+
+    @media (max-width: 540px) {
+      .modal-header {
+        margin-bottom: var(--space-md);
+        padding-bottom: var(--space-sm);
+      }
+
+      .modal-actions {
+        flex-direction: column-reverse;
+        gap: 8px;
+        margin-top: var(--space-lg);
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
   `]
 })
 export class ItemModalComponent implements OnInit {

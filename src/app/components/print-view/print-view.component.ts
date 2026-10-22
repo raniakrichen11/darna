@@ -69,42 +69,44 @@ import { I18nService } from '../../services/i18n.service';
             </span>
           </div>
 
-          <table class="items-table">
-            <thead>
-              <tr>
-                <th style="width: 36px; text-align: center;">{{ i18n.t('pdf.th_status') }}</th>
-                <th>{{ i18n.t('pdf.th_item') }}</th>
-                <th style="width: 48px; text-align: center;">{{ i18n.t('pdf.th_qty') }}</th>
-                <th style="width: 80px; text-align: end;">{{ i18n.t('pdf.th_est') }}</th>
-                <th style="width: 80px; text-align: end;">{{ i18n.t('pdf.th_act') }}</th>
-                <th style="width: 130px;">{{ i18n.t('pdf.th_notes') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (item of group.items; track item.id) {
-                <tr [class.purchased-row]="item.isPurchased">
-                  <td style="text-align: center;">
-                    <span class="check-box" [class.checked]="item.isPurchased">
-                      {{ item.isPurchased ? '✓' : '□' }}
-                    </span>
-                  </td>
-                  <td class="item-name">
-                    <strong>{{ shoppingList.getItemDisplayName(item) }}</strong>
-                  </td>
-                  <td style="text-align: center;">{{ item.quantity }}</td>
-                  <td style="text-align: end;">
-                    {{ item.estimatedUnitPrice ? (item.estimatedUnitPrice * item.quantity | number:'1.0-2') + ' ' + i18n.currency() : '-' }}
-                  </td>
-                  <td style="text-align: end; font-weight: 600;">
-                    {{ item.isPurchased && item.actualUnitPrice ? (item.actualUnitPrice * item.quantity | number:'1.0-2') + ' ' + i18n.currency() : '-' }}
-                  </td>
-                  <td class="notes-col">
-                    {{ item.notes || '' }}
-                  </td>
+          <div class="table-scroll-wrap">
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th style="width: 36px; text-align: center;">{{ i18n.t('pdf.th_status') }}</th>
+                  <th>{{ i18n.t('pdf.th_item') }}</th>
+                  <th style="width: 48px; text-align: center;">{{ i18n.t('pdf.th_qty') }}</th>
+                  <th style="width: 80px; text-align: end;">{{ i18n.t('pdf.th_est') }}</th>
+                  <th style="width: 80px; text-align: end;">{{ i18n.t('pdf.th_act') }}</th>
+                  <th style="width: 130px;">{{ i18n.t('pdf.th_notes') }}</th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (item of group.items; track item.id) {
+                  <tr [class.purchased-row]="item.isPurchased">
+                    <td style="text-align: center;">
+                      <span class="check-box" [class.checked]="item.isPurchased">
+                        {{ item.isPurchased ? '✓' : '□' }}
+                      </span>
+                    </td>
+                    <td class="item-name">
+                      <strong>{{ shoppingList.getItemDisplayName(item) }}</strong>
+                    </td>
+                    <td style="text-align: center;">{{ item.quantity }}</td>
+                    <td style="text-align: end;">
+                      {{ item.estimatedUnitPrice ? (item.estimatedUnitPrice * item.quantity | number:'1.0-2') + ' ' + i18n.currency() : '-' }}
+                    </td>
+                    <td style="text-align: end; font-weight: 600;">
+                      {{ item.isPurchased && item.actualUnitPrice ? (item.actualUnitPrice * item.quantity | number:'1.0-2') + ' ' + i18n.currency() : '-' }}
+                    </td>
+                    <td class="notes-col">
+                      {{ item.notes || '' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       }
 
@@ -154,13 +156,17 @@ import { I18nService } from '../../services/i18n.service';
 
     .summary-box {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
       background: #FAF7F2;
       border: 1px solid #E8E0D8;
       border-radius: 8px;
       padding: 10px 14px;
       margin-bottom: 20px;
+
+      @media (min-width: 640px) {
+        grid-template-columns: repeat(5, 1fr);
+      }
     }
 
     .summary-col {

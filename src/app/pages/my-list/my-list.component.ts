@@ -774,6 +774,205 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           }
         }
       }
+
+      /* Mobile Responsive Checklist Item Layout */
+      @media (max-width: 680px) {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        grid-template-areas:
+          "check info actions"
+          "empty stepper price";
+        row-gap: 10px;
+        column-gap: 10px;
+        padding: 12px 14px;
+        align-items: center;
+
+        .row-check {
+          grid-area: check;
+          align-self: flex-start;
+          margin-top: 3px;
+
+          .round-checkbox {
+            width: 26px;
+            height: 26px;
+          }
+        }
+
+        .row-info {
+          grid-area: info;
+          min-width: 0;
+
+          .item-name-text {
+            font-size: 0.94rem;
+            line-height: 1.35;
+            word-break: break-word;
+          }
+
+          .item-notes-text {
+            font-size: 0.76rem;
+            margin-top: 2px;
+          }
+        }
+
+        .row-actions {
+          grid-area: actions;
+          align-self: flex-start;
+          gap: 2px;
+
+          .action-icon-btn {
+            width: 28px;
+            height: 28px;
+          }
+        }
+
+        .row-stepper {
+          grid-area: stepper;
+          justify-self: start;
+
+          .stepper-box {
+            .stepper-btn {
+              width: 30px;
+              height: 28px;
+            }
+
+            .stepper-val {
+              min-width: 26px;
+              font-size: 0.88rem;
+            }
+          }
+        }
+
+        .row-price {
+          grid-area: price;
+          text-align: end;
+          min-width: unset;
+
+          .price-val {
+            font-size: 0.94rem;
+          }
+
+          .unit-sub {
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+
+    /* Mobile Responsive Category Header */
+    @media (max-width: 680px) {
+      .cat-block-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 12px 14px;
+
+        .header-left {
+          width: 100%;
+          gap: 8px;
+
+          .cat-title {
+            font-size: 0.96rem;
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+          }
+
+          .cat-progress-pill {
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            flex-shrink: 0;
+          }
+        }
+
+        .header-right {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          padding-top: 6px;
+          border-top: 1px dashed var(--color-border-subtle);
+
+          .cat-subtotals {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 0.82rem;
+
+            .act-amount {
+              font-weight: 700;
+              color: var(--color-primary);
+            }
+
+            .est-amount {
+              color: var(--color-text-muted);
+              font-size: 0.76rem;
+            }
+          }
+        }
+      }
+
+      .summary-strip-card {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 14px;
+
+        .summary-kpi:first-child {
+          grid-column: span 2;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .summary-kpi {
+          .kpi-label {
+            font-size: 0.68rem;
+          }
+          .kpi-val {
+            font-size: 1.15rem;
+            small {
+              font-size: 0.78rem;
+            }
+          }
+        }
+      }
+
+      .list-page-header {
+        gap: 12px;
+
+        .header-action-group {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+          width: 100%;
+
+          .btn {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            min-height: 40px;
+            justify-content: center;
+          }
+        }
+      }
+
+      .list-filters-strip {
+        gap: 10px;
+
+        .search-field-wrap {
+          max-width: 100%;
+          width: 100%;
+        }
+
+        .filter-pills-wrap {
+          width: 100%;
+          justify-content: space-between;
+
+          .filter-pill {
+            flex: 1;
+            text-align: center;
+            padding: 6px 8px;
+            font-size: 0.8rem;
+          }
+        }
+      }
     }
 
     .list-danger-strip {

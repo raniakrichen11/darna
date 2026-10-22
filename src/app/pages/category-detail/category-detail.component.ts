@@ -444,6 +444,39 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
       text-align: center;
       padding: var(--space-2xl);
     }
+
+    /* Mobile Responsive Enhancements */
+    @media (max-width: 600px) {
+      .category-detail-page {
+        gap: var(--space-lg);
+      }
+
+      .items-boutique-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .boutique-item-card {
+        padding: 14px;
+        gap: 10px;
+
+        .item-card-image-box {
+          height: 160px;
+        }
+
+        .item-card-title {
+          min-height: unset;
+        }
+
+        .item-card-desc {
+          min-height: unset;
+        }
+      }
+
+      .subcat-filter-bar {
+        padding-bottom: 6px;
+      }
+    }
   `]
 })
 export class CategoryDetailComponent {

@@ -511,6 +511,45 @@ import { AppLanguage } from '../../models/user-preferences.model';
         }
       }
     }
+
+    /* Mobile Responsive Settings */
+    @media (max-width: 600px) {
+      .settings-page {
+        gap: var(--space-lg);
+      }
+
+      .settings-card {
+        padding: 16px;
+        gap: 16px;
+
+        .card-header {
+          gap: 12px;
+
+          .header-icon-pill {
+            width: 38px;
+            height: 38px;
+            font-size: 1.15rem;
+          }
+
+          .section-title {
+            font-size: 1.25rem;
+          }
+        }
+      }
+
+      .backup-actions {
+        flex-direction: column;
+
+        .btn, .file-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .about-card {
+        padding: 18px 14px;
+      }
+    }
   `]
 })
 export class SettingsComponent {
