@@ -161,7 +161,24 @@ export const TRANSLATIONS_FR = {
   'pdf.status_done': 'Acheté',
   'pdf.status_todo': 'À acheter',
   'pdf.currency': 'DT',
-  'pdf.footer': 'Document généré par Darna | دارنا — Tout pour votre nouveau chez-vous.'
+  'pdf.footer': 'Document généré par Darna | دارنا — Tout pour votre nouveau chez-vous.',
+
+  // Footer
+  'footer.brand_sub': 'Le planificateur d’exception pour préparer votre trousseau de mariage et équiper votre nouveau foyer en Tunisie.',
+  'footer.nav_title': 'Navigation',
+  'footer.categories_title': 'Univers Trousseau',
+  'footer.promises_title': 'Engagements',
+  'footer.promise_offline': '100% Hors-ligne & PWA',
+  'footer.promise_offline_desc': 'Toutes vos données restent sur votre appareil',
+  'footer.promise_privacy': 'Confidentialité totale',
+  'footer.promise_privacy_desc': 'Sans compte obligatoire, ni revente de données',
+  'footer.promise_tunisia': 'Patrimoine & Traditions',
+  'footer.promise_tunisia_desc': 'Conçu spécialement pour la mariée tunisienne',
+  'footer.copyright': 'Darna | دارنا — Tout pour votre nouveau chez-vous. Tous droits réservés.',
+  'footer.quick_cat_kitchen': 'Cuisine & Vaisselle',
+  'footer.quick_cat_bedroom': 'Chambre à coucher & Linge',
+  'footer.quick_cat_bath': 'Salle de bain & Hammam',
+  'footer.quick_cat_bridal': 'Trousseau & Beauté'
 };
 
 export const TRANSLATIONS_AR: { [K in TranslationKey]: string } = {
@@ -322,7 +339,24 @@ export const TRANSLATIONS_AR: { [K in TranslationKey]: string } = {
   'pdf.status_done': 'تم الشراء',
   'pdf.status_todo': 'في الانتظار',
   'pdf.currency': 'د.ت',
-  'pdf.footer': 'تم إعداد هذه القائمة بواسطة تطبيق دارنا | Darna — كل ما تحتاجينه لبيتك الجديد.'
+  'pdf.footer': 'تم إعداد هذه القائمة بواسطة تطبيق دارنا | Darna — كل ما تحتاجينه لبيتك الجديد.',
+
+  // Footer
+  'footer.brand_sub': 'المساعد الرقمي المفضل لإعداد جهاز العروس التونسية وتأثيث بيتها الجديد بكل هدوء وثقة.',
+  'footer.nav_title': 'أقسام التطبيق',
+  'footer.categories_title': 'أقسام الجهاز',
+  'footer.promises_title': 'ضمانات التطبيق',
+  'footer.promise_offline': 'يعمل بدون إنترنت وتطبيق خفيف',
+  'footer.promise_offline_desc': 'بياناتك محفوظة بأمان على هاتفك فقط',
+  'footer.promise_privacy': 'خصوصية تامة',
+  'footer.promise_privacy_desc': 'دون الحاجة لحساب أو جمع أية بيانات خاصة',
+  'footer.promise_tunisia': 'أصالة وتقاليد تونسية',
+  'footer.promise_tunisia_desc': 'مصمم خصيصاً ليناسب العادات والأفراح التونسية',
+  'footer.copyright': 'دارنا | Darna — كل ما تحتاجينه لبيتك الجديد. جميع الحقوق محفوظة.',
+  'footer.quick_cat_kitchen': 'المطبخ والأواني',
+  'footer.quick_cat_bedroom': 'غرفة النوم والمفروشات',
+  'footer.quick_cat_bath': 'الحمام وجهاز الحمام',
+  'footer.quick_cat_bridal': 'جهاز العروس ومستلزماتها'
 };
 
 @Injectable({

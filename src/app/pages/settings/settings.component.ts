@@ -181,7 +181,10 @@ import { AppLanguage } from '../../models/user-preferences.model';
         <h3 class="about-title">{{ i18n.t('settings.about_title') }}</h3>
         <p class="about-desc">{{ i18n.t('settings.about_text') }}</p>
         <div class="culture-footer">
-          <span>Made with ❤️ for Tunisian Brides • Darna Editorial Luxury Edition</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="culture-symbol">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          </svg>
+          <span>Darna Editorial Luxury Edition · Conçu pour les mariées de Tunisie</span>
         </div>
       </section>
     </div>
@@ -478,10 +481,18 @@ import { AppLanguage } from '../../models/user-preferences.model';
       }
 
       .culture-footer {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         font-size: 0.78rem;
-        color: var(--color-terracotta);
-        margin-top: 10px;
+        color: var(--color-text-muted);
+        margin-top: 14px;
         font-weight: 500;
+
+        .culture-symbol {
+          color: var(--color-text-muted);
+          flex-shrink: 0;
+        }
       }
     }
   `]
