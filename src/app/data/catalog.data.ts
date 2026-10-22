@@ -8,6 +8,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Batterie de cuisine, casseroles, ustensiles et matériel de cuisson.',
     descriptionAr: 'أواني الطهي، القدور، أدوات التحضير ومستلزمات الطبخ اليومي والتقليدي.',
     icon: '🍳',
+    image: 'assets/cat_kitchen.jpg',
     subcategories: [
       { id: 'cuisson-plats', nameFr: 'Cuisson et casseroles', nameAr: 'قدور وأواني الطهي' },
       { id: 'ustensiles-decoupe', nameFr: 'Ustensiles et découpe', nameAr: 'أدوات التحضير والتقطيع' },
@@ -22,6 +23,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Assiettes, couverts, verres, services à thé et plateaux de présentation.',
     descriptionAr: 'الصحون، الملاعق والسكاكين، الكؤوس، أطقم الشاي والقهوة وصواني التقديم.',
     icon: '🍽️',
+    image: 'assets/cat_kitchen.jpg',
     subcategories: [
       { id: 'services-table', nameFr: 'Services de table et assiettes', nameAr: 'أطقم المائدة والصحون' },
       { id: 'couverts-verrerie', nameFr: 'Couverts et verres', nameAr: 'الملاعق وأطقم الكؤوس' },
@@ -36,6 +38,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Draps, couettes, oreillers, couvre-lits et literie des mariés.',
     descriptionAr: 'الملاءات، الأغطية واللحاف، الوسائد، أغطية السرير الفاخرة ومفروشات العروس.',
     icon: '🛏️',
+    image: 'assets/cat_bedroom.jpg',
     subcategories: [
       { id: 'parures-draps', nameFr: 'Parures de lit et draps', nameAr: 'أطقم الملاءات والشراشف' },
       { id: 'couettes-oreillers', nameFr: 'Couettes et oreillers', nameAr: 'اللحاف، البطانيات والوسائد' },
@@ -50,6 +53,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Serviettes, foutas, tapis de bain, accessoires et rituels hammam.',
     descriptionAr: 'المناشف، الفوطة التونسية، سجادات الحمام، الإكسسوارات ومستلزمات الحمام التقليدي.',
     icon: '🛁',
+    image: 'assets/cat_bath.jpg',
     subcategories: [
       { id: 'serviettes-foutas', nameFr: 'Serviettes et Foutas', nameAr: 'المناشف وفوطة الحمام' },
       { id: 'peignoirs-tapis', nameFr: 'Peignoirs et tapis de bain', nameAr: 'البرانس وسجاد الحمام' },
@@ -105,6 +109,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Pièces d’exception, coffrets, parfums, maquillage et rituels précieux.',
     descriptionAr: 'الجهاز الخاص، عطور العروس، حقائب السفر، مستحضرات التجميل والقطع المميزة.',
     icon: '💎',
+    image: 'assets/cat_bridal.jpg',
     subcategories: [
       { id: 'parfums-beaute', nameFr: 'Parfums et coffrets beauté', nameAr: 'العطور ومجموعات العناية' },
       { id: 'maquillage-soins', nameFr: 'Maquillage et trousse', nameAr: 'المكياج وحقيبة التجميل' },
@@ -184,6 +189,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Accessoires du jour J, peignoir brodé, chaussures de mariée et trousse.',
     descriptionAr: 'مستلزمات يوم الزفاف، برنوس العروس المطرز، حذاء الزفاف وحقيبة الطوارئ.',
     icon: '👰',
+    image: 'assets/darna_hero.jpg',
     subcategories: [
       { id: 'accessoires-jour-j', nameFr: 'Le grand jour', nameAr: 'مقتنيات يوم العرس' },
       { id: 'trousse-urgence', nameFr: 'Trousse de secours mariée', nameAr: 'حقيبة الطوارئ الصغيرة للعروس' },

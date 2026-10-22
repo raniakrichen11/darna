@@ -11,6 +11,7 @@ export interface CatalogCategory {
   descriptionFr: string;
   descriptionAr: string;
   icon: string;
+  image?: string;
   subcategories: CatalogSubcategory[];
 }
 

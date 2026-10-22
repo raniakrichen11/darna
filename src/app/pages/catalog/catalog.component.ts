@@ -14,93 +14,119 @@ import { CatalogItem } from '../../models/catalog.model';
   imports: [CommonModule, RouterLink, FormsModule],
   template: `
     <div class="catalog-page" [attr.dir]="i18n.dir()">
-      <!-- Header -->
-      <div class="page-header">
-        <h1>{{ i18n.t('catalog.title') }}</h1>
-        <p>{{ i18n.t('catalog.subtitle') }}</p>
-      </div>
-
-      <!-- Search & Filters Bar -->
-      <div class="search-filter-section card">
-        <div class="search-input-wrapper">
-          <span class="search-icon">🔍</span>
-          <input
-            type="text"
-            [(ngModel)]="searchQuery"
-            [placeholder]="i18n.t('action.search_placeholder')"
-            class="search-input"
-          />
-          @if (searchQuery()) {
-            <button type="button" class="clear-search-btn" (click)="searchQuery.set('')">✕</button>
-          }
+      <!-- Editorial Header -->
+      <header class="catalog-header">
+        <div class="header-intro">
+          <div class="catalog-eyebrow">
+            <span>{{ i18n.t('app.culture_badge') }}</span>
+          </div>
+          <h1>{{ i18n.t('catalog.title') }}</h1>
+          <p>{{ i18n.t('catalog.subtitle') }}</p>
         </div>
 
-        <!-- Category Horizontal Filter Chips -->
-        <div class="filter-chips">
-          <button
-            type="button"
-            class="chip"
-            [class.active]="selectedCategory() === 'all'"
-            (click)="selectedCategory.set('all')"
-          >
-            🌟 {{ i18n.t('catalog.all_categories') }}
-          </button>
-          @for (cat of catalogService.categories(); track cat.id) {
+        <!-- Understated Search & Category Filter Bar -->
+        <div class="catalog-search-bar">
+          <div class="search-input-box">
+            <svg class="search-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              [placeholder]="i18n.t('action.search_placeholder')"
+              class="minimal-search-input"
+            />
+            @if (searchQuery()) {
+              <button type="button" class="clear-search-btn" (click)="searchQuery.set('')" title="Effacer">✕</button>
+            }
+          </div>
+
+          <!-- Category Filter Pills (Horizontal Scroll) -->
+          <div class="category-pills-row">
             <button
               type="button"
-              class="chip"
-              [class.active]="selectedCategory() === cat.id"
-              (click)="selectedCategory.set(cat.id)"
+              class="pill-btn"
+              [class.active]="selectedCategory() === 'all'"
+              (click)="selectedCategory.set('all')"
             >
-              {{ cat.icon }} {{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}
+              {{ i18n.t('catalog.all_categories') }}
             </button>
-          }
+            @for (cat of catalogService.categories(); track cat.id) {
+              <button
+                type="button"
+                class="pill-btn"
+                [class.active]="selectedCategory() === cat.id"
+                (click)="selectedCategory.set(cat.id)"
+              >
+                <span class="pill-icon">{{ cat.icon }}</span>
+                <span>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</span>
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      </header>
 
-      <!-- Category Browsing Overview (When not searching & 'all' selected) -->
+      <!-- Category Boutique Showcase (When browsing 'all' and no search) -->
       @if (!searchQuery() && selectedCategory() === 'all') {
-        <section class="category-overview-section">
-          <div class="categories-banner-grid">
-            @for (category of catalogService.categories(); track category.id) {
-              <div class="category-banner card">
-                <div class="cat-banner-header">
-                  <div class="cat-banner-icon">{{ category.icon }}</div>
-                  <div class="cat-banner-title">
-                    <h2>{{ i18n.currentLang() === 'ar' ? category.nameAr : category.nameFr }}</h2>
-                    <span class="cat-badge">
-                      {{ catalogService.getCategoryItemCount(category.id) }} {{ i18n.t('catalog.items_count') }}
+        <section class="boutique-showcase-section">
+          <div class="categories-editorial-grid">
+            @for (cat of catalogService.categories(); track cat.id) {
+              <div class="boutique-category-card">
+                <div class="cat-image-container">
+                  <img
+                    [src]="cat.image || 'assets/cat_kitchen.jpg'"
+                    [alt]="cat.nameFr"
+                    class="category-hero-img"
+                    loading="lazy"
+                  />
+                  <div class="cat-gradient-scrim"></div>
+                  <div class="cat-floating-info">
+                    <span class="cat-emblem-badge">{{ cat.icon }}</span>
+                    <h2>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</h2>
+                    <span class="cat-count-pill">
+                      {{ catalogService.getCategoryItemCount(cat.id) }} {{ i18n.t('catalog.items_count') }}
                     </span>
                   </div>
-                  <a [routerLink]="['/catalog', category.id]" class="btn btn-outline btn-sm">
-                    {{ i18n.currentLang() === 'ar' ? 'عرض الكل' : 'Voir tout' }} →
-                  </a>
+                  <a [routerLink]="['/catalog', cat.id]" class="view-category-overlay-link" [attr.aria-label]="cat.nameFr"></a>
                 </div>
-                <p class="cat-banner-desc">
-                  {{ i18n.currentLang() === 'ar' ? category.descriptionAr : category.descriptionFr }}
-                </p>
 
-                <!-- 3 featured items quick preview -->
-                <div class="quick-items-preview">
-                  @for (item of getPreviewItems(category.id); track item.id) {
-                    <div class="quick-item-card">
-                      <div class="item-info">
-                        <span class="item-name">{{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}</span>
-                        @if (item.estimatedUnitPrice) {
-                          <span class="item-price">{{ item.estimatedUnitPrice }} {{ i18n.currency() }}</span>
-                        }
+                <div class="cat-footer-preview">
+                  <p class="cat-desc">{{ i18n.currentLang() === 'ar' ? cat.descriptionAr : cat.descriptionFr }}</p>
+                  
+                  <!-- Curated item snippets -->
+                  <div class="snippets-list">
+                    @for (item of getPreviewItems(cat.id); track item.id) {
+                      <div class="snippet-item">
+                        <div class="snippet-info">
+                          <span class="snippet-name">{{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}</span>
+                          @if (item.estimatedUnitPrice) {
+                            <span class="snippet-price">{{ item.estimatedUnitPrice }} {{ i18n.currency() }}</span>
+                          }
+                        </div>
+                        <button
+                          type="button"
+                          class="add-circle-btn"
+                          [class.in-list]="shoppingList.isCatalogItemInList(item.id)"
+                          (click)="onAddItem(item)"
+                          [title]="shoppingList.isCatalogItemInList(item.id) ? i18n.t('action.added') : i18n.t('action.add')"
+                        >
+                          @if (shoppingList.isCatalogItemInList(item.id)) {
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          } @else {
+                            +
+                          }
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        class="btn-add"
-                        [class.already-in]="shoppingList.isCatalogItemInList(item.id)"
-                        (click)="onAddItem(item)"
-                        [title]="shoppingList.isCatalogItemInList(item.id) ? i18n.t('action.added') : i18n.t('action.add')"
-                      >
-                        {{ shoppingList.isCatalogItemInList(item.id) ? '✓' : '+' }}
-                      </button>
-                    </div>
-                  }
+                    }
+                  </div>
+
+                  <a [routerLink]="['/catalog', cat.id]" class="explore-cat-btn">
+                    <span>{{ i18n.currentLang() === 'ar' ? 'تصفح جميع عناصر القسم' : 'Explorer tous les articles' }}</span>
+                    <span>→</span>
+                  </a>
                 </div>
               </div>
             }
@@ -110,29 +136,29 @@ import { CatalogItem } from '../../models/catalog.model';
 
       <!-- Filtered Items List (When searching or category selected) -->
       @if (searchQuery() || selectedCategory() !== 'all') {
-        <section class="items-grid-section">
-          <div class="results-meta">
-            <span>
+        <section class="catalog-items-section">
+          <div class="results-header">
+            <span class="results-tally">
               <strong>{{ filteredItems().length }}</strong> {{ i18n.t('catalog.items_count') }}
             </span>
           </div>
 
           @if (filteredItems().length === 0) {
-            <div class="no-results card">
-              <div class="no-results-icon">🔎</div>
+            <div class="no-results-editorial card">
+              <span class="no-res-icon">🔍</span>
               <h3>{{ i18n.t('catalog.no_results') }}</h3>
               <p>{{ i18n.t('catalog.search_empty_hint') }}</p>
-              <button type="button" class="btn btn-outline" (click)="resetFilters()">
+              <button type="button" class="btn btn-outline btn-sm" (click)="resetFilters()">
                 {{ i18n.t('catalog.all_categories') }}
               </button>
             </div>
           } @else {
-            <div class="items-grid">
+            <div class="items-boutique-grid">
               @for (item of filteredItems(); track item.id) {
-                <div class="item-card card">
-                  <div class="item-top">
-                    <div class="item-icon-box">{{ item.icon || '🛍️' }}</div>
-                    <div class="item-badges">
+                <div class="boutique-item-card card">
+                  <div class="item-card-header">
+                    <div class="item-icon-circle">{{ item.icon || '🛍️' }}</div>
+                    <div class="item-badges-column">
                       @if (item.isTraditional) {
                         <span class="badge badge-traditional">
                           🇹🇳 {{ i18n.t('catalog.traditional_label') }}
@@ -146,29 +172,29 @@ import { CatalogItem } from '../../models/catalog.model';
                     </div>
                   </div>
 
-                  <h3 class="item-title">
+                  <h3 class="item-card-title">
                     {{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}
                   </h3>
 
-                  <p class="item-desc">
+                  <p class="item-card-desc">
                     {{ i18n.currentLang() === 'ar' ? item.descriptionAr : item.descriptionFr }}
                   </p>
 
-                  <div class="item-specs">
-                    <div class="spec-row">
-                      <span class="spec-label">{{ i18n.t('catalog.suggested_qty') }}</span>
-                      <strong class="spec-val">{{ item.suggestedQuantity }}</strong>
+                  <div class="item-card-details">
+                    <div class="detail-row">
+                      <span class="detail-label">{{ i18n.t('catalog.suggested_qty') }}</span>
+                      <strong class="detail-val">{{ item.suggestedQuantity }}</strong>
                     </div>
 
-                    <div class="spec-row">
-                      <span class="spec-label">{{ i18n.t('catalog.estimated_price') }}</span>
-                      <strong class="spec-val price">
+                    <div class="detail-row">
+                      <span class="detail-label">{{ i18n.t('catalog.estimated_price') }}</span>
+                      <strong class="detail-val price-accent">
                         {{ item.estimatedUnitPrice ? (item.estimatedUnitPrice | number:'1.0-2') + ' ' + i18n.currency() : i18n.t('list.price_unknown') }}
                       </strong>
                     </div>
                   </div>
 
-                  <div class="item-footer">
+                  <div class="item-card-action">
                     <button
                       type="button"
                       class="btn w-full"
@@ -177,9 +203,9 @@ import { CatalogItem } from '../../models/catalog.model';
                       (click)="onAddItem(item)"
                     >
                       @if (shoppingList.isCatalogItemInList(item.id)) {
-                        <span>✓</span> {{ i18n.t('action.added') }} (+1)
+                        <span>✓ {{ i18n.t('action.added') }} (+1)</span>
                       } @else {
-                        <span>+</span> {{ i18n.t('action.add_to_list') }}
+                        <span>+ {{ i18n.t('action.add_to_list') }}</span>
                       }
                     </button>
                   </div>
@@ -198,52 +224,72 @@ import { CatalogItem } from '../../models/catalog.model';
       gap: var(--space-xl);
     }
 
-    .page-header {
-      h1 {
-        font-size: 1.85rem;
-        color: var(--color-text-main);
-        margin-bottom: 6px;
-      }
-      p {
-        color: var(--color-text-muted);
-        font-size: 1.05rem;
-      }
-    }
-
-    /* Search & Filter Section */
-    .search-filter-section {
+    /* Header */
+    .catalog-header {
       display: flex;
       flex-direction: column;
-      gap: var(--space-md);
-      padding: var(--space-md) var(--space-lg);
+      gap: var(--space-lg);
+
+      .catalog-eyebrow {
+        font-size: 0.76rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 1.05rem;
+        color: var(--color-text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+      }
     }
 
-    .search-input-wrapper {
+    /* Search & Filters */
+    .catalog-search-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .search-input-box {
       position: relative;
       display: flex;
       align-items: center;
 
-      .search-icon {
+      .search-svg {
         position: absolute;
-        inset-inline-start: 14px;
-        font-size: 1.1rem;
+        inset-inline-start: 16px;
+        color: var(--color-text-muted);
         pointer-events: none;
       }
 
-      .search-input {
+      .minimal-search-input {
         width: 100%;
-        padding: 12px 42px;
-        border: 1px solid var(--color-border);
+        padding: 12px 48px;
+        border: 1px solid var(--color-border-subtle);
         border-radius: var(--radius-full);
-        background: var(--color-surface-subtle);
-        font-size: 1rem;
+        background: var(--color-bg);
+        font-size: 0.95rem;
+        color: var(--color-text-main);
         outline: none;
         transition: all 0.2s;
 
         &:focus {
           border-color: var(--color-primary);
-          background: #fff;
-          box-shadow: 0 0 0 3px rgba(179, 107, 92, 0.15);
+          background: #FFFFFF;
+          box-shadow: 0 0 0 3px rgba(113, 59, 72, 0.1);
         }
       }
 
@@ -251,32 +297,36 @@ import { CatalogItem } from '../../models/catalog.model';
         position: absolute;
         inset-inline-end: 14px;
         color: var(--color-text-muted);
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding: 4px;
+        border-radius: 50%;
+
+        &:hover {
+          color: var(--color-text-main);
+        }
       }
     }
 
-    .filter-chips {
+    .category-pills-row {
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 2px;
       scrollbar-width: thin;
 
-      &::-webkit-scrollbar {
-        height: 4px;
-      }
-
-      .chip {
+      .pill-btn {
         white-space: nowrap;
         padding: 8px 16px;
         border-radius: var(--radius-full);
         background: var(--color-surface-subtle);
         border: 1px solid var(--color-border);
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         font-weight: 600;
         color: var(--color-text-main);
         transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
 
         &:hover {
           background: var(--color-surface-hover);
@@ -286,209 +336,282 @@ import { CatalogItem } from '../../models/catalog.model';
         &.active {
           background: var(--color-primary);
           border-color: var(--color-primary);
-          color: #fff;
+          color: #FFFFFF;
+          box-shadow: 0 2px 8px rgba(113, 59, 72, 0.22);
         }
       }
     }
 
-    /* Category Overview Grid */
-    .categories-banner-grid {
+    /* Boutique Categories Grid */
+    .categories-editorial-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: var(--space-lg);
 
-      @media (min-width: 840px) {
+      @media (min-width: 860px) {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    .category-banner {
+    .boutique-category-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-xs);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
-      gap: 12px;
 
-      .cat-banner-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+      }
 
-        .cat-banner-icon {
-          font-size: 2rem;
-          width: 52px;
-          height: 52px;
-          border-radius: var(--radius-md);
-          background: var(--color-primary-light);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+      .cat-image-container {
+        position: relative;
+        height: 180px;
+        overflow: hidden;
+        background: var(--color-bg-sand);
+
+        .category-hero-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .cat-banner-title {
-          flex: 1;
+        .cat-gradient-scrim {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(48, 41, 39, 0.1) 0%, rgba(48, 41, 39, 0.65) 100%);
+        }
+
+        .cat-floating-info {
+          position: absolute;
+          bottom: 16px;
+          inset-inline-start: 16px;
+          inset-inline-end: 16px;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+
+          .cat-emblem-badge {
+            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
 
           h2 {
-            font-size: 1.15rem;
+            font-size: 1.25rem;
+            color: #FFFFFF;
             margin: 0;
+            flex: 1;
+            margin-inline: 12px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
           }
 
-          .cat-badge {
-            font-size: 0.8rem;
-            color: var(--color-text-muted);
+          .cat-count-pill {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            background: rgba(255, 255, 255, 0.92);
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
           }
+        }
+
+        .view-category-overlay-link {
+          position: absolute;
+          inset: 0;
         }
       }
 
-      .cat-banner-desc {
-        font-size: 0.88rem;
-        color: var(--color-text-muted);
+      &:hover .category-hero-img {
+        transform: scale(1.05);
       }
 
-      .quick-items-preview {
+      .cat-footer-preview {
+        padding: var(--space-md) var(--space-lg);
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        background: var(--color-surface-subtle);
-        border-radius: var(--radius-md);
-        padding: 8px;
-        border: 1px solid var(--color-border-subtle);
-      }
+        gap: 12px;
+        flex: 1;
 
-      .quick-item-card {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 6px 10px;
-        background: #fff;
-        border-radius: var(--radius-sm);
-        border: 1px solid var(--color-border-subtle);
+        .cat-desc {
+          font-size: 0.88rem;
+          color: var(--color-text-muted);
+          line-height: 1.5;
+        }
 
-        .item-info {
+        .snippets-list {
           display: flex;
           flex-direction: column;
+          gap: 6px;
+          background: var(--color-surface-subtle);
+          border-radius: var(--radius-md);
+          padding: 8px 12px;
+          border: 1px solid var(--color-border-subtle);
+        }
 
-          .item-name {
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--color-text-main);
+        .snippet-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 6px 0;
+          border-bottom: 1px solid var(--color-border-subtle);
+
+          &:last-child {
+            border-bottom: none;
           }
 
-          .item-price {
-            font-size: 0.78rem;
+          .snippet-info {
+            display: flex;
+            flex-direction: column;
+
+            .snippet-name {
+              font-size: 0.88rem;
+              font-weight: 600;
+              color: var(--color-text-main);
+            }
+
+            .snippet-price {
+              font-size: 0.78rem;
+              color: var(--color-primary);
+              font-weight: 600;
+            }
+          }
+
+          .add-circle-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--color-primary-light);
             color: var(--color-primary);
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+            &.in-list {
+              background: var(--color-success-bg);
+              color: var(--color-success);
+            }
+
+            &:hover {
+              transform: scale(1.1);
+            }
           }
         }
 
-        .btn-add {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: var(--color-primary-light);
-          color: var(--color-primary);
-          font-weight: bold;
-          font-size: 1.1rem;
+        .explore-cat-btn {
+          margin-top: auto;
           display: flex;
           align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-
-          &.already-in {
-            background: var(--color-success-bg);
-            color: var(--color-success);
-          }
-
-          &:hover {
-            transform: scale(1.08);
-          }
+          justify-content: space-between;
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: var(--color-primary);
+          padding-top: 6px;
         }
       }
     }
 
-    /* Items Grid */
-    .results-meta {
+    /* Items Boutique Grid */
+    .results-header {
       margin-bottom: var(--space-md);
       font-size: 0.95rem;
       color: var(--color-text-muted);
     }
 
-    .items-grid {
+    .items-boutique-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: var(--space-lg);
     }
 
-    .item-card {
+    .boutique-item-card {
       display: flex;
       flex-direction: column;
       padding: var(--space-lg);
-      gap: 10px;
+      gap: 12px;
 
-      .item-top {
+      .item-card-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+
+        .item-icon-circle {
+          font-size: 1.85rem;
+          width: 48px;
+          height: 48px;
+          border-radius: var(--radius-md);
+          background: var(--color-surface-subtle);
+          border: 1px solid var(--color-border-subtle);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .item-badges-column {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4px;
+        }
       }
 
-      .item-icon-box {
-        font-size: 2rem;
-        width: 48px;
-        height: 48px;
-        background: var(--color-surface-subtle);
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--color-border-subtle);
-      }
-
-      .item-badges {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 4px;
-      }
-
-      .item-title {
+      .item-card-title {
         font-size: 1.05rem;
         color: var(--color-text-main);
         line-height: 1.35;
-        min-height: 2.7rem;
+        min-height: 2.8rem;
       }
 
-      .item-desc {
-        font-size: 0.85rem;
+      .item-card-desc {
+        font-size: 0.84rem;
         color: var(--color-text-muted);
+        line-height: 1.5;
         min-height: 2.5rem;
       }
 
-      .item-specs {
+      .item-card-details {
         background: var(--color-surface-subtle);
         border: 1px solid var(--color-border-subtle);
         border-radius: var(--radius-md);
-        padding: 8px 12px;
+        padding: 10px 14px;
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
 
-        .spec-row {
+        .detail-row {
           display: flex;
           justify-content: space-between;
-          font-size: 0.85rem;
+          font-size: 0.84rem;
 
-          .spec-label {
+          .detail-label {
             color: var(--color-text-muted);
           }
 
-          .spec-val.price {
+          .detail-val.price-accent {
             color: var(--color-primary);
             font-weight: 700;
           }
         }
       }
 
-      .item-footer {
+      .item-card-action {
         margin-top: auto;
-        padding-top: 8px;
+        padding-top: 6px;
 
         .w-full {
           width: 100%;
@@ -496,16 +619,25 @@ import { CatalogItem } from '../../models/catalog.model';
       }
     }
 
-    .no-results {
+    .no-results-editorial {
       text-align: center;
-      padding: var(--space-2xl);
+      padding: var(--space-2xl) var(--space-lg);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
 
-      .no-results-icon {
-        font-size: 3rem;
+      .no-res-icon {
+        font-size: 2.5rem;
+      }
+
+      h3 {
+        font-size: 1.35rem;
+      }
+
+      p {
+        color: var(--color-text-muted);
+        max-width: 420px;
       }
     }
   `]

@@ -14,31 +14,42 @@ import { CatalogItem } from '../../models/catalog.model';
   template: `
     <div class="category-detail-page" [attr.dir]="i18n.dir()">
       <!-- Back Link -->
-      <div class="breadcrumb">
+      <div class="breadcrumb-bar">
         <a routerLink="/catalog" class="back-link">
-          ← {{ i18n.t('catalog.back_to_categories') }}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>{{ i18n.t('catalog.back_to_categories') }}</span>
         </a>
       </div>
 
       @if (category(); as cat) {
-        <!-- Category Banner -->
-        <div class="cat-hero card">
-          <div class="cat-icon-lg">{{ cat.icon }}</div>
-          <div class="cat-hero-text">
+        <!-- Editorial Banner Frame -->
+        <div class="cat-editorial-hero">
+          @if (cat.image) {
+            <div class="hero-bg-container">
+              <img [src]="cat.image" [alt]="cat.nameFr" class="hero-bg-img" />
+              <div class="hero-overlay"></div>
+            </div>
+          }
+
+          <div class="hero-text-content">
+            <span class="cat-symbol">{{ cat.icon }}</span>
             <h1>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</h1>
             <p>{{ i18n.currentLang() === 'ar' ? cat.descriptionAr : cat.descriptionFr }}</p>
-          </div>
-          <div class="cat-stat-badge">
-            {{ categoryItems().length }} {{ i18n.t('catalog.items_count') }}
+            <div class="cat-tally">
+              {{ categoryItems().length }} {{ i18n.t('catalog.items_count') }}
+            </div>
           </div>
         </div>
 
         <!-- Subcategory Filter Pills -->
         @if (cat.subcategories && cat.subcategories.length > 0) {
-          <div class="subcat-pills">
+          <div class="subcat-filter-bar">
             <button
               type="button"
-              class="pill"
+              class="subcat-pill"
               [class.active]="selectedSubcategory() === 'all'"
               (click)="selectedSubcategory.set('all')"
             >
@@ -47,7 +58,7 @@ import { CatalogItem } from '../../models/catalog.model';
             @for (sub of cat.subcategories; track sub.id) {
               <button
                 type="button"
-                class="pill"
+                class="subcat-pill"
                 [class.active]="selectedSubcategory() === sub.id"
                 (click)="selectedSubcategory.set(sub.id)"
               >
@@ -57,13 +68,13 @@ import { CatalogItem } from '../../models/catalog.model';
           </div>
         }
 
-        <!-- Items Grid -->
-        <div class="items-grid">
+        <!-- Items Boutique Grid -->
+        <div class="items-boutique-grid">
           @for (item of filteredCategoryItems(); track item.id) {
-            <div class="item-card card">
-              <div class="item-top">
-                <div class="item-icon-box">{{ item.icon || '🛍️' }}</div>
-                <div class="item-badges">
+            <div class="boutique-item-card card">
+              <div class="item-card-header">
+                <div class="item-icon-circle">{{ item.icon || '🛍️' }}</div>
+                <div class="item-badges-column">
                   @if (item.isTraditional) {
                     <span class="badge badge-traditional">
                       🇹🇳 {{ i18n.t('catalog.traditional_label') }}
@@ -77,29 +88,29 @@ import { CatalogItem } from '../../models/catalog.model';
                 </div>
               </div>
 
-              <h3 class="item-title">
+              <h3 class="item-card-title">
                 {{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}
               </h3>
 
-              <p class="item-desc">
+              <p class="item-card-desc">
                 {{ i18n.currentLang() === 'ar' ? item.descriptionAr : item.descriptionFr }}
               </p>
 
-              <div class="item-specs">
-                <div class="spec-row">
-                  <span class="spec-label">{{ i18n.t('catalog.suggested_qty') }}</span>
-                  <strong class="spec-val">{{ item.suggestedQuantity }}</strong>
+              <div class="item-card-details">
+                <div class="detail-row">
+                  <span class="detail-label">{{ i18n.t('catalog.suggested_qty') }}</span>
+                  <strong class="detail-val">{{ item.suggestedQuantity }}</strong>
                 </div>
 
-                <div class="spec-row">
-                  <span class="spec-label">{{ i18n.t('catalog.estimated_price') }}</span>
-                  <strong class="spec-val price">
+                <div class="detail-row">
+                  <span class="detail-label">{{ i18n.t('catalog.estimated_price') }}</span>
+                  <strong class="detail-val price-accent">
                     {{ item.estimatedUnitPrice ? (item.estimatedUnitPrice | number:'1.0-2') + ' ' + i18n.currency() : i18n.t('list.price_unknown') }}
                   </strong>
                 </div>
               </div>
 
-              <div class="item-footer">
+              <div class="item-card-action">
                 <button
                   type="button"
                   class="btn w-full"
@@ -108,9 +119,9 @@ import { CatalogItem } from '../../models/catalog.model';
                   (click)="onAddItem(item)"
                 >
                   @if (shoppingList.isCatalogItemInList(item.id)) {
-                    <span>✓</span> {{ i18n.t('action.added') }} (+1)
+                    <span>✓ {{ i18n.t('action.added') }} (+1)</span>
                   } @else {
-                    <span>+</span> {{ i18n.t('action.add_to_list') }}
+                    <span>+ {{ i18n.t('action.add_to_list') }}</span>
                   }
                 </button>
               </div>
@@ -118,7 +129,7 @@ import { CatalogItem } from '../../models/catalog.model';
           }
         </div>
       } @else {
-        <div class="card not-found">
+        <div class="card not-found-box">
           <h2>Catégorie introuvable</h2>
           <a routerLink="/catalog" class="btn btn-primary">Retour au catalogue</a>
         </div>
@@ -132,173 +143,214 @@ import { CatalogItem } from '../../models/catalog.model';
       gap: var(--space-lg);
     }
 
-    .breadcrumb {
+    .breadcrumb-bar {
       .back-link {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         font-weight: 600;
         color: var(--color-primary);
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
+        transition: transform 0.2s;
 
         &:hover {
-          text-decoration: underline;
+          transform: translateX(-3px);
         }
       }
     }
 
-    .cat-hero {
+    /* Editorial Hero */
+    .cat-editorial-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--color-border);
+      min-height: 220px;
       display: flex;
       align-items: center;
-      gap: var(--space-lg);
       padding: var(--space-xl);
-      background: linear-gradient(135deg, #ffffff 0%, #faf3ee 100%);
+      background: var(--color-bg-sand);
 
-      .cat-icon-lg {
-        font-size: 3rem;
-        width: 72px;
-        height: 72px;
-        border-radius: var(--radius-lg);
-        background: var(--color-primary-light);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .hero-bg-container {
+        position: absolute;
+        inset: 0;
+
+        .hero-bg-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(48, 41, 39, 0.75) 0%, rgba(113, 59, 72, 0.8) 100%);
+        }
       }
 
-      .cat-hero-text {
-        flex: 1;
+      .hero-text-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 640px;
+
+        .cat-symbol {
+          font-size: 2.2rem;
+          margin-bottom: 2px;
+        }
 
         h1 {
-          font-size: 1.6rem;
-          color: var(--color-text-main);
-          margin-bottom: 4px;
+          color: #FFFFFF;
+          margin: 0;
+          font-size: 2.2rem;
         }
 
         p {
-          font-size: 0.95rem;
-          color: var(--color-text-muted);
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 1.05rem;
+          line-height: 1.6;
         }
-      }
 
-      .cat-stat-badge {
-        font-size: 0.85rem;
-        font-weight: 700;
-        background: #fff;
-        padding: 6px 14px;
-        border-radius: var(--radius-full);
-        border: 1px solid var(--color-border);
-        color: var(--color-primary);
+        .cat-tally {
+          display: inline-flex;
+          align-self: flex-start;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(8px);
+          color: #FFFFFF;
+          font-size: 0.78rem;
+          font-weight: 700;
+          padding: 4px 12px;
+          border-radius: var(--radius-full);
+          border: 1px solid rgba(255, 255, 255, 0.35);
+          margin-top: 6px;
+        }
       }
     }
 
-    .subcat-pills {
+    /* Subcategory Filter Pills */
+    .subcat-filter-bar {
       display: flex;
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 4px;
 
-      .pill {
+      .subcat-pill {
         white-space: nowrap;
-        padding: 8px 16px;
+        padding: 8px 18px;
         border-radius: var(--radius-full);
         background: var(--color-surface);
         border: 1px solid var(--color-border);
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         font-weight: 600;
         color: var(--color-text-main);
         transition: all 0.2s;
 
+        &:hover {
+          border-color: var(--color-primary);
+        }
+
         &.active {
           background: var(--color-primary);
           border-color: var(--color-primary);
-          color: #fff;
+          color: #FFFFFF;
+          box-shadow: 0 2px 8px rgba(113, 59, 72, 0.22);
         }
       }
     }
 
-    .items-grid {
+    /* Items Grid */
+    .items-boutique-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: var(--space-lg);
     }
 
-    .item-card {
+    .boutique-item-card {
       display: flex;
       flex-direction: column;
       padding: var(--space-lg);
-      gap: 10px;
+      gap: 12px;
 
-      .item-top {
+      .item-card-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+
+        .item-icon-circle {
+          font-size: 1.85rem;
+          width: 48px;
+          height: 48px;
+          border-radius: var(--radius-md);
+          background: var(--color-surface-subtle);
+          border: 1px solid var(--color-border-subtle);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .item-badges-column {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4px;
+        }
       }
 
-      .item-icon-box {
-        font-size: 2rem;
-        width: 48px;
-        height: 48px;
-        background: var(--color-surface-subtle);
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--color-border-subtle);
-      }
-
-      .item-badges {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 4px;
-      }
-
-      .item-title {
+      .item-card-title {
         font-size: 1.05rem;
         color: var(--color-text-main);
         line-height: 1.35;
-        min-height: 2.7rem;
+        min-height: 2.8rem;
       }
 
-      .item-desc {
-        font-size: 0.85rem;
+      .item-card-desc {
+        font-size: 0.84rem;
         color: var(--color-text-muted);
+        line-height: 1.5;
         min-height: 2.5rem;
       }
 
-      .item-specs {
+      .item-card-details {
         background: var(--color-surface-subtle);
         border: 1px solid var(--color-border-subtle);
         border-radius: var(--radius-md);
-        padding: 8px 12px;
+        padding: 10px 14px;
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
 
-        .spec-row {
+        .detail-row {
           display: flex;
           justify-content: space-between;
-          font-size: 0.85rem;
+          font-size: 0.84rem;
 
-          .spec-label {
+          .detail-label {
             color: var(--color-text-muted);
           }
 
-          .spec-val.price {
+          .detail-val.price-accent {
             color: var(--color-primary);
             font-weight: 700;
           }
         }
       }
 
-      .item-footer {
+      .item-card-action {
         margin-top: auto;
-        padding-top: 8px;
+        padding-top: 6px;
 
         .w-full {
           width: 100%;
         }
       }
+    }
+
+    .not-found-box {
+      text-align: center;
+      padding: var(--space-2xl);
     }
   `]
 })

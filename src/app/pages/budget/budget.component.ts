@@ -14,15 +14,16 @@ import { ToastService } from '../../services/toast.service';
   template: `
     <div class="budget-page" [attr.dir]="i18n.dir()">
       <!-- Page Header -->
-      <div class="page-header">
-        <h1>{{ i18n.t('budget.title') }}</h1>
-        <p>{{ i18n.t('budget.subtitle') }}</p>
-      </div>
+      <header class="page-header">
+        <span class="page-eyebrow">{{ i18n.currentLang() === 'ar' ? 'متابعة الميزانية والمصاريف' : 'SUIVI FINANCIER & BUDGET' }}</span>
+        <h1 class="page-title">{{ i18n.t('budget.title') }}</h1>
+        <p class="page-subtitle">{{ i18n.t('budget.subtitle') }}</p>
+      </header>
 
       <!-- Target Budget Setting Card -->
-      <div class="budget-target-card card">
+      <section class="budget-target-card">
         <div class="target-info">
-          <h3>🎯 {{ i18n.t('budget.target_label') }}</h3>
+          <div class="target-badge">🎯 {{ i18n.t('budget.target_label') }}</div>
           <p class="target-sub">
             {{ i18n.currentLang() === 'ar' ? 'حددي سقف ميزانيتك الإجمالية لمتابعة مصاريفك وتفادي التجاوز.' : 'Fixez votre plafond budgétaire global pour garder le contrôle de vos dépenses.' }}
           </p>
@@ -44,66 +45,74 @@ import { ToastService } from '../../services/toast.service';
             {{ i18n.t('budget.target_save') }}
           </button>
         </div>
-      </div>
+      </section>
 
       <!-- Financial Summary Cards -->
-      <div class="summary-cards-grid">
+      <section class="summary-cards-grid">
         <!-- Card 1: Estimated Total -->
-        <div class="summary-card card">
-          <div class="card-icon-tag bg-primary">📊</div>
-          <span class="card-title">{{ i18n.t('budget.est_total') }}</span>
-          <h2 class="card-amount">
+        <div class="summary-card">
+          <div class="card-top">
+            <span class="card-eyebrow">{{ i18n.t('budget.est_total') }}</span>
+            <div class="card-icon-pill pill-terracotta">📊</div>
+          </div>
+          <div class="card-amount">
             {{ shoppingList.totalEstimatedCost() | number:'1.0-2' }} <small>{{ i18n.currency() }}</small>
-          </h2>
-          <span class="card-footnote">
+          </div>
+          <div class="card-footer">
+            <span class="dot-indicator dot-terracotta"></span>
             {{ shoppingList.budgetSummary().itemsWithEstimatedPrice }} / {{ shoppingList.totalItemsCount() }} {{ i18n.currentLang() === 'ar' ? 'عنصر بسعر مقدّر' : 'articles chiffrés' }}
-          </span>
+          </div>
         </div>
 
         <!-- Card 2: Actual Spent -->
-        <div class="summary-card card">
-          <div class="card-icon-tag bg-success">💸</div>
-          <span class="card-title">{{ i18n.t('budget.act_spent') }}</span>
-          <h2 class="card-amount text-success">
+        <div class="summary-card">
+          <div class="card-top">
+            <span class="card-eyebrow">{{ i18n.t('budget.act_spent') }}</span>
+            <div class="card-icon-pill pill-sage">💸</div>
+          </div>
+          <div class="card-amount text-sage">
             {{ shoppingList.totalActualSpent() | number:'1.0-2' }} <small>{{ i18n.currency() }}</small>
-          </h2>
-          <span class="card-footnote">
+          </div>
+          <div class="card-footer">
+            <span class="dot-indicator dot-sage"></span>
             {{ shoppingList.budgetSummary().itemsWithActualPrice }} {{ i18n.currentLang() === 'ar' ? 'مشتريات مسجلة' : 'articles payés' }}
-          </span>
+          </div>
         </div>
 
         <!-- Card 3: Remaining Budget or Difference -->
-        <div class="summary-card card">
-          <div class="card-icon-tag bg-secondary">⚖️</div>
-          <span class="card-title">{{ i18n.t('budget.remaining_allowed') }}</span>
+        <div class="summary-card" [class.card-alert]="shoppingList.budgetSummary().totalTargetBudget !== undefined && (shoppingList.budgetSummary().remainingBudget ?? 0) < 0">
+          <div class="card-top">
+            <span class="card-eyebrow">{{ i18n.t('budget.remaining_allowed') }}</span>
+            <div class="card-icon-pill pill-burgundy">⚖️</div>
+          </div>
 
           @if (shoppingList.budgetSummary().totalTargetBudget !== undefined) {
             @if ((shoppingList.budgetSummary().remainingBudget ?? 0) >= 0) {
-              <h2 class="card-amount text-secondary">
+              <div class="card-amount text-burgundy">
                 {{ shoppingList.budgetSummary().remainingBudget | number:'1.0-2' }} <small>{{ i18n.currency() }}</small>
-              </h2>
-              <span class="card-footnote text-success">
+              </div>
+              <div class="card-footer text-sage">
                 ✓ {{ i18n.currentLang() === 'ar' ? 'الميزانية تحت السيطرة' : 'Dans les limites du budget' }}
-              </span>
+              </div>
             } @else {
-              <h2 class="card-amount text-danger">
+              <div class="card-amount text-danger">
                 {{ Math.abs(shoppingList.budgetSummary().remainingBudget ?? 0) | number:'1.0-2' }} <small>{{ i18n.currency() }}</small>
-              </h2>
-              <span class="card-footnote text-danger">
+              </div>
+              <div class="card-footer text-danger">
                 ⚠️ {{ i18n.t('budget.budget_exceeded') }}
-              </span>
+              </div>
             }
           } @else {
-            <h2 class="card-amount text-muted">--</h2>
-            <span class="card-footnote">
+            <div class="card-amount text-muted">--</div>
+            <div class="card-footer">
               {{ i18n.t('home.budget_undefined') }}
-            </span>
+            </div>
           }
         </div>
-      </div>
+      </section>
 
       <!-- Unknown Price Notice Warning -->
-      <div class="notice-banner card">
+      <div class="notice-banner">
         <span class="notice-icon">💡</span>
         <p class="notice-text">
           {{ i18n.t('budget.unknown_prices_note') }}
@@ -111,11 +120,14 @@ import { ToastService } from '../../services/toast.service';
       </div>
 
       <!-- Category Spending Breakdown -->
-      <div class="breakdown-card card">
+      <section class="breakdown-section">
         <div class="breakdown-header">
-          <h2>{{ i18n.t('budget.spending_by_category') }}</h2>
-          <span class="badge badge-primary">
-            {{ shoppingList.categoryGroups().length }} {{ i18n.currentLang() === 'ar' ? 'أقسام نشطة' : 'catégories actives' }}
+          <div class="breakdown-title-wrap">
+            <span class="breakdown-eyebrow">{{ i18n.currentLang() === 'ar' ? 'توزيع التكاليف' : 'RÉPARTITION' }}</span>
+            <h2 class="breakdown-title">{{ i18n.t('budget.spending_by_category') }}</h2>
+          </div>
+          <span class="badge-cat-count">
+            {{ shoppingList.categoryGroups().length }} {{ i18n.currentLang() === 'ar' ? 'أقسام نشطة' : 'catégories' }}
           </span>
         </div>
 
@@ -123,15 +135,16 @@ import { ToastService } from '../../services/toast.service';
           @for (group of shoppingList.categoryGroups(); track group.categoryId) {
             <div class="category-bar-row">
               <div class="bar-top">
-                <span class="cat-label">
-                  {{ group.categoryIcon }} {{ i18n.currentLang() === 'ar' ? group.categoryNameAr : group.categoryNameFr }}
-                </span>
-                <span class="cat-amounts">
+                <div class="cat-label-wrap">
+                  <span class="cat-icon-badge">{{ group.categoryIcon }}</span>
+                  <span class="cat-label">{{ i18n.currentLang() === 'ar' ? group.categoryNameAr : group.categoryNameFr }}</span>
+                </div>
+                <div class="cat-amounts">
                   @if (group.actualTotal > 0) {
                     <strong class="act">{{ group.actualTotal | number:'1.0-2' }} {{ i18n.currency() }}</strong>
                   }
                   <span class="est">(est. {{ group.estimatedTotal | number:'1.0-2' }} {{ i18n.currency() }})</span>
-                </span>
+                </div>
               </div>
 
               <!-- Visual progress meter -->
@@ -144,11 +157,12 @@ import { ToastService } from '../../services/toast.service';
 
               <div class="bar-sub">
                 <span>{{ group.purchasedCount }} / {{ group.totalItems }} {{ i18n.t('pdf.purchased') }}</span>
+                <span class="bar-percentage">{{ getBarPercentage(group.actualTotal || group.estimatedTotal) }}% {{ i18n.currentLang() === 'ar' ? 'من الإجمالي' : 'du budget est.' }}</span>
               </div>
             </div>
           }
         </div>
-      </div>
+      </section>
     </div>
   `,
   styles: [`
@@ -159,12 +173,29 @@ import { ToastService } from '../../services/toast.service';
     }
 
     .page-header {
-      h1 {
-        font-size: 1.85rem;
+      margin-bottom: var(--space-xs);
+
+      .page-eyebrow {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-weight: 600;
+        color: var(--color-terracotta);
+        display: block;
         margin-bottom: 4px;
       }
-      p {
+
+      .page-title {
+        font-family: var(--font-serif);
+        font-size: 2.2rem;
+        color: var(--color-burgundy);
+        line-height: 1.15;
+        margin-bottom: 6px;
+      }
+
+      .page-subtitle {
         color: var(--color-text-muted);
+        font-size: 0.95rem;
       }
     }
 
@@ -173,7 +204,11 @@ import { ToastService } from '../../services/toast.service';
       display: flex;
       flex-direction: column;
       gap: 16px;
-      background: linear-gradient(135deg, #ffffff 0%, #faf4f0 100%);
+      background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-sand) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-sm);
 
       @media (min-width: 768px) {
         flex-direction: row;
@@ -182,19 +217,24 @@ import { ToastService } from '../../services/toast.service';
       }
 
       .target-info {
-        h3 {
-          font-size: 1.15rem;
+        .target-badge {
+          font-family: var(--font-serif);
+          font-size: 1.25rem;
+          color: var(--color-burgundy);
           margin-bottom: 4px;
+          font-weight: 600;
         }
+
         .target-sub {
           font-size: 0.88rem;
           color: var(--color-text-muted);
+          max-width: 440px;
         }
       }
 
       .target-input-row {
         display: flex;
-        gap: 10px;
+        gap: 12px;
         align-items: center;
 
         .input-wrap {
@@ -203,25 +243,28 @@ import { ToastService } from '../../services/toast.service';
           align-items: center;
 
           .budget-num-input {
-            width: 140px;
+            width: 150px;
             padding: 10px 14px;
-            padding-inline-end: 42px;
+            padding-inline-end: 46px;
             border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
             font-size: 1.1rem;
             font-weight: 700;
-            background: #fff;
+            background: var(--color-surface);
+            color: var(--color-charcoal);
             outline: none;
+            transition: all 0.2s ease;
 
             &:focus {
-              border-color: var(--color-primary);
+              border-color: var(--color-burgundy);
+              box-shadow: 0 0 0 3px rgba(113, 59, 72, 0.12);
             }
           }
 
           .currency-tag {
             position: absolute;
             inset-inline-end: 12px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: var(--color-text-muted);
             pointer-events: none;
@@ -236,86 +279,157 @@ import { ToastService } from '../../services/toast.service';
       grid-template-columns: 1fr;
       gap: var(--space-md);
 
-      @media (min-width: 640px) {
+      @media (min-width: 680px) {
         grid-template-columns: repeat(3, 1fr);
       }
     }
 
     .summary-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      position: relative;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
 
-      .card-icon-tag {
-        width: 40px;
-        height: 40px;
-        border-radius: var(--radius-md);
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      &.card-alert {
+        border-color: rgba(179, 57, 57, 0.35);
+        background: #fffafa;
+      }
+
+      .card-top {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        margin-bottom: 4px;
 
-        &.bg-primary { background: var(--color-primary-light); }
-        &.bg-success { background: var(--color-success-bg); }
-        &.bg-secondary { background: var(--color-secondary-light); }
-      }
-
-      .card-title {
-        font-size: 0.82rem;
-        color: var(--color-text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .card-amount {
-        font-size: 1.65rem;
-        font-weight: 800;
-        color: var(--color-text-main);
-
-        small {
-          font-size: 1rem;
+        .card-eyebrow {
+          font-size: 0.72rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
           font-weight: 600;
           color: var(--color-text-muted);
         }
 
-        &.text-success { color: var(--color-success); }
-        &.text-secondary { color: var(--color-secondary); }
-        &.text-danger { color: var(--color-danger); }
-        &.text-muted { color: var(--color-text-light); }
+        .card-icon-pill {
+          width: 34px;
+          height: 34px;
+          border-radius: var(--radius-full);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+
+          &.pill-terracotta {
+            background: rgba(183, 125, 114, 0.15);
+          }
+          &.pill-sage {
+            background: rgba(113, 136, 117, 0.15);
+          }
+          &.pill-burgundy {
+            background: rgba(113, 59, 72, 0.12);
+          }
+        }
       }
 
-      .card-footnote {
+      .card-amount {
+        font-family: var(--font-serif);
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: var(--color-charcoal);
+        line-height: 1.1;
+
+        small {
+          font-family: var(--font-sans);
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: var(--color-text-muted);
+        }
+
+        &.text-sage {
+          color: var(--color-sage);
+        }
+        &.text-burgundy {
+          color: var(--color-burgundy);
+        }
+        &.text-danger {
+          color: #b33939;
+        }
+        &.text-muted {
+          color: var(--color-text-light);
+        }
+      }
+
+      .card-footer {
         font-size: 0.8rem;
         color: var(--color-text-muted);
         margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .dot-indicator {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+
+          &.dot-terracotta {
+            background-color: var(--color-terracotta);
+          }
+          &.dot-sage {
+            background-color: var(--color-sage);
+          }
+        }
+
+        &.text-sage {
+          color: var(--color-sage);
+          font-weight: 500;
+        }
+        &.text-danger {
+          color: #b33939;
+          font-weight: 600;
+        }
       }
     }
 
     /* Notice banner */
     .notice-banner {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      background: var(--color-accent-gold-light);
-      border: 1px solid #ebd7af;
-      padding: 12px 18px;
+      background: var(--color-sand);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
 
       .notice-icon {
-        font-size: 1.4rem;
+        font-size: 1.25rem;
+        line-height: 1;
         flex-shrink: 0;
       }
 
       .notice-text {
         font-size: 0.88rem;
-        color: #7c581a;
+        color: var(--color-charcoal);
         margin: 0;
+        line-height: 1.5;
       }
     }
 
     /* Category Breakdown */
-    .breakdown-card {
+    .breakdown-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
       gap: var(--space-lg);
@@ -324,69 +438,121 @@ import { ToastService } from '../../services/toast.service';
     .breakdown-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--color-border);
 
-      h2 {
-        font-size: 1.25rem;
+      .breakdown-eyebrow {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        color: var(--color-terracotta);
+        display: block;
+      }
+
+      .breakdown-title {
+        font-family: var(--font-serif);
+        font-size: 1.45rem;
+        color: var(--color-burgundy);
+        margin: 0;
+      }
+
+      .badge-cat-count {
+        font-size: 0.78rem;
+        padding: 4px 10px;
+        background: var(--color-sand);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        color: var(--color-text-muted);
+        font-weight: 500;
       }
     }
 
     .category-bars-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 18px;
     }
 
     .category-bar-row {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: var(--color-ivory);
+      border: 1px solid var(--color-border);
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: #fff;
+      }
 
       .bar-top {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 0.95rem;
 
-        .cat-label {
-          font-weight: 600;
-          color: var(--color-text-main);
+        .cat-label-wrap {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .cat-icon-badge {
+            font-size: 1.15rem;
+          }
+
+          .cat-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-charcoal);
+          }
         }
 
         .cat-amounts {
           display: flex;
-          align-items: center;
+          align-items: baseline;
           gap: 6px;
 
           .act {
-            color: var(--color-primary);
+            color: var(--color-burgundy);
+            font-weight: 700;
+            font-size: 0.95rem;
           }
 
           .est {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--color-text-muted);
           }
         }
       }
 
       .bar-track {
-        height: 10px;
-        background: var(--color-surface-subtle);
-        border: 1px solid var(--color-border);
+        height: 8px;
+        background: var(--color-sand);
         border-radius: var(--radius-full);
         overflow: hidden;
 
         .bar-fill {
           height: 100%;
-          background: linear-gradient(90deg, var(--color-primary-light), var(--color-primary));
+          background: linear-gradient(90deg, var(--color-terracotta), var(--color-burgundy));
           border-radius: var(--radius-full);
-          transition: width 0.3s ease;
+          transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
       }
 
       .bar-sub {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         font-size: 0.78rem;
         color: var(--color-text-muted);
+
+        .bar-percentage {
+          font-weight: 600;
+          color: var(--color-terracotta);
+        }
       }
     }
   `]

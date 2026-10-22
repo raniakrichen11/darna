@@ -16,18 +16,20 @@ import { AppLanguage } from '../../models/user-preferences.model';
   template: `
     <div class="settings-page" [attr.dir]="i18n.dir()">
       <!-- Page Header -->
-      <div class="page-header">
-        <h1>{{ i18n.t('settings.title') }}</h1>
-        <p>{{ i18n.t('settings.subtitle') }}</p>
-      </div>
+      <header class="page-header">
+        <span class="page-eyebrow">{{ i18n.currentLang() === 'ar' ? 'الإعدادات والتفضيلات' : 'PARAMÈTRES & PRÉFÉRENCES' }}</span>
+        <h1 class="page-title">{{ i18n.t('settings.title') }}</h1>
+        <p class="page-subtitle">{{ i18n.t('settings.subtitle') }}</p>
+      </header>
 
       <!-- Language Switcher Card -->
-      <section class="settings-card card">
+      <section class="settings-card">
         <div class="card-header">
-          <div class="header-icon">🌍</div>
-          <div>
-            <h2>{{ i18n.t('settings.language_section') }}</h2>
-            <p>{{ i18n.currentLang() === 'ar' ? 'اختاري اللغة المناسبة لكِ مع تغيير فوري للاتجاه (RTL / LTR).' : 'Basculez entre le Français et l’Arabe avec inversion dynamique de la mise en page.' }}</p>
+          <div class="header-icon-pill">🌍</div>
+          <div class="header-text">
+            <span class="section-eyebrow">{{ i18n.currentLang() === 'ar' ? 'اللغة والاتجاه' : 'LANGUE & DIRECTION' }}</span>
+            <h2 class="section-title">{{ i18n.t('settings.language_section') }}</h2>
+            <p class="section-desc">{{ i18n.currentLang() === 'ar' ? 'اختاري اللغة المناسبة لكِ مع تغيير فوري للاتجاه (RTL / LTR).' : 'Basculez entre le Français et l’Arabe avec inversion dynamique de la mise en page.' }}</p>
           </div>
         </div>
 
@@ -67,12 +69,13 @@ import { AppLanguage } from '../../models/user-preferences.model';
       </section>
 
       <!-- Personal Info Card -->
-      <section class="settings-card card">
+      <section class="settings-card">
         <div class="card-header">
-          <div class="header-icon">👰</div>
-          <div>
-            <h2>{{ i18n.t('settings.personal_section') }}</h2>
-            <p>{{ i18n.currentLang() === 'ar' ? 'لتخصيص ترويسة ملف PDF وقائمة جهازك.' : 'Pour personnaliser vos exports PDF et votre accueil.' }}</p>
+          <div class="header-icon-pill">👰</div>
+          <div class="header-text">
+            <span class="section-eyebrow">{{ i18n.currentLang() === 'ar' ? 'الملف الشخصي' : 'PROFIL MARIÉE' }}</span>
+            <h2 class="section-title">{{ i18n.t('settings.personal_section') }}</h2>
+            <p class="section-desc">{{ i18n.currentLang() === 'ar' ? 'لتخصيص ترويسة ملف PDF وقائمة جهازك.' : 'Pour personnaliser vos exports PDF et votre accueil.' }}</p>
           </div>
         </div>
 
@@ -99,7 +102,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
             />
           </div>
 
-          <div class="form-group">
+          <div class="form-group full-width">
             <label for="weddingDate">{{ i18n.t('settings.wedding_date') }}</label>
             <input
               id="weddingDate"
@@ -112,12 +115,13 @@ import { AppLanguage } from '../../models/user-preferences.model';
       </section>
 
       <!-- PWA Installation Card -->
-      <section class="settings-card card">
+      <section class="settings-card pwa-card">
         <div class="card-header">
-          <div class="header-icon">📱</div>
-          <div>
-            <h2>{{ i18n.t('settings.pwa_section') }}</h2>
-            <p>
+          <div class="header-icon-pill">📱</div>
+          <div class="header-text">
+            <span class="section-eyebrow">APPLICATION PWA</span>
+            <h2 class="section-title">{{ i18n.t('settings.pwa_section') }}</h2>
+            <p class="section-desc">
               {{ i18n.currentLang() === 'ar'
                 ? 'دارنا يعمل كتطبيق هاتف حقيقي (PWA) حتى عند انقطاع الإنترنت أو أثناء التسوق في الأسواق والمحلات.'
                 : 'Darna fonctionne comme une vraie application mobile (PWA), consultable hors-ligne dans les magasins et marchés.' }}
@@ -127,7 +131,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
 
         <div class="pwa-actions-row">
           @if (pwa.isInstalled()) {
-            <div class="badge badge-success">
+            <div class="pwa-badge installed">
               ✓ {{ i18n.t('settings.pwa_installed') }}
             </div>
           } @else if (pwa.canInstall()) {
@@ -135,22 +139,23 @@ import { AppLanguage } from '../../models/user-preferences.model';
               📲 {{ i18n.t('settings.pwa_install_btn') }}
             </button>
           } @else {
-            <span class="pwa-hint">
+            <div class="pwa-hint-box">
               {{ i18n.currentLang() === 'ar'
                 ? '💡 يمكنك إضافة دارنا إلى شاشتك الرئيسية عبر خيار «Ajouter à l’écran d’accueil» من متصفحك.'
                 : '💡 Pour installer l’application, utilisez l’option « Ajouter à l’écran d’accueil » de votre navigateur.' }}
-            </span>
+            </div>
           }
         </div>
       </section>
 
       <!-- Data Backup & Reset Card -->
-      <section class="settings-card card">
+      <section class="settings-card">
         <div class="card-header">
-          <div class="header-icon">💾</div>
-          <div>
-            <h2>{{ i18n.t('settings.data_section') }}</h2>
-            <p>{{ i18n.t('settings.data_desc') }}</p>
+          <div class="header-icon-pill">💾</div>
+          <div class="header-text">
+            <span class="section-eyebrow">{{ i18n.currentLang() === 'ar' ? 'البيانات والأمان' : 'DONNÉES & SAUVEGARDE' }}</span>
+            <h2 class="section-title">{{ i18n.t('settings.data_section') }}</h2>
+            <p class="section-desc">{{ i18n.t('settings.data_desc') }}</p>
           </div>
         </div>
 
@@ -164,18 +169,19 @@ import { AppLanguage } from '../../models/user-preferences.model';
             <input type="file" accept=".json" (change)="onImportFile($event)" style="display: none;" />
           </label>
 
-          <button type="button" class="btn btn-subtle" (click)="onResetStarter()">
+          <button type="button" class="btn btn-subtle reset-btn" (click)="onResetStarter()">
             🔄 {{ i18n.t('settings.reset_starter') }}
           </button>
         </div>
       </section>
 
       <!-- About Darna Section -->
-      <section class="about-card card">
-        <h3>{{ i18n.t('settings.about_title') }}</h3>
-        <p>{{ i18n.t('settings.about_text') }}</p>
+      <section class="about-card">
+        <div class="about-brand">Darna | دارنا</div>
+        <h3 class="about-title">{{ i18n.t('settings.about_title') }}</h3>
+        <p class="about-desc">{{ i18n.t('settings.about_text') }}</p>
         <div class="culture-footer">
-          <span>Made with ❤️ for Tunisian Brides • Darna v1.0.0</span>
+          <span>Made with ❤️ for Tunisian Brides • Darna Editorial Luxury Edition</span>
         </div>
       </section>
     </div>
@@ -188,46 +194,85 @@ import { AppLanguage } from '../../models/user-preferences.model';
     }
 
     .page-header {
-      h1 {
-        font-size: 1.85rem;
+      margin-bottom: var(--space-xs);
+
+      .page-eyebrow {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-weight: 600;
+        color: var(--color-terracotta);
+        display: block;
         margin-bottom: 4px;
       }
-      p {
+
+      .page-title {
+        font-family: var(--font-serif);
+        font-size: 2.2rem;
+        color: var(--color-burgundy);
+        line-height: 1.15;
+        margin-bottom: 6px;
+      }
+
+      .page-subtitle {
         color: var(--color-text-muted);
+        font-size: 0.95rem;
       }
     }
 
     .settings-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
       gap: var(--space-lg);
 
       .card-header {
         display: flex;
-        gap: 14px;
+        gap: 16px;
         align-items: flex-start;
 
-        .header-icon {
-          font-size: 1.8rem;
-          width: 48px;
-          height: 48px;
-          border-radius: var(--radius-md);
-          background: var(--color-surface-subtle);
+        .header-icon-pill {
+          width: 44px;
+          height: 44px;
+          border-radius: var(--radius-full);
+          background: var(--color-sand);
           border: 1px solid var(--color-border);
           display: flex;
           align-items: center;
           justify-content: center;
+          font-size: 1.35rem;
           flex-shrink: 0;
         }
 
-        h2 {
-          font-size: 1.25rem;
-          margin-bottom: 2px;
-        }
+        .header-text {
+          flex: 1;
 
-        p {
-          font-size: 0.88rem;
-          color: var(--color-text-muted);
+          .section-eyebrow {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            color: var(--color-terracotta);
+            display: block;
+          }
+
+          .section-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            color: var(--color-burgundy);
+            margin: 2px 0 4px 0;
+          }
+
+          .section-desc {
+            font-size: 0.88rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+            margin: 0;
+          }
         }
       }
     }
@@ -236,7 +281,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
     .language-choices {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 14px;
 
       @media (min-width: 600px) {
         grid-template-columns: repeat(2, 1fr);
@@ -246,27 +291,29 @@ import { AppLanguage } from '../../models/user-preferences.model';
     .lang-box {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 16px;
-      background: var(--color-surface-subtle);
+      gap: 16px;
+      padding: 18px 20px;
+      background: var(--color-ivory);
       border: 2px solid var(--color-border);
       border-radius: var(--radius-md);
       cursor: pointer;
       text-align: start;
-      transition: all 0.2s;
+      transition: all 0.25s ease;
 
       .flag {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
 
       .lang-meta {
         flex: 1;
         display: flex;
         flex-direction: column;
+        gap: 2px;
 
         strong {
-          font-size: 1rem;
-          color: var(--color-text-main);
+          font-family: var(--font-serif);
+          font-size: 1.15rem;
+          color: var(--color-charcoal);
         }
 
         small {
@@ -278,17 +325,18 @@ import { AppLanguage } from '../../models/user-preferences.model';
       .check-mark {
         font-size: 1.25rem;
         font-weight: 800;
-        color: var(--color-primary);
+        color: var(--color-burgundy);
       }
 
       &.active {
-        background: #fff;
-        border-color: var(--color-primary);
-        box-shadow: 0 4px 12px rgba(179, 107, 92, 0.12);
+        background: var(--color-surface);
+        border-color: var(--color-burgundy);
+        box-shadow: 0 4px 16px rgba(113, 59, 72, 0.1);
       }
 
       &:hover:not(.active) {
         border-color: var(--color-border-strong);
+        background: #fff;
       }
     }
 
@@ -301,16 +349,77 @@ import { AppLanguage } from '../../models/user-preferences.model';
       @media (min-width: 640px) {
         grid-template-columns: repeat(2, 1fr);
       }
+
+      .full-width {
+        @media (min-width: 640px) {
+          grid-column: span 2;
+        }
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          font-weight: 600;
+          color: var(--color-text-muted);
+        }
+
+        input {
+          padding: 10px 14px;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          background: var(--color-surface);
+          color: var(--color-charcoal);
+          font-family: inherit;
+          font-size: 0.95rem;
+          transition: all 0.2s ease;
+
+          &:focus {
+            outline: none;
+            border-color: var(--color-burgundy);
+            box-shadow: 0 0 0 3px rgba(113, 59, 72, 0.12);
+          }
+        }
+      }
     }
 
     /* PWA */
+    .pwa-card {
+      background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-sand) 100%);
+    }
+
     .pwa-actions-row {
       display: flex;
       align-items: center;
 
-      .pwa-hint {
+      .pwa-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: var(--radius-full);
+        font-size: 0.85rem;
+        font-weight: 600;
+
+        &.installed {
+          background: rgba(113, 136, 117, 0.15);
+          color: var(--color-sage);
+          border: 1px solid var(--color-sage);
+        }
+      }
+
+      .pwa-hint-box {
         font-size: 0.88rem;
         color: var(--color-text-muted);
+        background: var(--color-surface);
+        padding: 10px 16px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
       }
     }
 
@@ -322,31 +431,57 @@ import { AppLanguage } from '../../models/user-preferences.model';
 
       .file-btn {
         margin: 0;
+        cursor: pointer;
+      }
+
+      .reset-btn {
+        margin-inline-start: auto;
+
+        @media (max-width: 600px) {
+          margin-inline-start: 0;
+          width: 100%;
+        }
       }
     }
 
     .about-card {
-      background: var(--color-surface-subtle);
+      background: var(--color-sand);
       border: 1px dashed var(--color-border-strong);
-      padding: var(--space-lg);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
+      text-align: center;
+      align-items: center;
 
-      h3 {
-        font-size: 1.1rem;
-        color: var(--color-primary);
+      .about-brand {
+        font-family: var(--font-serif);
+        font-size: 1.3rem;
+        color: var(--color-burgundy);
+        letter-spacing: 0.05em;
       }
 
-      p {
+      .about-title {
+        font-family: var(--font-serif);
+        font-size: 1.15rem;
+        color: var(--color-charcoal);
+        margin: 0;
+      }
+
+      .about-desc {
         font-size: 0.9rem;
         line-height: 1.6;
+        color: var(--color-text-muted);
+        max-width: 600px;
+        margin: 0;
       }
 
       .culture-footer {
-        font-size: 0.8rem;
-        color: var(--color-text-light);
-        margin-top: 8px;
+        font-size: 0.78rem;
+        color: var(--color-terracotta);
+        margin-top: 10px;
+        font-weight: 500;
       }
     }
   `]

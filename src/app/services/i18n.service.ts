@@ -8,7 +8,8 @@ export const TRANSLATIONS_FR = {
   'app.name': 'Darna | دارنا',
   'app.title': 'Darna — Trousseau & Maison de la Mariée',
   'app.tagline': 'Tout pour votre nouveau chez-vous.',
-  'app.subtitle': 'Préparez votre nouveau chez-vous, à votre rythme.',
+  'app.headline': 'Votre nouveau chez-vous, à votre rythme.',
+  'app.subtitle': 'Retrouvez tout ce dont vous avez besoin pour préparer votre trousseau, organiser vos achats et avancer sereinement.',
   'app.culture_badge': 'Traditions & Modernité Tunisienne',
 
   // Navigation
@@ -168,7 +169,8 @@ export const TRANSLATIONS_AR: { [K in TranslationKey]: string } = {
   'app.name': 'دارنا | Darna',
   'app.title': 'دارنا — مخطط جهاز العروس وتأثيث البيت',
   'app.tagline': 'كل ما تحتاجينه لبيتك الجديد.',
-  'app.subtitle': 'جهّزي بيتك الجديد، خطوة بخطوة وعلى راحتك.',
+  'app.headline': 'جهّزي بيتك الجديد، خطوة بخطوة.',
+  'app.subtitle': 'اكتشفي كل ما تحتاجينه لإعداد جهازك، تنظيم مشترياتك وتأثيث بيتك الجديد بكل ثقة وهدوء.',
   'app.culture_badge': 'أصالة تونسية ولمسة عصرية',
 
   // Navigation

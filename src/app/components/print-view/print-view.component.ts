@@ -117,7 +117,7 @@ import { I18nService } from '../../services/i18n.service';
   styles: [`
     .print-container {
       background: #ffffff;
-      color: #2d2422;
+      color: #302927;
       padding: 24px;
       font-size: 11pt;
       line-height: 1.4;
@@ -128,20 +128,22 @@ import { I18nService } from '../../services/i18n.service';
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      border-bottom: 2px solid #b36b5c;
+      border-bottom: 2px solid #713B48;
       padding-bottom: 12px;
       margin-bottom: 16px;
     }
 
     .brand-title {
-      font-size: 20pt;
-      color: #b36b5c;
+      font-family: 'Playfair Display', 'Amiri', serif;
+      font-size: 22pt;
+      color: #713B48;
       margin: 0;
+      letter-spacing: 0.04em;
     }
 
     .brand-tagline {
       font-size: 9pt;
-      color: #6e5d5b;
+      color: #827872;
       margin: 2px 0 0 0;
     }
 
@@ -154,8 +156,8 @@ import { I18nService } from '../../services/i18n.service';
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
-      background: #faf7f2;
-      border: 1px solid #ebdcd4;
+      background: #FAF7F2;
+      border: 1px solid #E8E0D8;
       border-radius: 8px;
       padding: 10px 14px;
       margin-bottom: 20px;
@@ -167,21 +169,22 @@ import { I18nService } from '../../services/i18n.service';
 
       .label {
         font-size: 8pt;
-        color: #6e5d5b;
+        color: #827872;
         text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       .val {
         font-size: 11pt;
         font-weight: 700;
-        color: #2d2422;
+        color: #302927;
 
         &.success {
-          color: #3f7b58;
+          color: #5F7D66;
         }
 
         &.bold {
-          color: #b36b5c;
+          color: #713B48;
         }
       }
     }
@@ -195,27 +198,29 @@ import { I18nService } from '../../services/i18n.service';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f4ede4;
-      padding: 6px 10px;
+      background: #F0E9E0;
+      padding: 6px 12px;
       border-radius: 6px;
+      border-inline-start: 4px solid #713B48;
       margin-bottom: 6px;
 
       h3 {
-        font-size: 10.5pt;
+        font-family: 'Playfair Display', 'Amiri', serif;
+        font-size: 11pt;
         margin: 0;
-        color: #2d2422;
+        color: #302927;
       }
 
       .cat-count {
         font-size: 9pt;
         font-weight: normal;
-        color: #6e5d5b;
+        color: #827872;
       }
 
       .cat-subtotal {
         font-size: 9pt;
         font-weight: bold;
-        color: #b36b5c;
+        color: #713B48;
       }
     }
 
@@ -225,46 +230,48 @@ import { I18nService } from '../../services/i18n.service';
       font-size: 9.5pt;
 
       th {
-        border-bottom: 1px solid #ebdcd4;
-        padding: 5px 8px;
+        border-bottom: 1px solid #E8E0D8;
+        padding: 6px 8px;
         font-size: 8.5pt;
-        color: #6e5d5b;
+        color: #827872;
         text-align: start;
-        background: #fdfcfb;
+        background: #FAF7F2;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
       }
 
       td {
-        padding: 5px 8px;
-        border-bottom: 1px solid #f2e7e1;
+        padding: 6px 8px;
+        border-bottom: 1px solid #F0E9E0;
         vertical-align: middle;
       }
 
       .purchased-row {
-        background-color: #fafdfa;
+        background-color: #FAFDF9;
       }
 
       .check-box {
         font-size: 11pt;
         &.checked {
-          color: #3f7b58;
+          color: #5F7D66;
           font-weight: bold;
         }
       }
 
       .notes-col {
         font-size: 8pt;
-        color: #6e5d5b;
+        color: #827872;
         font-style: italic;
       }
     }
 
     .print-footer {
       margin-top: 24px;
-      border-top: 1px solid #ebdcd4;
+      border-top: 1px solid #E8E0D8;
       padding-top: 10px;
       text-align: center;
       font-size: 8.5pt;
-      color: #9c8886;
+      color: #827872;
     }
   `]
 })

@@ -1,60 +1,62 @@
 /* ==========================================================================
    DARNA | دارنا — Design System Tokens & Global Styles
-   Tunisian Bridal & Home Shopping Planner
+   Editorial Luxury Design for Tunisian Bridal Shopping Planner
    ========================================================================== */
 
 :root {
-  /* Color Palette */
-  --color-bg: #faf7f2;
-  --color-bg-alt: #f4ede4;
-  --color-surface: #ffffff;
-  --color-surface-subtle: #fcfaf7;
-  --color-surface-hover: #f7f2eb;
+  /* Warm Sophisticated Editorial Palette */
+  --color-bg: #FAF7F2;               /* Warm Ivory background */
+  --color-bg-sand: #F0E9E0;          /* Pale Sand */
+  --color-surface: #FFFFFF;          /* Soft White surface */
+  --color-surface-subtle: #FAF6F1;   /* Soft warm tint surface */
+  --color-surface-hover: #F5EFE8;
 
-  /* Primary Brand: Dusty Rose & Warm Terracotta */
-  --color-primary: #b36b5c;
-  --color-primary-hover: #9e5b4d;
-  --color-primary-light: #f6e9e6;
-  --color-primary-subtle: #fbf3f1;
+  /* Primary Accent: Deep Burgundy */
+  --color-primary: #713B48;
+  --color-primary-hover: #5A2C37;
+  --color-primary-light: #F4EAE7;
+  --color-primary-subtle: #FAF2F0;
 
-  /* Secondary Accent: Sage Green */
-  --color-secondary: #5f826d;
-  --color-secondary-hover: #4e6d5b;
-  --color-secondary-light: #eaf1ed;
+  /* Secondary Accent: Muted Terracotta */
+  --color-secondary: #B77D72;
+  --color-secondary-hover: #9E685E;
+  --color-secondary-light: #F8F2F0;
 
-  /* Gold / Accent Warm */
-  --color-accent-gold: #c89650;
-  --color-accent-gold-light: #fbf5ea;
-
-  /* Typography Colors: Charcoal & Warm Dark Brown */
-  --color-text-main: #2d2422;
-  --color-text-muted: #6e5d5b;
-  --color-text-light: #9c8886;
-  --color-text-inverse: #ffffff;
-
-  /* Borders & Dividers */
-  --color-border: #ebdcd4;
-  --color-border-subtle: #f2e7e1;
-  --color-border-strong: #d5c0b6;
+  /* Soft Accent: Dusty Rose & Champagne Gold */
+  --color-soft-rose: #E8D4D0;
+  --color-accent-gold: #B88540;
+  --color-accent-gold-light: #FAF4EB;
 
   /* Status Colors */
-  --color-success: #3f7b58;
-  --color-success-bg: #edf7f1;
-  --color-warning: #b7791f;
-  --color-warning-bg: #fffaf0;
-  --color-danger: #c53030;
-  --color-danger-bg: #fff5f5;
+  --color-success: #5F7D66;          /* Muted Sage */
+  --color-success-bg: #EDF3EE;
+  --color-warning: #B37D28;
+  --color-warning-bg: #FBF6EC;
+  --color-danger: #B84743;
+  --color-danger-bg: #FDF2F2;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(45, 36, 34, 0.04);
-  --shadow-sm: 0 2px 6px rgba(45, 36, 34, 0.06);
-  --shadow-md: 0 6px 16px rgba(45, 36, 34, 0.08);
-  --shadow-lg: 0 12px 28px rgba(45, 36, 34, 0.12);
+  /* Typography Colors */
+  --color-text-main: #302927;        /* Deep Charcoal Brown */
+  --color-text-muted: #827872;       /* Warm Grey */
+  --color-text-light: #A89F99;       /* Delicate grey-beige */
+  --color-text-inverse: #FFFFFF;
+
+  /* Borders & Dividers */
+  --color-border: #E8E0D8;           /* Subtle Warm Beige */
+  --color-border-subtle: #F2ECE6;
+  --color-border-strong: #D5C8BD;
+
+  /* Soft Ambient Shadows (No harsh black shadows) */
+  --shadow-xs: 0 1px 3px rgba(48, 41, 39, 0.03);
+  --shadow-sm: 0 2px 8px rgba(48, 41, 39, 0.05);
+  --shadow-md: 0 8px 24px rgba(48, 41, 39, 0.06);
+  --shadow-lg: 0 16px 40px rgba(48, 41, 39, 0.08);
 
   /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
 
   /* Spacing */
@@ -62,16 +64,17 @@
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
+  --space-xl: 36px;
+  --space-2xl: 56px;
 
-  /* Fonts */
-  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-arabic: 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+  /* Typography Tokens */
   --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-arabic-heading: 'Amiri', 'Noto Sans Arabic', serif;
+  --font-arabic-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
 }
 
-/* Reset & Box Sizing */
+/* Base Reset & Box Sizing */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -85,32 +88,67 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   background-color: var(--color-bg);
   color: var(--color-text-main);
-  line-height: 1.55;
+  line-height: 1.6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* RTL Specific Adaptations */
+/* RTL Typography & Direction */
 html[dir="rtl"] body {
-  font-family: var(--font-arabic), var(--font-body);
+  font-family: var(--font-arabic-body);
 }
 
-/* Typography elements */
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] .font-editorial {
+  font-family: var(--font-arabic-heading), var(--font-arabic-body);
+  letter-spacing: 0;
+}
+
+/* Editorial Headings */
 h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-main);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.25;
 }
 
-h1 { font-size: 1.85rem; }
-h2 { font-size: 1.45rem; }
-h3 { font-size: 1.2rem; }
-h4 { font-size: 1.05rem; }
+h1, .h1 {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+
+  @media (min-width: 768px) {
+    font-size: 2.85rem;
+  }
+}
+
+h2, .h2 {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+
+  @media (min-width: 768px) {
+    font-size: 1.95rem;
+  }
+}
+
+h3, .h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+h4, .h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
 
 p {
   color: var(--color-text-muted);
@@ -119,7 +157,11 @@ p {
 a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    color: var(--color-primary-hover);
+  }
 }
 
 button {
@@ -134,33 +176,38 @@ input, textarea, select {
   font-size: 0.95rem;
 }
 
-/* Global Button Styles */
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 18px;
-  border-radius: var(--radius-md);
-  font-size: 0.95rem;
+  padding: 11px 22px;
+  border-radius: var(--radius-full);
+  font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  min-height: 44px; /* Accessible touch target */
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 44px;
   text-align: center;
   border: 1px solid transparent;
+  letter-spacing: 0.01em;
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 
   &.btn-primary {
     background-color: var(--color-primary);
     color: var(--color-text-inverse);
-    box-shadow: 0 2px 8px rgba(179, 107, 92, 0.25);
+    box-shadow: 0 3px 12px rgba(113, 59, 72, 0.22);
 
     &:hover {
       background-color: var(--color-primary-hover);
+      box-shadow: 0 6px 18px rgba(113, 59, 72, 0.3);
+      transform: translateY(-1px);
     }
   }
 
@@ -170,13 +217,15 @@ input, textarea, select {
 
     &:hover {
       background-color: var(--color-secondary-hover);
+      transform: translateY(-1px);
     }
   }
 
   &.btn-outline {
-    background-color: transparent;
+    background-color: #FFFFFF;
     color: var(--color-text-main);
-    border: 1px solid var(--color-border-strong);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xs);
 
     &:hover {
       background-color: var(--color-surface-hover);
@@ -190,50 +239,57 @@ input, textarea, select {
     color: var(--color-primary);
 
     &:hover {
-      background-color: #edd9d4;
+      background-color: #EBDAD6;
     }
   }
 
   &.btn-sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
+    padding: 7px 15px;
+    font-size: 0.84rem;
     min-height: 36px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-full);
   }
 
   &.btn-icon {
-    padding: 8px;
+    padding: 0;
     width: 44px;
     height: 44px;
     border-radius: var(--radius-full);
   }
 }
 
-/* Cards */
+/* ==========================================================================
+   Cards & Surfaces
+   ========================================================================== */
 .card {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
 
   &.interactive:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
-    border-color: var(--color-primary);
+    border-color: var(--color-border-strong);
   }
 }
 
-/* Badges */
+/* ==========================================================================
+   Badges
+   ========================================================================== */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 4px 12px;
   border-radius: var(--radius-full);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
 
   &.badge-primary {
     background-color: var(--color-primary-light);
@@ -247,8 +303,8 @@ input, textarea, select {
 
   &.badge-traditional {
     background-color: var(--color-accent-gold-light);
-    color: #9c6c22;
-    border: 1px solid #ebd7af;
+    color: #8C6120;
+    border: 1px solid #EEDFCA;
   }
 
   &.badge-success {
@@ -257,10 +313,12 @@ input, textarea, select {
   }
 }
 
-/* Layout Container */
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
 .container {
   width: 100%;
-  max-width: 1140px;
+  max-width: 1180px;
   margin-inline: auto;
   padding-inline: var(--space-md);
 }
@@ -271,31 +329,41 @@ input, textarea, select {
   }
 }
 
-/* Modal Backdrop & Dialog */
+/* ==========================================================================
+   Modals & Bottom Sheet
+   ========================================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(45, 36, 34, 0.5);
-  backdrop-filter: blur(4px);
+  background-color: rgba(48, 41, 39, 0.45);
+  backdrop-filter: blur(6px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-md);
-  animation: fadeIn 0.2s ease;
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-card {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 520px;
+  max-width: 540px;
   max-height: 90vh;
   overflow-y: auto;
   padding: var(--space-xl);
   box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
   position: relative;
-  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (max-width: 600px) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-top: auto;
+    max-height: 85vh;
+  }
 }
 
 @keyframes fadeIn {
@@ -304,82 +372,88 @@ input, textarea, select {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Form Controls */
+/* ==========================================================================
+   Form Controls
+   ========================================================================== */
 .form-group {
   margin-bottom: var(--space-md);
 
   label {
     display: block;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
     color: var(--color-text-main);
   }
 
   input, select, textarea {
     width: 100%;
-    padding: 10px 14px;
+    padding: 12px 16px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     background-color: var(--color-surface-subtle);
     color: var(--color-text-main);
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
 
     &:focus {
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(179, 107, 92, 0.15);
-      background-color: var(--color-surface);
+      box-shadow: 0 0 0 3px rgba(113, 59, 72, 0.12);
+      background-color: #FFFFFF;
     }
   }
 
   textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 90px;
   }
 }
 
-/* Toast Notifications */
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
 .toast-banner {
   position: fixed;
   bottom: 84px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--color-text-main);
-  color: #fff;
-  padding: 12px 20px;
+  color: #FFFFFF;
+  padding: 12px 24px;
   border-radius: var(--radius-full);
   font-size: 0.9rem;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: var(--shadow-lg);
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(48, 41, 39, 0.25);
   z-index: 999;
-  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (min-width: 768px) {
-    bottom: 32px;
+    bottom: 36px;
   }
 }
 
 @keyframes popIn {
-  from { transform: translate(-50%, 15px); opacity: 0; }
+  from { transform: translate(-50%, 18px); opacity: 0; }
   to { transform: translate(-50%, 0); opacity: 1; }
 }
 
-/* Print Styles */
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
 @media print {
   body {
-    background: #ffffff !important;
+    background: #FFFFFF !important;
     color: #000000 !important;
   }
 
-  header, nav, footer, .no-print, .btn, .toast-banner, .modal-overlay {
+  header, nav, footer, .no-print, .btn, .toast-banner, .modal-overlay, .mobile-bottom-nav {
     display: none !important;
   }
 
@@ -390,10 +464,5 @@ input, textarea, select {
   .container {
     max-width: 100% !important;
     padding: 0 !important;
-  }
-
-  .card {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
   }
 }
