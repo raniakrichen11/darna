@@ -62,12 +62,14 @@
 .brand-link {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
+  flex-shrink: 0;
+  white-space: nowrap;
 
   .brand-monogram {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-sm);
     background: var(--color-primary-light);
     border: 1px solid var(--color-soft-rose);
@@ -80,8 +82,8 @@
     flex-shrink: 0;
 
     .brand-emblem-svg {
-      width: 26px;
-      height: 26px;
+      width: 25px;
+      height: 25px;
     }
   }
 
@@ -92,39 +94,50 @@
   .brand-text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
 
     .brand-title {
-      font-size: 1.35rem;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      font-size: 1.3rem;
       font-weight: 600;
       color: var(--color-text-main);
-      line-height: 1.1;
+      line-height: 1.15;
+      white-space: nowrap;
 
       .brand-latin {
         font-family: var(--font-serif);
         color: var(--color-primary);
         letter-spacing: -0.01em;
+        font-weight: 700;
       }
 
       .brand-sep {
-        margin: 0 4px;
+        margin: 0 2px;
         color: var(--color-border-strong);
         font-weight: 300;
       }
 
       .brand-arabic {
         font-family: var(--font-arabic-heading);
-        font-size: 1.25rem;
+        font-size: 1.22rem;
         color: var(--color-text-main);
       }
     }
 
     .brand-tagline {
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
+      font-size: 0.64rem;
+      letter-spacing: 0.07em;
       text-transform: uppercase;
       color: var(--color-text-muted);
       margin-top: 2px;
       font-weight: 600;
+      white-space: nowrap !important;
+      line-height: 1.2;
+      display: block !important;
     }
   }
 
@@ -132,8 +145,8 @@
     gap: 8px;
 
     .brand-monogram {
-      width: 34px;
-      height: 34px;
+      width: 35px;
+      height: 35px;
 
       .brand-emblem-svg {
         width: 22px;
@@ -144,13 +157,46 @@
     .brand-text {
       .brand-title {
         font-size: 1.15rem;
+
         .brand-arabic {
           font-size: 1.05rem;
         }
       }
 
       .brand-tagline {
-        display: none;
+        font-size: 0.58rem;
+        letter-spacing: 0.04em;
+        display: block !important;
+        white-space: nowrap !important;
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    gap: 6px;
+
+    .brand-monogram {
+      width: 32px;
+      height: 32px;
+
+      .brand-emblem-svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .brand-text {
+      .brand-title {
+        font-size: 1.02rem;
+
+        .brand-arabic {
+          font-size: 0.95rem;
+        }
+      }
+
+      .brand-tagline {
+        font-size: 0.52rem;
+        letter-spacing: 0.02em;
       }
     }
   }
@@ -324,28 +370,14 @@
 
 @media (max-width: 480px) {
   .header-container {
-    height: 58px;
+    height: 62px;
     gap: 8px;
-  }
-  .brand-link {
-    gap: 8px;
-    .brand-monogram {
-      width: 32px;
-      height: 32px;
-      font-size: 1.1rem;
-    }
-    .brand-text .brand-title {
-      font-size: 1.12rem;
-    }
-    .brand-text .brand-tagline {
-      display: none;
-    }
   }
   .lang-segmented-bar {
     padding: 2px;
     gap: 1px;
     .lang-seg-btn {
-      padding: 4px 8px;
+      padding: 4px 7px;
       font-size: 0.72rem;
     }
   }
