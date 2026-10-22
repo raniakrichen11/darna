@@ -354,6 +354,48 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         [item]="previewArticleItem()"
         (close)="closeArticlePreview()"
       ></app-article-preview-modal>
+
+      <!-- Clear All Confirmation Modal -->
+      @if (showClearConfirmModal()) {
+        <div class="modal-overlay" (click)="closeClearConfirmModal()">
+          <div class="modal-card confirm-modal-card" (click)="$event.stopPropagation()" [attr.dir]="i18n.dir()">
+            <div class="confirm-modal-header">
+              <div class="confirm-warning-icon">⚠️</div>
+              <div class="confirm-header-text">
+                <span class="confirm-eyebrow">
+                  {{ i18n.currentLang() === 'ar' ? 'تأكيد الحذف' : (i18n.currentLang() === 'en' ? 'CONFIRM DELETION' : 'CONFIRMATION') }}
+                </span>
+                <h2 class="confirm-title">
+                  {{ i18n.currentLang() === 'ar' ? 'إفراغ القائمة بالكامل؟' : (i18n.currentLang() === 'en' ? 'Clear entire list?' : 'Vider toute la liste ?') }}
+                </h2>
+              </div>
+            </div>
+
+            <p class="confirm-body-text">
+              {{ i18n.currentLang() === 'ar'
+                ? 'هل أنتِ متأكدة من رغبتك في حذف جميع عناصر جهازك؟ هذه العملية نهائية ولا يمكن التراجع عنها.'
+                : (i18n.currentLang() === 'en'
+                  ? 'Are you sure you want to remove all items from your shopping list? This action is permanent and cannot be undone.'
+                  : 'Êtes-vous sûre de vouloir supprimer tous les articles de votre liste ? Cette action est irréversible.')
+              }}
+            </p>
+
+            <div class="confirm-stats-pill">
+              <span>📋 {{ shoppingList.totalItemsCount() }} {{ i18n.t('catalog.items_count') }}</span>
+              <span>💰 {{ shoppingList.totalEstimatedCost() | number:'1.0-2' }} {{ i18n.currency() }}</span>
+            </div>
+
+            <div class="confirm-modal-actions">
+              <button type="button" class="btn btn-outline" (click)="closeClearConfirmModal()">
+                {{ i18n.currentLang() === 'ar' ? 'لا، تراجع' : (i18n.currentLang() === 'en' ? 'No, cancel' : 'Non, annuler') }}
+              </button>
+              <button type="button" class="btn btn-danger-confirm" (click)="confirmClearAll()">
+                🗑️ {{ i18n.currentLang() === 'ar' ? 'نعم، إفراغ القائمة' : (i18n.currentLang() === 'en' ? 'Yes, clear list' : 'Oui, vider la liste') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
   styles: [`
@@ -1013,6 +1055,122 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         margin-top: 8px;
       }
     }
+
+    /* Clear All Confirmation Modal */
+    .confirm-modal-card {
+      max-width: 460px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: #FFFFFF;
+      box-shadow: var(--shadow-lg);
+
+      .confirm-modal-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+
+        .confirm-warning-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #FDF2F2;
+          color: #B84743;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          flex-shrink: 0;
+          border: 1px solid rgba(184, 71, 67, 0.2);
+        }
+
+        .confirm-header-text {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          .confirm-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--color-danger);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+          }
+
+          .confirm-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            margin: 0;
+            line-height: 1.25;
+          }
+        }
+      }
+
+      .confirm-body-text {
+        font-size: 0.92rem;
+        color: var(--color-text-muted);
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      .confirm-stats-pill {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--color-surface-subtle);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--color-text-main);
+      }
+
+      .confirm-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 6px;
+        padding-top: 14px;
+        border-top: 1px solid var(--color-border-subtle);
+
+        .btn-danger-confirm {
+          background-color: var(--color-danger);
+          color: #FFFFFF;
+          border: none;
+          font-weight: 600;
+          padding: 10px 18px;
+          border-radius: var(--radius-full);
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 2px 8px rgba(184, 71, 67, 0.25);
+          cursor: pointer;
+
+          &:hover {
+            background-color: #9E3733;
+            box-shadow: 0 4px 12px rgba(184, 71, 67, 0.35);
+            transform: translateY(-1px);
+          }
+
+          &:active {
+            transform: scale(0.97);
+          }
+        }
+
+        @media (max-width: 480px) {
+          flex-direction: column-reverse;
+          gap: 8px;
+
+          .btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+    }
   `]
 })
 export class MyListComponent {
@@ -1031,6 +1189,7 @@ export class MyListComponent {
   showItemModal = signal<boolean>(false);
   modalItem = signal<ShoppingListItem | undefined>(undefined);
   previewArticleItem = signal<CatalogItem | undefined>(undefined);
+  showClearConfirmModal = signal<boolean>(false);
   isExporting = signal<boolean>(false);
 
   openArticlePreview(listItem: ShoppingListItem): void {
@@ -1193,14 +1352,21 @@ export class MyListComponent {
   }
 
   onClearAll(): void {
-    if (confirm(this.i18n.t('action.clear_confirm'))) {
-      this.shoppingList.clearAll();
-      const lang = this.i18n.currentLang();
-      const msg = lang === 'ar'
-        ? 'تم إفراغ القائمة'
-        : (lang === 'en' ? 'List cleared' : 'Liste vidée');
-      this.toast.show(msg);
-    }
+    this.showClearConfirmModal.set(true);
+  }
+
+  closeClearConfirmModal(): void {
+    this.showClearConfirmModal.set(false);
+  }
+
+  confirmClearAll(): void {
+    this.shoppingList.clearAll();
+    this.showClearConfirmModal.set(false);
+    const lang = this.i18n.currentLang();
+    const msg = lang === 'ar'
+      ? 'تم إفراغ القائمة بنجاح ✨'
+      : (lang === 'en' ? 'List cleared successfully ✨' : 'Liste vidée avec succès ✨');
+    this.toast.show(msg);
   }
 
   onPrint(): void {
