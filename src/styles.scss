@@ -350,16 +350,27 @@ input, textarea, select {
 /* ==========================================================================
    Modals & Bottom Sheet
    ========================================================================== */
+/* Prevent background scrolling when any modal/popup is open */
+body:has(.modal-overlay),
+body.modal-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(48, 41, 39, 0.45);
-  backdrop-filter: blur(6px);
+  background-color: rgba(48, 41, 39, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-md);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CatalogItem } from '../../models/catalog.model';
 import { CatalogService } from '../../services/catalog.service';
@@ -122,13 +122,35 @@ import { I18nService } from '../../services/i18n.service';
   styles: [`
     .article-modal-card {
       max-width: 580px;
+      width: 100%;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
       padding: 0;
-      overflow: hidden;
       background: var(--color-surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-border);
       box-shadow: var(--shadow-lg);
       position: relative;
+      display: flex;
+      flex-direction: column;
+
+      /* Refined internal scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border-strong) transparent;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: var(--color-border-strong);
+        border-radius: 99px;
+      }
     }
 
     /* Image Hero */
@@ -136,6 +158,7 @@ import { I18nService } from '../../services/i18n.service';
       position: relative;
       width: 100%;
       height: 280px;
+      flex-shrink: 0;
       background: var(--color-bg-sand);
       overflow: hidden;
 
@@ -383,7 +406,7 @@ import { I18nService } from '../../services/i18n.service';
     }
   `]
 })
-export class ArticlePreviewModalComponent {
+export class ArticlePreviewModalComponent implements OnChanges, OnDestroy {
   @Input() item?: CatalogItem;
   @Output() close = new EventEmitter<void>();
   @Output() addToShoppingList = new EventEmitter<CatalogItem>();
@@ -391,6 +414,20 @@ export class ArticlePreviewModalComponent {
   catalogService = inject(CatalogService);
   shoppingList = inject(ShoppingListService);
   i18n = inject(I18nService);
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['item']) {
+      if (this.item) {
+        document.body.classList.add('modal-open');
+      } else {
+        document.body.classList.remove('modal-open');
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('modal-open');
+  }
 
   get isInList(): boolean {
     return !!this.item && this.shoppingList.isCatalogItemInList(this.item.id);

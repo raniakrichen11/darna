@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ShoppingListItem } from '../../models/shopping-list.model';
@@ -279,7 +279,7 @@ import { I18nService } from '../../services/i18n.service';
     }
   `]
 })
-export class ItemModalComponent implements OnInit {
+export class ItemModalComponent implements OnInit, OnDestroy {
   @Input() existingItem?: ShoppingListItem;
   @Input() defaultCategoryId?: string;
   @Output() save = new EventEmitter<any>();
@@ -296,6 +296,7 @@ export class ItemModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    document.body.classList.add('modal-open');
     const isAr = this.i18n.currentLang() === 'ar';
     let initialName = '';
     if (this.existingItem) {
@@ -341,5 +342,9 @@ export class ItemModalComponent implements OnInit {
     if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
       this.close.emit();
     }
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('modal-open');
   }
 }
