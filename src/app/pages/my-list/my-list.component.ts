@@ -446,12 +446,20 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
     .summary-strip-card {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      padding: var(--space-md) var(--space-lg);
+      gap: 10px;
+      padding: 12px 14px;
       background: #FFFFFF;
+
+      @media (max-width: 639px) {
+        .summary-kpi:last-child {
+          grid-column: span 2;
+        }
+      }
 
       @media (min-width: 640px) {
         grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        padding: var(--space-md) var(--space-lg);
       }
 
       @media (min-width: 940px) {
@@ -824,19 +832,19 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         grid-template-areas:
           "check info actions"
           "empty stepper price";
-        row-gap: 10px;
-        column-gap: 10px;
-        padding: 12px 14px;
+        row-gap: 6px;
+        column-gap: 8px;
+        padding: 10px 12px;
         align-items: center;
 
         .row-check {
           grid-area: check;
           align-self: flex-start;
-          margin-top: 3px;
+          margin-top: 2px;
 
           .round-checkbox {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
           }
         }
 
@@ -845,14 +853,14 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           min-width: 0;
 
           .item-name-text {
-            font-size: 0.94rem;
-            line-height: 1.35;
+            font-size: 0.9rem;
+            line-height: 1.3;
             word-break: break-word;
           }
 
           .item-notes-text {
-            font-size: 0.76rem;
-            margin-top: 2px;
+            font-size: 0.74rem;
+            margin-top: 1px;
           }
         }
 
@@ -873,13 +881,13 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 
           .stepper-box {
             .stepper-btn {
-              width: 30px;
-              height: 28px;
+              width: 28px;
+              height: 26px;
             }
 
             .stepper-val {
-              min-width: 26px;
-              font-size: 0.88rem;
+              min-width: 24px;
+              font-size: 0.85rem;
             }
           }
         }
@@ -890,11 +898,11 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           min-width: unset;
 
           .price-val {
-            font-size: 0.94rem;
+            font-size: 0.9rem;
           }
 
           .unit-sub {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
           }
         }
       }
@@ -905,23 +913,23 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
       .cat-block-header {
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
-        padding: 12px 14px;
+        gap: 6px;
+        padding: 10px 12px;
 
         .header-left {
           width: 100%;
           gap: 8px;
 
           .cat-title {
-            font-size: 0.96rem;
+            font-size: 0.92rem;
             flex: 1;
             min-width: 0;
             word-break: break-word;
           }
 
           .cat-progress-pill {
-            font-size: 0.72rem;
-            padding: 2px 7px;
+            font-size: 0.7rem;
+            padding: 2px 6px;
             flex-shrink: 0;
           }
         }
@@ -929,8 +937,8 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         .header-right {
           width: 100%;
           display: flex;
-          justify-content: flex-end;
-          padding-top: 6px;
+          justify-content: space-between;
+          padding-top: 4px;
           border-top: 1px dashed var(--color-border-subtle);
 
           .cat-subtotals {

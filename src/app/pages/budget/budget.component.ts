@@ -592,12 +592,21 @@ import { ToastService } from '../../services/toast.service';
     /* Mobile Responsive Budget Page Elements */
     @media (max-width: 640px) {
       .budget-page {
-        gap: var(--space-lg);
+        gap: 14px;
       }
 
       .budget-target-card {
-        padding: 16px;
-        gap: 14px;
+        padding: 14px 12px;
+        gap: 12px;
+
+        .target-info {
+          .target-badge {
+            font-size: 1.15rem;
+          }
+          .target-sub {
+            font-size: 0.82rem;
+          }
+        }
 
         .target-input-row {
           flex-direction: column;
@@ -609,34 +618,50 @@ import { ToastService } from '../../services/toast.service';
 
             .budget-num-input {
               width: 100%;
-              font-size: 1.15rem;
+              font-size: 1.1rem;
+              padding: 9px 12px;
             }
           }
 
           .btn {
             width: 100%;
             justify-content: center;
+            min-height: 40px;
           }
         }
       }
 
+      .summary-cards-grid {
+        gap: 10px;
+      }
+
+      .summary-card {
+        padding: 12px 14px;
+        gap: 6px;
+
+        .card-amount {
+          font-size: 1.45rem;
+        }
+      }
+
       .breakdown-section {
-        padding: 16px 14px;
-        gap: 14px;
+        padding: 14px 12px;
+        gap: 12px;
 
         .breakdown-header {
           flex-direction: column;
           align-items: flex-start;
-          gap: 8px;
+          gap: 6px;
 
           .badge-cat-count {
             align-self: flex-start;
           }
         }
-      }
 
-      .summary-card {
-        padding: 16px;
+        .breakdown-item {
+          padding: 10px 12px;
+          gap: 6px;
+        }
       }
     }
   `]

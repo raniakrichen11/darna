@@ -448,33 +448,62 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
     /* Mobile Responsive Enhancements */
     @media (max-width: 600px) {
       .category-detail-page {
-        gap: var(--space-lg);
+        gap: 14px;
+      }
+
+      .cat-editorial-hero {
+        min-height: 140px;
+        padding: 14px 12px;
+
+        .hero-text-content {
+          gap: 4px;
+
+          .cat-symbol {
+            font-size: 1.6rem;
+          }
+
+          h1 {
+            font-size: 1.5rem;
+          }
+
+          p {
+            font-size: 0.86rem;
+            line-height: 1.45;
+          }
+
+          .cat-tally {
+            font-size: 0.74rem;
+            padding: 3px 8px;
+          }
+        }
       }
 
       .items-boutique-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
       }
 
       .boutique-item-card {
-        padding: 14px;
-        gap: 10px;
+        padding: 12px;
+        gap: 8px;
 
         .item-card-image-box {
-          height: 160px;
+          height: 140px;
         }
 
         .item-card-title {
           min-height: unset;
+          font-size: 0.94rem;
         }
 
         .item-card-desc {
           min-height: unset;
+          font-size: 0.84rem;
         }
       }
 
       .subcat-filter-bar {
-        padding-bottom: 6px;
+        padding-bottom: 4px;
       }
     }
   `]

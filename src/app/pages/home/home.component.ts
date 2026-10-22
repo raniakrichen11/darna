@@ -695,56 +695,95 @@ import { I18nService } from '../../services/i18n.service';
     /* Mobile Responsive Home Enhancements */
     @media (max-width: 640px) {
       .home-page {
-        gap: var(--space-lg);
+        gap: 16px;
       }
 
       .hero-editorial {
-        gap: var(--space-md);
-        padding: var(--space-xs) 0 var(--space-md);
+        gap: 12px;
+        padding: 4px 0 10px;
 
         .hero-headline {
-          font-size: 1.85rem;
-          line-height: 1.2;
+          font-size: 1.65rem;
+          line-height: 1.25;
+          margin-bottom: 6px;
         }
 
         .hero-subtext {
-          font-size: 0.92rem;
-          line-height: 1.6;
-          margin-bottom: 20px;
+          font-size: 0.88rem;
+          line-height: 1.5;
+          margin-bottom: 14px;
+        }
+
+        .hero-pill-badge {
+          margin-bottom: 8px;
+          padding: 4px 10px;
+          font-size: 0.72rem;
         }
 
         .hero-action-buttons {
           flex-direction: column;
           width: 100%;
+          gap: 8px;
 
           .btn {
             width: 100%;
             justify-content: center;
+            min-height: 42px;
+          }
+        }
+      }
+
+      .curated-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+
+        .curated-card {
+          .card-img-wrap {
+            height: 110px;
+          }
+
+          .card-content {
+            padding: 10px 8px;
+            gap: 4px;
+
+            .card-title {
+              font-size: 0.88rem;
+              line-height: 1.25;
+            }
+
+            .card-desc {
+              display: none;
+            }
+
+            .card-link {
+              margin-top: 4px;
+              font-size: 0.76rem;
+            }
           }
         }
       }
 
       .overview-strip {
-        padding: 16px 14px;
-        gap: 14px;
+        padding: 12px;
+        gap: 12px;
 
         .strip-progress-block {
           .progress-counts {
-            gap: 10px;
-            font-size: 0.78rem;
+            gap: 8px;
+            font-size: 0.75rem;
           }
         }
 
         .strip-budget-block {
-          gap: 10px;
+          gap: 8px;
         }
       }
 
       .recent-activity-section {
-        padding: 16px 14px;
+        padding: 14px 12px;
 
         .section-title-row {
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
       }
 

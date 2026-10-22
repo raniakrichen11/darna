@@ -515,24 +515,24 @@ import { AppLanguage } from '../../models/user-preferences.model';
     /* Mobile Responsive Settings */
     @media (max-width: 600px) {
       .settings-page {
-        gap: var(--space-lg);
+        gap: 14px;
       }
 
       .settings-card {
-        padding: 16px;
-        gap: 16px;
+        padding: 14px 12px;
+        gap: 12px;
 
         .card-header {
-          gap: 12px;
+          gap: 10px;
 
           .header-icon-pill {
-            width: 38px;
-            height: 38px;
-            font-size: 1.15rem;
+            width: 34px;
+            height: 34px;
+            font-size: 1.05rem;
           }
 
           .section-title {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
           }
         }
       }

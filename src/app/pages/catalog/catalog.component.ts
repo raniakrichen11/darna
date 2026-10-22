@@ -763,25 +763,66 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
     /* Mobile Responsive Enhancements */
     @media (max-width: 600px) {
       .catalog-page {
-        gap: var(--space-lg);
+        gap: 16px;
       }
 
-      .boutique-category-card .cat-footer-preview {
-        padding: 14px;
+      .catalog-header {
         gap: 10px;
+
+        .catalog-eyebrow {
+          font-size: 0.72rem;
+        }
+
+        h1 {
+          font-size: 1.6rem;
+        }
+
+        p {
+          font-size: 0.88rem;
+          line-height: 1.5;
+        }
+      }
+
+      .categories-editorial-grid {
+        gap: 12px;
+      }
+
+      .boutique-category-card {
+        .cat-image-container {
+          height: 130px;
+        }
+
+        .cat-footer-preview {
+          padding: 12px;
+          gap: 8px;
+
+          .cat-desc {
+            font-size: 0.84rem;
+            line-height: 1.45;
+          }
+
+          .cat-popular-preview {
+            gap: 6px;
+
+            .preview-row {
+              padding: 5px 8px;
+              font-size: 0.8rem;
+            }
+          }
+        }
       }
 
       .items-boutique-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
       }
 
       .boutique-item-card {
-        padding: 14px;
-        gap: 10px;
+        padding: 12px;
+        gap: 8px;
 
         .item-card-image-box {
-          height: 160px;
+          height: 140px;
         }
       }
     }

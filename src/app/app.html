@@ -388,7 +388,7 @@
   }
 
   <!-- Hidden Container for High Resolution A4 PDF Export -->
-  <div style="position: absolute; left: -9999px; top: -9999px; width: 794px;">
+  <div style="position: fixed; inset-inline-start: -9999px; top: -9999px; width: 794px; opacity: 0; pointer-events: none; visibility: hidden; z-index: -9999;" aria-hidden="true">
     <app-print-view></app-print-view>
   </div>
 </div>

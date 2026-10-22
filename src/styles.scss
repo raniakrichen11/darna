@@ -70,8 +70,8 @@
   /* Typography Tokens */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-arabic-heading: 'Amiri', 'Noto Sans Arabic', serif;
-  --font-arabic-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+  --font-arabic-heading: 'Noto Sans Arabic', 'Amiri', system-ui, -apple-system, sans-serif;
+  --font-arabic-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* Base Reset & Box Sizing */
@@ -85,6 +85,8 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
@@ -97,6 +99,8 @@ body {
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* RTL Typography & Direction */
@@ -108,6 +112,7 @@ body.lang-ar {
 
   body, input, textarea, select, button {
     font-family: var(--font-arabic-body);
+    line-height: 1.5;
   }
 
   h1, h2, h3, h4, h5, h6,
@@ -121,11 +126,55 @@ body.lang-ar {
   .modal-title {
     font-family: var(--font-arabic-heading), var(--font-arabic-body);
     letter-spacing: 0 !important;
+    line-height: 1.35;
   }
 
   /* Reset letter-spacing in Arabic to maintain connected cursive shaping */
   *, span, a, p, button, input, label {
     letter-spacing: normal !important;
+  }
+
+  /* Compact spacing & refined margins on mobile for Arabic RTL */
+  @media (max-width: 680px) {
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 20px;
+    --space-2xl: 28px;
+
+    .container {
+      padding-inline: 12px !important;
+    }
+
+    .card {
+      padding: 12px 14px !important;
+    }
+
+    h1, .h1 {
+      font-size: 1.6rem !important;
+      line-height: 1.25 !important;
+      margin-bottom: 6px !important;
+    }
+
+    h2, .h2 {
+      font-size: 1.3rem !important;
+      line-height: 1.25 !important;
+      margin-bottom: 4px !important;
+    }
+
+    h3, .h3 {
+      font-size: 1.05rem !important;
+      line-height: 1.3 !important;
+    }
+
+    p {
+      line-height: 1.48 !important;
+    }
+
+    .btn {
+      min-height: 40px !important;
+      padding: 8px 16px !important;
+      font-size: 0.88rem !important;
+    }
   }
 }
 
