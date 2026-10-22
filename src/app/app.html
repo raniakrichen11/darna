@@ -14,19 +14,29 @@
   <!-- Header -->
   <header class="app-header">
     <div class="container header-container">
-      <!-- Logo & Brand -->
+      <!-- Logo & Brand (Charte Graphique Officielle) -->
       <a routerLink="/home" class="brand-link">
         <div class="brand-monogram">
-          <span>D</span>
+          <svg viewBox="0 0 100 100" fill="none" class="brand-emblem-svg" xmlns="http://www.w3.org/2000/svg" aria-label="Darna Logo">
+            <!-- Moorish Pointed Arch -->
+            <path d="M 22 84 L 22 56 C 22 36, 34 20, 50 12 C 66 20, 78 36, 78 56 L 78 84 L 70 84 L 70 56 C 70 39, 60 26, 50 20 C 40 26, 30 39, 30 56 L 30 84 Z" fill="currentColor" />
+            <!-- Inner Portal Silhouette -->
+            <path d="M 36 84 L 36 52 C 36 45, 41 40, 47 40 C 47.5 40, 48 40.5, 48 41 L 48 84 Z" fill="currentColor" />
+            <!-- Olive / Jasmine Branch -->
+            <path d="M 48 70 Q 52 58, 62 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M 58 46 C 60 38, 68 36, 72 38 C 70 45, 63 48, 58 46 Z" fill="currentColor" />
+            <path d="M 52 56 C 56 50, 64 51, 67 54 C 64 60, 57 60, 52 56 Z" fill="currentColor" />
+            <path d="M 48 66 C 52 62, 59 63, 62 67 C 58 72, 52 71, 48 66 Z" fill="currentColor" />
+          </svg>
         </div>
         <div class="brand-text">
           <div class="brand-title">
             <span class="brand-latin">Darna</span>
-            <span class="brand-sep">·</span>
+            <span class="brand-sep">|</span>
             <span class="brand-arabic">دارنا</span>
           </div>
           <span class="brand-tagline">
-            {{ i18n.currentLang() === 'ar' ? 'كل ما تحتاجينه لبيتك الجديد' : 'Édition Trousseau & Maison' }}
+            {{ i18n.currentLang() === 'ar' ? 'كل ما تحتاجينه لبيتك الجديد' : (i18n.currentLang() === 'en' ? 'Everything for your new home' : 'Tout pour votre nouveau chez-vous') }}
           </span>
         </div>
       </a>
@@ -111,17 +121,20 @@
         <div class="footer-col footer-col-brand">
           <div class="footer-brand-header">
             <div class="footer-symbol" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18"></path>
-                <path d="M5 21V10a7 7 0 0 1 14 0v11"></path>
-                <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+              <svg viewBox="0 0 100 100" fill="none" class="footer-emblem-svg" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 22 84 L 22 56 C 22 36, 34 20, 50 12 C 66 20, 78 36, 78 56 L 78 84 L 70 84 L 70 56 C 70 39, 60 26, 50 20 C 40 26, 30 39, 30 56 L 30 84 Z" fill="currentColor" />
+                <path d="M 36 84 L 36 52 C 36 45, 41 40, 47 40 C 47.5 40, 48 40.5, 48 41 L 48 84 Z" fill="currentColor" />
+                <path d="M 48 70 Q 52 58, 62 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M 58 46 C 60 38, 68 36, 72 38 C 70 45, 63 48, 58 46 Z" fill="currentColor" />
+                <path d="M 52 56 C 56 50, 64 51, 67 54 C 64 60, 57 60, 52 56 Z" fill="currentColor" />
+                <path d="M 48 66 C 52 62, 59 63, 62 67 C 58 72, 52 71, 48 66 Z" fill="currentColor" />
               </svg>
             </div>
             <span class="footer-brand-title">{{ i18n.currentLang() === 'ar' ? 'دارنا | Darna' : 'Darna | دارنا' }}</span>
           </div>
 
           <p class="footer-brand-desc">
-            {{ i18n.t('footer.brand_sub') }}
+            {{ i18n.currentLang() === 'ar' ? 'كل ما تحتاجينه لبيتك الجديد — تونس' : (i18n.currentLang() === 'en' ? 'Everything for your new home — Tunisia' : 'Tout pour votre nouveau chez-vous — Tunisie') }}
           </p>
 
           <div class="footer-meta-pill">

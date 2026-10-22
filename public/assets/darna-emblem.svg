@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="120" height="120" fill="none">
+    <!-- Outer Moorish Pointed Arch -->
+    <path d="M 22 84
+             L 22 56
+             C 22 36, 34 20, 50 12
+             C 66 20, 78 36, 78 56
+             L 78 84
+             L 70 84
+             L 70 56
+             C 70 39, 60 26, 50 20
+             C 40 26, 30 39, 30 56
+             L 30 84
+             Z"
+          fill="#713B48" />
+
+    <!-- Inner Portal / Pillar (Left Door Silhouette) -->
+    <path d="M 36 84
+             L 36 52
+             C 36 45, 41 40, 47 40
+             C 47.5 40, 48 40.5, 48 41
+             L 48 84
+             Z"
+          fill="#713B48" />
+
+    <!-- Organic Olive / Jasmine Branch & Leaves (Right Silhouette) -->
+    <!-- Stem -->
+    <path d="M 48 70
+             Q 52 58, 62 48"
+          stroke="#713B48"
+          stroke-width="2.5"
+          stroke-linecap="round" />
+
+    <!-- Leaf 1 (Top right pointing leaf) -->
+    <path d="M 58 46
+             C 60 38, 68 36, 72 38
+             C 70 45, 63 48, 58 46 Z"
+          fill="#713B48" />
+
+    <!-- Leaf 2 (Middle leaf) -->
+    <path d="M 52 56
+             C 56 50, 64 51, 67 54
+             C 64 60, 57 60, 52 56 Z"
+          fill="#713B48" />
+
+    <!-- Leaf 3 (Lower leaf) -->
+    <path d="M 48 66
+             C 52 62, 59 63, 62 67
+             C 58 72, 52 71, 48 66 Z"
+          fill="#713B48" />
+  </svg>

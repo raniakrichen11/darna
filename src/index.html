@@ -7,7 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
   <meta name="theme-color" content="#713B48">
   <meta name="description" content="Darna | دارنا : Votre assistant de luxe pour organiser votre trousseau de mariage et équiper votre nouveau foyer en Tunisie.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Darna">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
   <link rel="manifest" href="manifest.webmanifest">
   
   <!-- Google Fonts: Editorial Serif (Playfair Display & Amiri), Modern Sans (Plus Jakarta Sans & Noto Sans Arabic) -->
@@ -16,7 +24,99 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div id="darna-splash-loader">
+      <style>
+        #darna-splash-loader {
+          position: fixed;
+          inset: 0;
+          background-color: #FAF7F2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 99999;
+          font-family: 'Playfair Display', Georgia, serif;
+        }
+        .splash-brand-emblem {
+          width: 88px;
+          height: 88px;
+          animation: darnaPulse 2s ease-in-out infinite;
+        }
+        .splash-brand-title {
+          margin-top: 18px;
+          font-size: 2.1rem;
+          font-weight: 600;
+          color: #713B48;
+          letter-spacing: -0.01em;
+          line-height: 1.1;
+          display: flex;
+          align-items: baseline;
+          gap: 10px;
+        }
+        .splash-arabic {
+          font-family: 'Amiri', serif;
+          font-size: 1.85rem;
+          color: #302927;
+        }
+        .splash-tagline {
+          margin-top: 8px;
+          font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+          font-size: 0.8rem;
+          color: #827872;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          font-weight: 600;
+        }
+        .splash-progress-track {
+          margin-top: 26px;
+          width: 140px;
+          height: 3px;
+          background: #E8E0D8;
+          border-radius: 99px;
+          overflow: hidden;
+          position: relative;
+        }
+        .splash-progress-bar {
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 50%;
+          background: #713B48;
+          border-radius: 99px;
+          animation: darnaSlide 1.4s ease-in-out infinite;
+        }
+        @keyframes darnaPulse {
+          0%, 100% { transform: scale(1); opacity: 0.95; }
+          50% { transform: scale(1.06); opacity: 1; }
+        }
+        @keyframes darnaSlide {
+          0% { left: -50%; width: 30%; }
+          50% { left: 25%; width: 50%; }
+          100% { left: 100%; width: 30%; }
+        }
+      </style>
+      <!-- Official Darna Tunisian Arch & Olive Sprig Emblem -->
+      <svg class="splash-brand-emblem" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 22 84 L 22 56 C 22 36, 34 20, 50 12 C 66 20, 78 36, 78 56 L 78 84 L 70 84 L 70 56 C 70 39, 60 26, 50 20 C 40 26, 30 39, 30 56 L 30 84 Z" fill="#713B48" />
+        <path d="M 36 84 L 36 52 C 36 45, 41 40, 47 40 C 47.5 40, 48 40.5, 48 41 L 48 84 Z" fill="#713B48" />
+        <path d="M 48 70 Q 52 58, 62 48" stroke="#713B48" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M 58 46 C 60 38, 68 36, 72 38 C 70 45, 63 48, 58 46 Z" fill="#713B48" />
+        <path d="M 52 56 C 56 50, 64 51, 67 54 C 64 60, 57 60, 52 56 Z" fill="#713B48" />
+        <path d="M 48 66 C 52 62, 59 63, 62 67 C 58 72, 52 71, 48 66 Z" fill="#713B48" />
+      </svg>
+      <div class="splash-brand-title">
+        <span>Darna</span>
+        <span style="font-size: 1.2rem; color: #D5C8BD; font-family: serif;">|</span>
+        <span class="splash-arabic">دارنا</span>
+      </div>
+      <div class="splash-tagline">Tout pour votre nouveau chez-vous</div>
+      <div class="splash-progress-track">
+        <div class="splash-progress-bar"></div>
+      </div>
+    </div>
+  </app-root>
   <noscript>Veuillez activer JavaScript pour utiliser Darna | دارنا.</noscript>
 </body>
 </html>
