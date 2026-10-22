@@ -61,7 +61,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                 (click)="selectedCategory.set(cat.id)"
               >
                 <span class="pill-icon">{{ cat.icon }}</span>
-                <span>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</span>
+                <span>{{ catalogService.getCategoryName(cat) }}</span>
               </button>
             }
           </div>
@@ -77,33 +77,33 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                 <div class="cat-image-container">
                   <img
                     [src]="cat.image || 'assets/cat_kitchen.jpg'"
-                    [alt]="cat.nameFr"
+                    [alt]="catalogService.getCategoryName(cat)"
                     class="category-hero-img"
                     loading="lazy"
                   />
                   <div class="cat-gradient-scrim"></div>
                   <div class="cat-floating-info">
                     <span class="cat-emblem-badge">{{ cat.icon }}</span>
-                    <h2>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</h2>
+                    <h2>{{ catalogService.getCategoryName(cat) }}</h2>
                     <span class="cat-count-pill">
                       {{ catalogService.getCategoryItemCount(cat.id) }} {{ i18n.t('catalog.items_count') }}
                     </span>
                   </div>
-                  <a [routerLink]="['/catalog', cat.id]" class="view-category-overlay-link" [attr.aria-label]="cat.nameFr"></a>
+                  <a [routerLink]="['/catalog', cat.id]" class="view-category-overlay-link" [attr.aria-label]="catalogService.getCategoryName(cat)"></a>
                 </div>
 
                 <div class="cat-footer-preview">
-                  <p class="cat-desc">{{ i18n.currentLang() === 'ar' ? cat.descriptionAr : cat.descriptionFr }}</p>
+                  <p class="cat-desc">{{ catalogService.getCategoryDesc(cat) }}</p>
                   
                   <!-- Curated item snippets -->
                   <div class="snippets-list">
                     @for (item of getPreviewItems(cat.id); track item.id) {
                       <div class="snippet-item" (click)="openArticlePreview(item)">
                         <div class="snippet-thumb-wrap">
-                          <img [src]="catalogService.getItemImage(item)" class="snippet-mini-img" [alt]="item.nameFr" />
+                          <img [src]="catalogService.getItemImage(item)" class="snippet-mini-img" [alt]="catalogService.getItemName(item)" />
                         </div>
                         <div class="snippet-info">
-                          <span class="snippet-name">{{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}</span>
+                          <span class="snippet-name">{{ catalogService.getItemName(item) }}</span>
                           @if (item.estimatedUnitPrice) {
                             <span class="snippet-price">{{ item.estimatedUnitPrice }} {{ i18n.currency() }}</span>
                           }
@@ -128,7 +128,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                   </div>
 
                   <a [routerLink]="['/catalog', cat.id]" class="explore-cat-btn">
-                    <span>{{ i18n.currentLang() === 'ar' ? 'تصفح جميع عناصر القسم' : 'Explorer tous les articles' }}</span>
+                    <span>{{ i18n.currentLang() === 'ar' ? 'تصفح جميع عناصر القسم' : (i18n.currentLang() === 'en' ? 'Explore all items in category' : 'Explorer tous les articles') }}</span>
                     <span>{{ i18n.isRtl() ? '←' : '→' }}</span>
                   </a>
                 </div>
@@ -164,11 +164,11 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                   <div class="item-card-image-box" (click)="openArticlePreview(item)" role="button" tabindex="0">
                     <img
                       [src]="catalogService.getItemImage(item)"
-                      [alt]="i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr"
+                      [alt]="catalogService.getItemName(item)"
                       class="item-card-real-img"
                     />
                     <div class="image-preview-overlay">
-                      <span class="preview-badge">🔍 {{ i18n.currentLang() === 'ar' ? 'عرض الصورة والتفاصيل' : 'Aperçu & Détails' }}</span>
+                      <span class="preview-badge">🔍 {{ i18n.currentLang() === 'ar' ? 'عرض الصورة والتفاصيل' : (i18n.currentLang() === 'en' ? 'Photo Preview & Details' : 'Aperçu & Détails') }}</span>
                     </div>
                     @if (item.isTraditional) {
                       <span class="badge-traditional-corner">
@@ -189,11 +189,11 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                   </div>
 
                   <h3 class="item-card-title clickable-title" (click)="openArticlePreview(item)">
-                    {{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}
+                    {{ catalogService.getItemName(item) }}
                   </h3>
 
                   <p class="item-card-desc">
-                    {{ i18n.currentLang() === 'ar' ? item.descriptionAr : item.descriptionFr }}
+                    {{ catalogService.getItemDesc(item) }}
                   </p>
 
                   <div class="item-card-details">

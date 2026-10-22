@@ -195,7 +195,42 @@
   }
 }
 
-/* Language Pill Button */
+/* Segmented Language Switcher (FR | AR | EN) */
+.lang-segmented-bar {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-bg-sand);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+  box-shadow: var(--shadow-xs);
+
+  .lang-seg-btn {
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 11px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.02em;
+
+    &:hover {
+      color: var(--color-text-main);
+    }
+
+    &.active {
+      background: var(--color-surface);
+      color: var(--color-primary);
+      box-shadow: 0 1px 4px rgba(48, 41, 39, 0.12);
+    }
+  }
+}
+
+/* Language Pill Button (legacy fallback) */
 .lang-pill-btn {
   display: flex;
   align-items: center;

@@ -24,19 +24,25 @@ export class App {
   toast = inject(ToastService);
 
   toggleLanguage(): void {
-    const nextLang: AppLanguage = this.i18n.currentLang() === 'fr' ? 'ar' : 'fr';
-    this.preferences.setLanguage(nextLang);
-    const isAr = nextLang === 'ar';
-    this.toast.show(
-      isAr ? 'تم تفعيل اللغة العربية (RTL)' : 'Langue française activée (LTR)'
-    );
+    const current = this.i18n.currentLang();
+    const nextLang: AppLanguage = current === 'fr' ? 'ar' : (current === 'ar' ? 'en' : 'fr');
+    this.setLanguage(nextLang);
+  }
+
+  setLanguage(lang: AppLanguage): void {
+    this.preferences.setLanguage(lang);
+    const msg = lang === 'ar'
+      ? 'تم تفعيل اللغة العربية (RTL)'
+      : (lang === 'en' ? 'English activated (LTR)' : 'Langue française activée (LTR)');
+    this.toast.show(msg);
   }
 
   setInitialLanguage(lang: AppLanguage): void {
     this.preferences.setLanguage(lang);
-    this.toast.show(
-      lang === 'ar' ? 'مرحباً بكِ في دارنا 🕊️' : 'Bienvenue sur Darna 🕊️'
-    );
+    const msg = lang === 'ar'
+      ? 'مرحباً بكِ في دارنا 🕊️'
+      : (lang === 'en' ? 'Welcome to Darna 🕊️' : 'Bienvenue sur Darna 🕊️');
+    this.toast.show(msg);
   }
 
   async onInstallClick(): Promise<void> {

@@ -127,6 +127,7 @@ export const TRANSLATIONS_FR = {
   'settings.language_section': 'Langue de l’interface',
   'settings.french': 'Français (LTR)',
   'settings.arabic': 'العربية (RTL)',
+  'settings.english': 'English (LTR)',
   'settings.personal_section': 'Informations de la mariée',
   'settings.bride_name': 'Nom ou prénom de la mariée :',
   'settings.groom_name': 'Nom ou prénom du marié (optionnel) :',
@@ -305,6 +306,7 @@ export const TRANSLATIONS_AR: { [K in TranslationKey]: string } = {
   'settings.language_section': 'لغة واجهة التطبيق',
   'settings.french': 'الفرنسية — Français',
   'settings.arabic': 'العربية — Tunisian RTL',
+  'settings.english': 'الإنجليزية — English (LTR)',
   'settings.personal_section': 'معلومات العروسين',
   'settings.bride_name': 'اسم العروس :',
   'settings.groom_name': 'اسم العريس (اختياري) :',
@@ -359,6 +361,185 @@ export const TRANSLATIONS_AR: { [K in TranslationKey]: string } = {
   'footer.quick_cat_bridal': 'جهاز العروس ومستلزماتها'
 };
 
+export const TRANSLATIONS_EN: { [K in TranslationKey]: string } = {
+  // Brand & Slogans
+  'app.name': 'Darna | دارنا',
+  'app.title': 'Darna — Bridal Trousseau & Home Planner',
+  'app.tagline': 'Everything for your new home.',
+  'app.headline': 'Your new home, step by step.',
+  'app.subtitle': 'Discover everything you need to prepare your wedding trousseau, organize your purchases, and furnish your new home with complete peace of mind.',
+  'app.culture_badge': 'Tunisian Traditions & Modern Living',
+
+  // Navigation
+  'nav.home': 'Home',
+  'nav.catalog': 'Catalog',
+  'nav.my_list': 'My Trousseau',
+  'nav.budget': 'Budget & Tracking',
+  'nav.settings': 'Settings',
+
+  // Actions
+  'action.add': 'Add',
+  'action.added': 'Added',
+  'action.add_to_list': 'Add to my list',
+  'action.create_custom': 'Create custom item',
+  'action.edit': 'Edit',
+  'action.save': 'Save',
+  'action.cancel': 'Cancel',
+  'action.delete': 'Delete',
+  'action.delete_confirm': 'Are you sure you want to remove this item?',
+  'action.clear_all': 'Clear list',
+  'action.clear_confirm': 'Are you sure you want to delete all items from your list?',
+  'action.reset_catalog': 'Load recommended selection',
+  'action.explore_catalog': 'Explore catalog',
+  'action.continue_list': 'Open my trousseau',
+  'action.export_pdf': 'Download PDF (A4)',
+  'action.print': 'Print list',
+  'action.search_placeholder': 'Search an item, tajine, fouta, linens...',
+  'action.filter_all': 'All',
+  'action.filter_remaining': 'To buy',
+  'action.filter_purchased': 'Purchased',
+  'action.mark_purchased': 'Mark as purchased',
+  'action.mark_unpurchased': 'Mark to buy',
+  'action.close': 'Close',
+  'action.install_app': 'Install App',
+  'action.switch_lang': 'Switch language',
+
+  // Dashboard
+  'home.welcome': 'Marhaban bikoum 🕊️',
+  'home.progress_title': 'Trousseau progress',
+  'home.items_purchased': 'items purchased',
+  'home.items_remaining': 'items remaining',
+  'home.total_planned': 'Total planned',
+  'home.budget_estimate': 'Estimated cost',
+  'home.budget_spent': 'Actual spent',
+  'home.budget_balance': 'Remaining balance',
+  'home.budget_undefined': 'Budget not set',
+  'home.categories_heading': 'Browse by world',
+  'home.recent_items': 'Recently added items',
+  'home.start_organizing': 'Start organizing',
+  'home.empty_recent': 'Your list is still empty. Add your first essentials from the catalog!',
+
+  // Catalog
+  'catalog.title': 'Tunisian Bridal Catalog',
+  'catalog.subtitle': 'Curated traditional and modern essentials for your new home.',
+  'catalog.all_categories': 'All categories',
+  'catalog.items_count': 'items available',
+  'catalog.suggested_qty': 'Suggested quantity:',
+  'catalog.estimated_price': 'Estimated price:',
+  'catalog.traditional_label': 'Traditional',
+  'catalog.no_results': 'No items match your search.',
+  'catalog.search_empty_hint': 'Try another keyword (e.g. couscous, sheets, tableware...)',
+  'catalog.back_to_categories': 'All categories',
+
+  // Shopping List
+  'list.title': 'My Bridal Trousseau List',
+  'list.subtitle': 'Your personalized shopping list, organized by category.',
+  'list.empty_title': 'Your trousseau list is empty',
+  'list.empty_desc': 'Explore suggestions from the Tunisian catalog or add your own custom items directly.',
+  'list.btn_explore': 'Discover suggestions',
+  'list.btn_add_custom': 'Add custom item',
+  'list.item_name': 'Item name',
+  'list.quantity': 'Quantity',
+  'list.est_unit_price': 'Est. unit price (DT)',
+  'list.act_unit_price': 'Actual price paid (DT)',
+  'list.category': 'Category',
+  'list.notes': 'Notes (color, brand, store...)',
+  'list.notes_placeholder': 'E.g.: Cream white, bought from Souk or store...',
+  'list.price_unknown': 'Not estimated',
+  'list.total_estimated': 'Estimated total:',
+  'list.total_actual': 'Total paid:',
+  'list.filter_status': 'Filter by status:',
+  'list.filter_category': 'Filter by category:',
+  'list.collapse_all': 'Collapse all',
+  'list.expand_all': 'Expand all',
+
+  // Custom Item Modal
+  'modal.custom_title': 'Add custom item',
+  'modal.edit_title': 'Edit item',
+  'modal.name_label': 'Item name (required)',
+  'modal.name_placeholder': 'E.g.: Carved crystal beverage service...',
+  'modal.category_label': 'Category',
+  'modal.qty_label': 'Quantity',
+  'modal.est_price_label': 'Estimated unit price (DT)',
+  'modal.act_price_label': 'Actual unit price paid (DT)',
+  'modal.notes_label': 'Notes & details',
+
+  // Budget Screen
+  'budget.title': 'Budget & Expenses',
+  'budget.subtitle': 'Track your estimated projections and actual purchases in Tunisian Dinars (DT).',
+  'budget.target_label': 'Your target overall budget (DT):',
+  'budget.target_placeholder': 'E.g.: 12000',
+  'budget.target_save': 'Update budget',
+  'budget.summary_title': 'Financial overview',
+  'budget.est_total': 'Total estimated',
+  'budget.act_spent': 'Actual expenses made',
+  'budget.remaining_allowed': 'Remaining budget allowance',
+  'budget.budget_exceeded': 'Warning: Budget exceeded by',
+  'budget.spending_by_category': 'Breakdown by category',
+  'budget.unknown_prices_note': 'Note: Items without prices are not counted as free. Their amounts can be filled during your shopping trips.',
+  'budget.purchased_stat': 'Completion rate',
+
+  // Settings
+  'settings.title': 'Settings & Preferences',
+  'settings.subtitle': 'Customize your experience, language, and local data management.',
+  'settings.language_section': 'Interface language',
+  'settings.french': 'Français (LTR)',
+  'settings.arabic': 'العربية (RTL)',
+  'settings.english': 'English (LTR)',
+  'settings.personal_section': 'Bride information',
+  'settings.bride_name': 'Bride name or nickname:',
+  'settings.groom_name': 'Groom name or nickname (optional):',
+  'settings.wedding_date': 'Expected wedding date:',
+  'settings.data_section': 'Local data management',
+  'settings.data_desc': 'All your data is securely stored directly on your personal device.',
+  'settings.export_backup': 'Export backup (JSON)',
+  'settings.import_backup': 'Restore backup (JSON)',
+  'settings.reset_starter': 'Restore recommended Tunisian selection',
+  'settings.pwa_section': 'Mobile Application (PWA)',
+  'settings.pwa_installed': 'Application installed on this device.',
+  'settings.pwa_install_btn': 'Install app on my phone',
+  'settings.about_title': 'About Darna | دارنا',
+  'settings.about_text': 'Darna is a bridal trousseau planner lovingly crafted for Tunisian brides, uniting heritage traditions with modern elegance.',
+
+  // PDF Export
+  'pdf.title': 'Wedding Trousseau Checklist',
+  'pdf.date': 'Export date:',
+  'pdf.bride': 'Bride-to-be:',
+  'pdf.summary': 'Overview Summary',
+  'pdf.total_items': 'Total items',
+  'pdf.purchased': 'Purchased',
+  'pdf.remaining': 'Remaining',
+  'pdf.est_cost': 'Total estimated cost',
+  'pdf.act_cost': 'Total paid to date',
+  'pdf.th_status': 'Status',
+  'pdf.th_item': 'Item Description',
+  'pdf.th_qty': 'Qty',
+  'pdf.th_est': 'Est. Price',
+  'pdf.th_act': 'Actual Price',
+  'pdf.th_notes': 'Notes',
+  'pdf.status_done': 'Purchased',
+  'pdf.status_todo': 'To buy',
+  'pdf.currency': 'DT',
+  'pdf.footer': 'Document generated by Darna | دارنا — Everything for your new home.',
+
+  // Footer
+  'footer.brand_sub': 'The premier planner to prepare your bridal trousseau and furnish your new home in Tunisia.',
+  'footer.nav_title': 'Navigation',
+  'footer.categories_title': 'Trousseau Worlds',
+  'footer.promises_title': 'Our Commitments',
+  'footer.promise_offline': '100% Offline & PWA',
+  'footer.promise_offline_desc': 'All your data stays private on your device',
+  'footer.promise_privacy': 'Complete Privacy',
+  'footer.promise_privacy_desc': 'No required account, no data tracking',
+  'footer.promise_tunisia': 'Heritage & Traditions',
+  'footer.promise_tunisia_desc': 'Specially designed for the Tunisian bride',
+  'footer.copyright': 'Darna | دارنا — Everything for your new home. All rights reserved.',
+  'footer.quick_cat_kitchen': 'Kitchen & Tableware',
+  'footer.quick_cat_bedroom': 'Bedroom & Linens',
+  'footer.quick_cat_bath': 'Bathroom & Hammam',
+  'footer.quick_cat_bridal': 'Trousseau & Beauty'
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -380,7 +561,7 @@ export class I18nService {
       if (typeof document !== 'undefined') {
         document.documentElement.setAttribute('lang', lang);
         document.documentElement.setAttribute('dir', dir);
-        document.body.classList.remove('lang-fr', 'lang-ar');
+        document.body.classList.remove('lang-fr', 'lang-ar', 'lang-en');
         document.body.classList.add(`lang-${lang}`);
       }
       
@@ -393,7 +574,7 @@ export class I18nService {
   private getInitialLang(): AppLanguage {
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem(this.STORAGE_KEY) as AppLanguage | null;
-      if (saved === 'fr' || saved === 'ar') {
+      if (saved === 'fr' || saved === 'ar' || saved === 'en') {
         return saved;
       }
     }
@@ -401,18 +582,32 @@ export class I18nService {
   }
 
   setLanguage(lang: AppLanguage): void {
-    if (lang === 'fr' || lang === 'ar') {
+    if (lang === 'fr' || lang === 'ar' || lang === 'en') {
       this.currentLang.set(lang);
     }
   }
 
   toggleLanguage(): void {
-    this.setLanguage(this.currentLang() === 'fr' ? 'ar' : 'fr');
+    const current = this.currentLang();
+    if (current === 'fr') {
+      this.setLanguage('ar');
+    } else if (current === 'ar') {
+      this.setLanguage('en');
+    } else {
+      this.setLanguage('fr');
+    }
   }
 
   translate(key: TranslationKey): string {
     const lang = this.currentLang();
-    const dictionary = lang === 'ar' ? TRANSLATIONS_AR : TRANSLATIONS_FR;
+    let dictionary: { [K in TranslationKey]: string };
+    if (lang === 'ar') {
+      dictionary = TRANSLATIONS_AR;
+    } else if (lang === 'en') {
+      dictionary = TRANSLATIONS_EN;
+    } else {
+      dictionary = TRANSLATIONS_FR;
+    }
     return dictionary[key] ?? TRANSLATIONS_FR[key] ?? key;
   }
 

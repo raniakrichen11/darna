@@ -50,14 +50,14 @@ import { I18nService } from '../../services/i18n.service';
             <div class="article-header">
               <span class="article-subcat">{{ getSubcategoryName() }}</span>
               <h2 class="article-title">
-                {{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}
+                {{ catalogService.getItemName(item) }}
               </h2>
             </div>
 
             <!-- Detailed Description / Cultural Significance -->
             <div class="article-description-box">
               <p class="description-text">
-                {{ i18n.currentLang() === 'ar' ? (item.descriptionAr || item.descriptionFr) : (item.descriptionFr || item.descriptionAr) }}
+                {{ catalogService.getItemDesc(item) }}
               </p>
             </div>
 
@@ -68,7 +68,7 @@ import { I18nService } from '../../services/i18n.service';
                 <span class="spec-icon">📦</span>
                 <div class="spec-meta">
                   <span class="spec-label">{{ i18n.t('catalog.suggested_qty') }}</span>
-                  <strong class="spec-value">{{ item.suggestedQuantity }} {{ i18n.currentLang() === 'ar' ? 'قطعة مقترحة' : 'unité(s)' }}</strong>
+                  <strong class="spec-value">{{ item.suggestedQuantity }} {{ i18n.currentLang() === 'ar' ? 'قطعة مقترحة' : (i18n.currentLang() === 'en' ? 'suggested unit(s)' : 'unité(s)') }}</strong>
                 </div>
               </div>
 
@@ -89,9 +89,9 @@ import { I18nService } from '../../services/i18n.service';
               <span class="status-icon">{{ isInList ? '✓' : 'ℹ️' }}</span>
               <span class="status-text">
                 @if (isInList) {
-                  {{ i18n.currentLang() === 'ar' ? 'هذا العنصر مسجل في قائمة جهازك.' : 'Cet article est déjà enregistré dans votre trousseau.' }}
+                  {{ i18n.currentLang() === 'ar' ? 'هذا العنصر مسجل في قائمة جهازك.' : (i18n.currentLang() === 'en' ? 'This item is already saved in your trousseau.' : 'Cet article est déjà enregistré dans votre trousseau.') }}
                 } @else {
-                  {{ i18n.currentLang() === 'ar' ? 'لم تضيفي هذا العنصر بعد إلى قائمتك.' : 'Vous n’avez pas encore ajouté cet article à votre trousseau.' }}
+                  {{ i18n.currentLang() === 'ar' ? 'لم تضيفي هذا العنصر بعد إلى قائمتك.' : (i18n.currentLang() === 'en' ? 'You have not added this item to your trousseau yet.' : 'Vous n’avez pas encore ajouté cet article à votre trousseau.') }}
                 }
               </span>
             </div>
@@ -369,14 +369,14 @@ export class ArticlePreviewModalComponent {
   getCategoryName(): string {
     if (!this.item) return '';
     const cat = this.catalogService.getCategoryById(this.item.categoryId);
-    return cat ? (this.i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr) : '';
+    return this.catalogService.getCategoryName(cat);
   }
 
   getSubcategoryName(): string {
     if (!this.item) return '';
     const cat = this.catalogService.getCategoryById(this.item.categoryId);
     const sub = cat?.subcategories.find(s => s.id === this.item?.subcategoryId);
-    return sub ? (this.i18n.currentLang() === 'ar' ? sub.nameAr : sub.nameFr) : this.getCategoryName();
+    return sub ? this.catalogService.getSubcategoryName(sub) : this.getCategoryName();
   }
 
   onAddClick(): void {

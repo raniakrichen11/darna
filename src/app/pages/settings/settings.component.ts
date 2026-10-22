@@ -65,6 +65,22 @@ import { AppLanguage } from '../../models/user-preferences.model';
               <span class="check-mark">✓</span>
             }
           </button>
+
+          <button
+            type="button"
+            class="lang-box"
+            [class.active]="i18n.currentLang() === 'en'"
+            (click)="selectLanguage('en')"
+          >
+            <span class="flag">🇬🇧</span>
+            <div class="lang-meta">
+              <strong>English</strong>
+              <small>Left to Right (LTR)</small>
+            </div>
+            @if (i18n.currentLang() === 'en') {
+              <span class="check-mark">✓</span>
+            }
+          </button>
         </div>
       </section>
 
@@ -511,9 +527,10 @@ export class SettingsComponent {
 
   selectLanguage(lang: AppLanguage): void {
     this.preferences.setLanguage(lang);
-    this.toast.show(
-      lang === 'ar' ? 'تم تفعيل اللغة العربية (RTL) ✨' : 'Langue française activée (LTR) ✨'
-    );
+    const msg = lang === 'ar'
+      ? 'تم تفعيل اللغة العربية (RTL) ✨'
+      : (lang === 'en' ? 'English language activated (LTR) ✨' : 'Langue française activée (LTR) ✨');
+    this.toast.show(msg);
   }
 
   onBrideNameChange(val: string): void {

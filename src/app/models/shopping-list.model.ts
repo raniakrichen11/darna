@@ -5,6 +5,7 @@ export interface ShoppingListItem {
   subcategoryId?: string;
   customNameFr?: string;
   customNameAr?: string;
+  customNameEn?: string;
   quantity: number;
   estimatedUnitPrice?: number; // In TND
   actualUnitPrice?: number;    // In TND
@@ -18,6 +19,7 @@ export interface CategoryGroup {
   categoryId: string;
   categoryNameFr: string;
   categoryNameAr: string;
+  categoryNameEn?: string;
   categoryIcon: string;
   items: ShoppingListItem[];
   totalItems: number;

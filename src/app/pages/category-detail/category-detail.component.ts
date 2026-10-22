@@ -37,8 +37,8 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 
           <div class="hero-text-content">
             <span class="cat-symbol">{{ cat.icon }}</span>
-            <h1>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</h1>
-            <p>{{ i18n.currentLang() === 'ar' ? cat.descriptionAr : cat.descriptionFr }}</p>
+            <h1>{{ catalogService.getCategoryName(cat) }}</h1>
+            <p>{{ catalogService.getCategoryDesc(cat) }}</p>
             <div class="cat-tally">
               {{ categoryItems().length }} {{ i18n.t('catalog.items_count') }}
             </div>
@@ -63,7 +63,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                 [class.active]="selectedSubcategory() === sub.id"
                 (click)="selectedSubcategory.set(sub.id)"
               >
-                {{ i18n.currentLang() === 'ar' ? sub.nameAr : sub.nameFr }}
+                {{ catalogService.getSubcategoryName(sub) }}
               </button>
             }
           </div>
@@ -77,11 +77,11 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
               <div class="item-card-image-box" (click)="openArticlePreview(item)" role="button" tabindex="0">
                 <img
                   [src]="catalogService.getItemImage(item)"
-                  [alt]="i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr"
+                  [alt]="catalogService.getItemName(item)"
                   class="item-card-real-img"
                 />
                 <div class="image-preview-overlay">
-                  <span class="preview-badge">🔍 {{ i18n.currentLang() === 'ar' ? 'عرض الصورة والتفاصيل' : 'Aperçu & Détails' }}</span>
+                  <span class="preview-badge">🔍 {{ i18n.currentLang() === 'ar' ? 'عرض الصورة والتفاصيل' : (i18n.currentLang() === 'en' ? 'Photo Preview & Details' : 'Aperçu & Détails') }}</span>
                 </div>
                 @if (item.isTraditional) {
                   <span class="badge-traditional-corner">
@@ -102,11 +102,11 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
               </div>
 
               <h3 class="item-card-title clickable-title" (click)="openArticlePreview(item)">
-                {{ i18n.currentLang() === 'ar' ? item.nameAr : item.nameFr }}
+                {{ catalogService.getItemName(item) }}
               </h3>
 
               <p class="item-card-desc">
-                {{ i18n.currentLang() === 'ar' ? item.descriptionAr : item.descriptionFr }}
+                {{ catalogService.getItemDesc(item) }}
               </p>
 
               <div class="item-card-details">

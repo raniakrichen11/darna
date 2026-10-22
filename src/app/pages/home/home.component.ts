@@ -126,7 +126,7 @@ import { I18nService } from '../../services/i18n.service';
         <div class="section-title-row">
           <div>
             <h2>{{ i18n.t('home.categories_heading') }}</h2>
-            <p class="section-sub">{{ i18n.currentLang() === 'ar' ? 'استكشفي أركان وتجهيزات بيتكِ الجديد بكل تفاصيلها.' : 'Explorez chaque univers de votre futur intérieur avec soin et sérénité.' }}</p>
+            <p class="section-sub">{{ i18n.currentLang() === 'ar' ? 'استكشفي أركان وتجهيزات بيتكِ الجديد بكل تفاصيلها.' : (i18n.currentLang() === 'en' ? 'Explore every world of your future home with serenity and care.' : 'Explorez chaque univers de votre futur intérieur avec soin et sérénité.') }}</p>
           </div>
           <a routerLink="/catalog" class="editorial-see-all">
             {{ i18n.t('catalog.all_categories') }} {{ i18n.isRtl() ? '←' : '→' }}
@@ -137,7 +137,7 @@ import { I18nService } from '../../services/i18n.service';
           @for (cat of featuredCategories; track cat.id) {
             <a [routerLink]="['/catalog', cat.id]" class="curated-card">
               <div class="card-img-wrap">
-                <img [src]="cat.image || 'assets/cat_kitchen.jpg'" [alt]="cat.nameFr" class="cat-img" loading="lazy" />
+                <img [src]="cat.image || 'assets/cat_kitchen.jpg'" [alt]="catalogService.getCategoryName(cat)" class="cat-img" loading="lazy" />
                 <div class="card-overlay"></div>
                 <div class="card-badge">
                   <span>{{ catalogService.getCategoryItemCount(cat.id) }} {{ i18n.t('catalog.items_count') }}</span>
@@ -145,8 +145,8 @@ import { I18nService } from '../../services/i18n.service';
               </div>
               <div class="card-body">
                 <div class="card-icon-emblem">{{ cat.icon }}</div>
-                <h3>{{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}</h3>
-                <p>{{ i18n.currentLang() === 'ar' ? cat.descriptionAr : cat.descriptionFr }}</p>
+                <h3>{{ catalogService.getCategoryName(cat) }}</h3>
+                <p>{{ catalogService.getCategoryDesc(cat) }}</p>
               </div>
             </a>
           }

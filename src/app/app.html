@@ -62,16 +62,36 @@
           </button>
         }
 
-        <!-- Language Switcher Pill -->
-        <button
-          type="button"
-          class="lang-pill-btn"
-          (click)="toggleLanguage()"
-          [title]="i18n.t('action.switch_lang')"
-        >
-          <span class="lang-flag">{{ i18n.currentLang() === 'fr' ? '🇹🇳' : '🇫🇷' }}</span>
-          <span class="lang-code">{{ i18n.currentLang() === 'fr' ? 'العربية' : 'Français' }}</span>
-        </button>
+        <!-- Segmented 3-Language Switcher (FR | AR | EN) -->
+        <div class="lang-segmented-bar" [attr.aria-label]="i18n.t('action.switch_lang')">
+          <button
+            type="button"
+            class="lang-seg-btn"
+            [class.active]="i18n.currentLang() === 'fr'"
+            (click)="setLanguage('fr')"
+            title="Français"
+          >
+            FR
+          </button>
+          <button
+            type="button"
+            class="lang-seg-btn"
+            [class.active]="i18n.currentLang() === 'ar'"
+            (click)="setLanguage('ar')"
+            title="العربية (تونس)"
+          >
+            عربي
+          </button>
+          <button
+            type="button"
+            class="lang-seg-btn"
+            [class.active]="i18n.currentLang() === 'en'"
+            (click)="setLanguage('en')"
+            title="English"
+          >
+            EN
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -341,19 +361,24 @@
     <div class="modal-overlay">
       <div class="modal-card welcome-modal text-center">
         <div class="welcome-emblem">🕊️</div>
-        <h2>Bienvenue sur Darna · مرحباً بكِ في دارنا</h2>
+        <h2>Bienvenue sur Darna · مرحباً بكِ في دارنا · Welcome to Darna</h2>
         <p class="welcome-intro">
           Le planificateur d’exception pour préparer votre trousseau de mariage et équiper votre nouveau chez-vous avec sérénité.
           <br>
           رفيقكِ الأمثل لإعداد جهاز العروس وتأثيث بيتك الجديد بكل هدوء وأناقة.
+          <br>
+          The premier planner to organize your bridal trousseau and furnish your new home with complete peace of mind.
         </p>
 
         <div class="welcome-lang-grid">
-          <button type="button" class="btn btn-primary welcome-btn" (click)="setInitialLanguage('fr')">
+          <button type="button" class="btn btn-outline welcome-btn" (click)="setInitialLanguage('fr')">
             <span>🇫🇷</span> Continuer en Français
           </button>
-          <button type="button" class="btn btn-outline welcome-btn" (click)="setInitialLanguage('ar')">
+          <button type="button" class="btn btn-primary welcome-btn" (click)="setInitialLanguage('ar')">
             <span>🇹🇳</span> المتابعة باللغة العربية
+          </button>
+          <button type="button" class="btn btn-outline welcome-btn" (click)="setInitialLanguage('en')">
+            <span>🇬🇧</span> Continue in English
           </button>
         </div>
       </div>

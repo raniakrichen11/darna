@@ -36,14 +36,56 @@ export class CatalogService {
     return pool.filter(item => {
       const matchNameFr = item.nameFr.toLowerCase().includes(q);
       const matchNameAr = item.nameAr.includes(q);
+      const matchNameEn = item.nameEn ? item.nameEn.toLowerCase().includes(q) : false;
       const matchDescFr = item.descriptionFr ? item.descriptionFr.toLowerCase().includes(q) : false;
       const matchDescAr = item.descriptionAr ? item.descriptionAr.includes(q) : false;
-      return matchNameFr || matchNameAr || matchDescFr || matchDescAr;
+      const matchDescEn = item.descriptionEn ? item.descriptionEn.toLowerCase().includes(q) : false;
+      return matchNameFr || matchNameAr || matchNameEn || matchDescFr || matchDescAr || matchDescEn;
     });
   }
 
   getCategoryItemCount(categoryId: string): number {
     return this.items().filter(i => i.categoryId === categoryId).length;
+  }
+
+  getCategoryName(cat: CatalogCategory | undefined): string {
+    if (!cat) return '';
+    const lang = this.i18n.currentLang();
+    if (lang === 'ar') return cat.nameAr;
+    if (lang === 'en') return cat.nameEn || cat.nameFr;
+    return cat.nameFr;
+  }
+
+  getCategoryDesc(cat: CatalogCategory | undefined): string {
+    if (!cat) return '';
+    const lang = this.i18n.currentLang();
+    if (lang === 'ar') return cat.descriptionAr;
+    if (lang === 'en') return cat.descriptionEn || cat.descriptionFr;
+    return cat.descriptionFr;
+  }
+
+  getItemName(item: CatalogItem | undefined): string {
+    if (!item) return '';
+    const lang = this.i18n.currentLang();
+    if (lang === 'ar') return item.nameAr;
+    if (lang === 'en') return item.nameEn || item.nameFr;
+    return item.nameFr;
+  }
+
+  getItemDesc(item: CatalogItem | undefined): string {
+    if (!item) return '';
+    const lang = this.i18n.currentLang();
+    if (lang === 'ar') return item.descriptionAr || '';
+    if (lang === 'en') return item.descriptionEn || item.descriptionFr || '';
+    return item.descriptionFr || '';
+  }
+
+  getSubcategoryName(sub: { nameFr: string; nameAr: string; nameEn?: string } | undefined): string {
+    if (!sub) return '';
+    const lang = this.i18n.currentLang();
+    if (lang === 'ar') return sub.nameAr;
+    if (lang === 'en') return sub.nameEn || sub.nameFr;
+    return sub.nameFr;
   }
 
   getItemImage(item: CatalogItem): string {

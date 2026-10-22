@@ -187,7 +187,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                   </span>
                   <span class="cat-icon-badge">{{ group.categoryIcon }}</span>
                   <h3 class="cat-title">
-                    {{ i18n.currentLang() === 'ar' ? group.categoryNameAr : group.categoryNameFr }}
+                    {{ i18n.currentLang() === 'ar' ? group.categoryNameAr : (i18n.currentLang() === 'en' ? (group.categoryNameEn || group.categoryNameFr) : group.categoryNameFr) }}
                   </h3>
                   <span class="cat-progress-pill">
                     {{ group.purchasedCount }}/{{ group.totalItems }}
@@ -251,14 +251,14 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                             type="button"
                             class="stepper-btn"
                             (click)="decrementQty(item)"
-                            [title]="i18n.currentLang() === 'ar' ? 'إنقاص' : 'Diminuer'"
+                            [title]="i18n.currentLang() === 'ar' ? 'إنقاص' : (i18n.currentLang() === 'en' ? 'Decrease' : 'Diminuer')"
                           >−</button>
                           <span class="stepper-val">{{ item.quantity }}</span>
                           <button
                             type="button"
                             class="stepper-btn"
                             (click)="incrementQty(item)"
-                            [title]="i18n.currentLang() === 'ar' ? 'زيادة' : 'Augmenter'"
+                            [title]="i18n.currentLang() === 'ar' ? 'زيادة' : (i18n.currentLang() === 'en' ? 'Increase' : 'Augmenter')"
                           >+</button>
                         </div>
                       </div>
@@ -269,12 +269,12 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                           <span class="price-val text-sage">
                             {{ (item.actualUnitPrice * item.quantity) | number:'1.0-2' }} {{ i18n.currency() }}
                           </span>
-                          <small class="unit-sub">({{ item.actualUnitPrice }} {{ i18n.currentLang() === 'ar' ? 'للوحدة' : '/u' }})</small>
+                          <small class="unit-sub">({{ item.actualUnitPrice }} {{ i18n.currentLang() === 'ar' ? 'للوحدة' : (i18n.currentLang() === 'en' ? '/unit' : '/u') }})</small>
                         } @else if (item.estimatedUnitPrice) {
                           <span class="price-val">
                             ~{{ (item.estimatedUnitPrice * item.quantity) | number:'1.0-2' }} {{ i18n.currency() }}
                           </span>
-                          <small class="unit-sub">({{ item.estimatedUnitPrice }} {{ i18n.currentLang() === 'ar' ? 'للوحدة' : '/u' }})</small>
+                          <small class="unit-sub">({{ item.estimatedUnitPrice }} {{ i18n.currentLang() === 'ar' ? 'للوحدة' : (i18n.currentLang() === 'en' ? '/unit' : '/u') }})</small>
                         } @else {
                           <span class="price-unspecified">
                             {{ i18n.t('list.price_unknown') }}
@@ -288,7 +288,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                           type="button"
                           class="action-icon-btn preview-btn"
                           (click)="openArticlePreview(item)"
-                          [title]="i18n.currentLang() === 'ar' ? 'عرض صورة المقال' : 'Aperçu photo de cet article'"
+                          [title]="i18n.currentLang() === 'ar' ? 'عرض صورة المقال' : (i18n.currentLang() === 'en' ? 'Photo preview of this item' : 'Aperçu photo de cet article')"
                         >
                           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -943,20 +943,22 @@ export class MyListComponent {
   }
 
   onSaveModalItem(formData: any): void {
+    const lang = this.i18n.currentLang();
     if (formData.id) {
-      const isAr = this.i18n.currentLang() === 'ar';
       this.shoppingList.updateItem(formData.id, {
         categoryId: formData.categoryId,
-        customNameFr: !isAr ? formData.name : this.modalItem()?.customNameFr,
-        customNameAr: isAr ? formData.name : this.modalItem()?.customNameAr,
+        customNameFr: lang === 'fr' ? formData.name : this.modalItem()?.customNameFr,
+        customNameAr: lang === 'ar' ? formData.name : this.modalItem()?.customNameAr,
+        customNameEn: lang === 'en' ? formData.name : this.modalItem()?.customNameEn,
         quantity: formData.quantity,
         estimatedUnitPrice: formData.estimatedUnitPrice,
         actualUnitPrice: formData.actualUnitPrice,
         notes: formData.notes
       });
-      this.toast.show(
-        this.i18n.currentLang() === 'ar' ? 'تم تحديث العنصر بنجاح ✨' : 'Article mis à jour avec succès ✨'
-      );
+      const msg = lang === 'ar'
+        ? 'تم تحديث العنصر بنجاح ✨'
+        : (lang === 'en' ? 'Item updated successfully ✨' : 'Article mis à jour avec succès ✨');
+      this.toast.show(msg);
     } else {
       this.shoppingList.addCustomItem({
         name: formData.name,
@@ -966,34 +968,39 @@ export class MyListComponent {
         actualUnitPrice: formData.actualUnitPrice,
         notes: formData.notes
       });
-      this.toast.show(
-        this.i18n.currentLang() === 'ar' ? 'تمت إضافة العنصر المخصص ✨' : 'Article personnalisé ajouté ✨'
-      );
+      const msg = lang === 'ar'
+        ? 'تمت إضافة العنصر المخصص ✨'
+        : (lang === 'en' ? 'Custom item added ✨' : 'Article personnalisé ajouté ✨');
+      this.toast.show(msg);
     }
     this.closeModal();
   }
 
   onDeleteItem(item: ShoppingListItem): void {
     const name = this.shoppingList.getItemDisplayName(item);
+    const lang = this.i18n.currentLang();
     const confirmMsg =
-      this.i18n.currentLang() === 'ar'
+      lang === 'ar'
         ? `هل تريدين حذف «${name}»؟`
-        : `Voulez-vous supprimer « ${name} » ?`;
+        : (lang === 'en' ? `Do you want to delete "${name}"?` : `Voulez-vous supprimer « ${name} » ?`);
 
     if (confirm(confirmMsg)) {
       this.shoppingList.removeItem(item.id);
-      this.toast.show(
-        this.i18n.currentLang() === 'ar' ? 'تم حذف العنصر' : 'Article supprimé'
-      );
+      const msg = lang === 'ar'
+        ? 'تم حذف العنصر'
+        : (lang === 'en' ? 'Item removed' : 'Article supprimé');
+      this.toast.show(msg);
     }
   }
 
   onClearAll(): void {
     if (confirm(this.i18n.t('action.clear_confirm'))) {
       this.shoppingList.clearAll();
-      this.toast.show(
-        this.i18n.currentLang() === 'ar' ? 'تم إفراغ القائمة' : 'Liste vidée'
-      );
+      const lang = this.i18n.currentLang();
+      const msg = lang === 'ar'
+        ? 'تم إفراغ القائمة'
+        : (lang === 'en' ? 'List cleared' : 'Liste vidée');
+      this.toast.show(msg);
     }
   }
 
@@ -1003,9 +1010,11 @@ export class MyListComponent {
 
   async onExportPdf(): Promise<void> {
     this.isExporting.set(true);
-    this.toast.show(
-      this.i18n.currentLang() === 'ar' ? 'جارٍ تحضير ملف PDF...' : 'Génération du PDF en cours...'
-    );
+    const lang = this.i18n.currentLang();
+    const msg = lang === 'ar'
+      ? 'جارٍ تحضير ملف PDF...'
+      : (lang === 'en' ? 'Generating PDF...' : 'Génération du PDF en cours...');
+    this.toast.show(msg);
     try {
       await this.pdfExport.exportToPdf('printable-export-container');
     } finally {

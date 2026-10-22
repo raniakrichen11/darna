@@ -15,7 +15,7 @@ import { I18nService } from '../../services/i18n.service';
         <div class="brand">
           <h1 class="brand-title">Darna | دارنا</h1>
           <p class="brand-tagline">
-            {{ i18n.currentLang() === 'ar' ? 'كل ما تحتاجينه لبيتك الجديد' : 'Tout pour votre nouveau chez-vous' }}
+            {{ i18n.t('app.tagline') }}
           </p>
         </div>
         <div class="meta">
@@ -61,7 +61,7 @@ import { I18nService } from '../../services/i18n.service';
           <div class="category-header">
             <h3>
               {{ group.categoryIcon }}
-              {{ i18n.currentLang() === 'ar' ? group.categoryNameAr : group.categoryNameFr }}
+              {{ i18n.currentLang() === 'ar' ? group.categoryNameAr : (i18n.currentLang() === 'en' ? (group.categoryNameEn || group.categoryNameFr) : group.categoryNameFr) }}
               <span class="cat-count">({{ group.purchasedCount }}/{{ group.totalItems }})</span>
             </h3>
             <span class="cat-subtotal">

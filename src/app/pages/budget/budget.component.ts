@@ -25,7 +25,7 @@ import { ToastService } from '../../services/toast.service';
         <div class="target-info">
           <div class="target-badge">🎯 {{ i18n.t('budget.target_label') }}</div>
           <p class="target-sub">
-            {{ i18n.currentLang() === 'ar' ? 'حددي سقف ميزانيتك الإجمالية لمتابعة مصاريفك وتفادي التجاوز.' : 'Fixez votre plafond budgétaire global pour garder le contrôle de vos dépenses.' }}
+            {{ i18n.currentLang() === 'ar' ? 'حددي سقف ميزانيتك الإجمالية لمتابعة مصاريفك وتفادي التجاوز.' : (i18n.currentLang() === 'en' ? 'Set your overall budget limit to manage expenses and avoid overspending.' : 'Fixez votre plafond budgétaire global pour garder le contrôle de vos dépenses.') }}
           </p>
         </div>
 
@@ -127,7 +127,7 @@ import { ToastService } from '../../services/toast.service';
             <h2 class="breakdown-title">{{ i18n.t('budget.spending_by_category') }}</h2>
           </div>
           <span class="badge-cat-count">
-            {{ shoppingList.categoryGroups().length }} {{ i18n.currentLang() === 'ar' ? 'أقسام نشطة' : 'catégories' }}
+            {{ shoppingList.categoryGroups().length }} {{ i18n.currentLang() === 'ar' ? 'أقسام نشطة' : (i18n.currentLang() === 'en' ? 'active categories' : 'catégories') }}
           </span>
         </div>
 
@@ -137,7 +137,7 @@ import { ToastService } from '../../services/toast.service';
               <div class="bar-top">
                 <div class="cat-label-wrap">
                   <span class="cat-icon-badge">{{ group.categoryIcon }}</span>
-                  <span class="cat-label">{{ i18n.currentLang() === 'ar' ? group.categoryNameAr : group.categoryNameFr }}</span>
+                  <span class="cat-label">{{ i18n.currentLang() === 'ar' ? group.categoryNameAr : (i18n.currentLang() === 'en' ? (group.categoryNameEn || group.categoryNameFr) : group.categoryNameFr) }}</span>
                 </div>
                 <div class="cat-amounts">
                   @if (group.actualTotal > 0) {
@@ -157,7 +157,7 @@ import { ToastService } from '../../services/toast.service';
 
               <div class="bar-sub">
                 <span>{{ group.purchasedCount }} / {{ group.totalItems }} {{ i18n.t('pdf.purchased') }}</span>
-                <span class="bar-percentage">{{ getBarPercentage(group.actualTotal || group.estimatedTotal) }}% {{ i18n.currentLang() === 'ar' ? 'من الإجمالي' : 'du budget est.' }}</span>
+                <span class="bar-percentage">{{ getBarPercentage(group.actualTotal || group.estimatedTotal) }}% {{ i18n.currentLang() === 'ar' ? 'من الإجمالي' : (i18n.currentLang() === 'en' ? 'of total' : 'du budget est.') }}</span>
               </div>
             </div>
           }
@@ -572,11 +572,11 @@ export class BudgetComponent {
     const val = this.tempTargetBudget();
     const cleanVal = val !== undefined && val !== null && !isNaN(val) ? Number(val) : undefined;
     this.preferences.setTargetBudget(cleanVal);
-    this.toast.show(
-      this.i18n.currentLang() === 'ar'
-        ? 'تم تحديث ميزانيتك بنجاح 🎯'
-        : 'Budget mis à jour avec succès 🎯'
-    );
+    const lang = this.i18n.currentLang();
+    const msg = lang === 'ar'
+      ? 'تم تحديث ميزانيتك بنجاح 🎯'
+      : (lang === 'en' ? 'Budget updated successfully 🎯' : 'Budget mis à jour avec succès 🎯');
+    this.toast.show(msg);
   }
 
   getBarPercentage(amount: number): number {

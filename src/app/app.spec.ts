@@ -33,15 +33,25 @@ describe('App & Core Services', () => {
     expect(catalog.items().length).toBeGreaterThanOrEqual(50);
   });
 
-  it('should toggle language and set RTL direction for Arabic', () => {
+  it('should toggle language and set RTL direction for Arabic, and LTR for English', () => {
     i18n.setLanguage('fr');
     expect(i18n.isRtl()).toBeFalse();
     expect(i18n.dir()).toBe('ltr');
+    expect(i18n.currency()).toBe('DT');
+    expect(i18n.t('nav.home')).toBe('Accueil');
 
     i18n.setLanguage('ar');
     expect(i18n.isRtl()).toBeTrue();
     expect(i18n.dir()).toBe('rtl');
     expect(i18n.currency()).toBe('د.ت');
+    expect(i18n.t('nav.home')).toBe('الرئيسية');
+
+    i18n.setLanguage('en');
+    expect(i18n.isRtl()).toBeFalse();
+    expect(i18n.dir()).toBe('ltr');
+    expect(i18n.currency()).toBe('DT');
+    expect(i18n.t('nav.home')).toBe('Home');
+    expect(i18n.t('nav.catalog')).toBe('Catalog');
   });
 
   it('should add catalog item and compute budget totals', () => {

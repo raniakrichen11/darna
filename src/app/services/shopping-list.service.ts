@@ -121,13 +121,14 @@ export class ShoppingListService {
     actualUnitPrice?: number;
     notes?: string;
   }): ShoppingListItem {
-    const isAr = this.i18n.currentLang() === 'ar';
+    const lang = this.i18n.currentLang();
     const newItem: ShoppingListItem = {
       id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
       categoryId: params.categoryId,
       subcategoryId: params.subcategoryId,
-      customNameFr: !isAr ? params.name : undefined,
-      customNameAr: isAr ? params.name : undefined,
+      customNameFr: lang === 'fr' ? params.name : undefined,
+      customNameAr: lang === 'ar' ? params.name : undefined,
+      customNameEn: lang === 'en' ? params.name : undefined,
       quantity: Math.max(1, params.quantity || 1),
       estimatedUnitPrice: params.estimatedUnitPrice,
       actualUnitPrice: params.actualUnitPrice,
@@ -197,13 +198,18 @@ export class ShoppingListService {
     if (item.catalogItemId) {
       const catItem = this.catalogService.getItemById(item.catalogItemId);
       if (catItem) {
-        return lang === 'ar' ? catItem.nameAr : catItem.nameFr;
+        if (lang === 'ar') return catItem.nameAr;
+        if (lang === 'en') return catItem.nameEn || catItem.nameFr;
+        return catItem.nameFr;
       }
     }
     if (lang === 'ar') {
-      return item.customNameAr || item.customNameFr || 'عنصر مخصص';
+      return item.customNameAr || item.customNameEn || item.customNameFr || 'عنصر مخصص';
     }
-    return item.customNameFr || item.customNameAr || 'Article personnalisé';
+    if (lang === 'en') {
+      return item.customNameEn || item.customNameFr || item.customNameAr || 'Custom item';
+    }
+    return item.customNameFr || item.customNameEn || item.customNameAr || 'Article personnalisé';
   }
 
   // Helper to resolve item icon
@@ -297,6 +303,7 @@ export class ShoppingListService {
           categoryId: cat.id,
           categoryNameFr: cat.nameFr,
           categoryNameAr: cat.nameAr,
+          categoryNameEn: cat.nameEn || cat.nameFr,
           categoryIcon: cat.icon,
           items: catItems,
           totalItems: catItems.length,

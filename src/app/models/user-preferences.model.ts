@@ -1,4 +1,4 @@
-export type AppLanguage = 'fr' | 'ar';
+export type AppLanguage = 'fr' | 'ar' | 'en';
 
 export interface UserPreferences {
   language: AppLanguage;
