@@ -265,10 +265,43 @@
 .main-content {
   flex: 1;
   padding: var(--space-lg) 0 var(--space-2xl);
+
+  @media (max-width: 859px) {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
+  }
 }
 
 .content-container {
   min-height: calc(100vh - 180px);
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    height: 58px;
+    gap: 8px;
+  }
+  .brand-link {
+    gap: 8px;
+    .brand-monogram {
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+    }
+    .brand-text .brand-title {
+      font-size: 1.12rem;
+    }
+    .brand-text .brand-tagline {
+      display: none;
+    }
+  }
+  .lang-segmented-bar {
+    padding: 2px;
+    gap: 1px;
+    .lang-seg-btn {
+      padding: 4px 8px;
+      font-size: 0.72rem;
+    }
+  }
 }
 
 /* Global Modern Editorial Footer */
