@@ -58,30 +58,11 @@ export class CatalogService {
     ) {
       return 'assets/item_couscoussier.jpg';
     }
-    if (
-      item.categoryId === 'vaisselle-service' ||
-      item.id === 'cui-002' ||
-      item.nameFr.toLowerCase().includes('tajine') ||
-      item.nameFr.toLowerCase().includes('service de table')
-    ) {
+    if (item.categoryId === 'vaisselle-service' && (item.id === 'cui-002' || item.nameFr.toLowerCase().includes('tajine') || item.nameFr.toLowerCase().includes('service de table'))) {
       return 'assets/item_tableware.jpg';
     }
-    if (
-      item.categoryId === 'trousseau-mariee' ||
-      item.categoryId === 'vetements-accessoires' ||
-      item.nameFr.toLowerCase().includes('parfum') ||
-      item.nameFr.toLowerCase().includes('bijoux')
-    ) {
+    if (item.categoryId === 'trousseau-mariee' && (item.nameFr.toLowerCase().includes('parfum') || item.nameFr.toLowerCase().includes('bijoux') || item.nameFr.toLowerCase().includes('coffret'))) {
       return 'assets/item_bridal_set.jpg';
-    }
-    if (item.categoryId === 'salle-de-bain') {
-      return 'assets/cat_bath.jpg';
-    }
-    if (item.categoryId === 'chambre-literie' || item.categoryId === 'linge-maison') {
-      return 'assets/cat_bedroom.jpg';
-    }
-    if (item.categoryId === 'cuisine-ustensiles') {
-      return 'assets/cat_kitchen.jpg';
     }
     const cat = this.getCategoryById(item.categoryId);
     return cat?.image || 'assets/cat_kitchen.jpg';

@@ -23,7 +23,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Assiettes, couverts, verres, services à thé et plateaux de présentation.',
     descriptionAr: 'الصحون، الملاعق والسكاكين، الكؤوس، أطقم الشاي والقهوة وصواني التقديم.',
     icon: '🍽️',
-    image: 'assets/cat_kitchen.jpg',
+    image: 'assets/cat_tableware.jpg',
     subcategories: [
       { id: 'services-table', nameFr: 'Services de table et assiettes', nameAr: 'أطقم المائدة والصحون' },
       { id: 'couverts-verrerie', nameFr: 'Couverts et verres', nameAr: 'الملاعق وأطقم الكؤوس' },
@@ -68,6 +68,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Rideaux, coussins, tapis, luminaires et touches d’ambiance chaleureuses.',
     descriptionAr: 'الستائر، الوسائد الديكورية، الزرابي، الإضاءة واللمسات الجمالية للمنزل.',
     icon: '🛋️',
+    image: 'assets/cat_living_room.jpg',
     subcategories: [
       { id: 'rideaux-voilages', nameFr: 'Rideaux et voilages', nameAr: 'الستائر وأقمشة النوافذ' },
       { id: 'tapis-salons', nameFr: 'Tapis et carpettes', nameAr: 'الزرابي وسجاد الصالون' },
@@ -82,6 +83,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Gros et petits appareils pour faciliter la vie quotidienne du foyer.',
     descriptionAr: 'الأجهزة الكهربائية الكبيرة والصغيرة لتجهيز بيت الزوجية العصري.',
     icon: '⚡',
+    image: 'assets/cat_appliances.jpg',
     subcategories: [
       { id: 'petit-dej-cuisine', nameFr: 'Petit électroménager cuisine', nameAr: 'أجهزة المطبخ الصغيرة' },
       { id: 'entretien-linge-sol', nameFr: 'Entretien et nettoyage', nameAr: 'أجهزة الكي والتنظيف' },
@@ -95,6 +97,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Gardes-robes, tenues d’intérieur, pyjamas, babouches et sorties.',
     descriptionAr: 'الملابس اليومية، ملابس البيت، البيجامات، الأحذية والشباشب الأنيقة.',
     icon: '👗',
+    image: 'assets/cat_apparel.jpg',
     subcategories: [
       { id: 'interieur-pyjamas', nameFr: 'Pyjamas et homewear', nameAr: 'البيجامات وملابس البيت' },
       { id: 'lingerie-nuit', nameFr: 'Lingerie et nuisettes', nameAr: 'ملابس النوم واللانجري' },
@@ -124,6 +127,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Nappes, chemins de table, torchons et linges de réception.',
     descriptionAr: 'المفارش، شراشف طاولة الطعام، مناشف المطبخ ومفروشات المناسبات.',
     icon: '🧵',
+    image: 'assets/cat_linens.jpg',
     subcategories: [
       { id: 'nappes-reception', nameFr: 'Nappes et chemins de table', nameAr: 'مفارش السفرة وطاولات الضيافة' },
       { id: 'torchons-essuie-mains', nameFr: 'Torchons et essuie-mains', nameAr: 'مناشف المطبخ والأيدي' },
@@ -137,6 +141,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Balais, seaux, séchoir, produits essentiels pour un foyer impeccable.',
     descriptionAr: 'المكانس، الدلاء، منشر الغسيل وأدوات النظافة اليومية لبيت مشرق.',
     icon: '🧹',
+    image: 'assets/cat_cleaning.jpg',
     subcategories: [
       { id: 'balais-seaux', nameFr: 'Balais, serpillières et seaux', nameAr: 'مكانس وأدوات مسح الأرضيات' },
       { id: 'sechage-repassage', nameFr: 'Séchoir et table à repasser', nameAr: 'منشر الغسيل وطاولة الكي' },
@@ -150,6 +155,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Boîtes sous-lit, cintres, séparateurs de tiroirs et paniers.',
     descriptionAr: 'صناديق التخزين، علّاقات الملابس، منظمات الأدراج وسلال الترتيب.',
     icon: '📦',
+    image: 'assets/cat_organization.jpg',
     subcategories: [
       { id: 'cintres-dressing', nameFr: 'Cintres et housses dressing', nameAr: 'علّاقات الملابس وأكياس الحفظ' },
       { id: 'organisateurs-tiroirs', nameFr: 'Séparateurs et boîtes', nameAr: 'منظمات الأدراج والصناديق' },
@@ -163,6 +169,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Linge pour les invités, matelas d’appoint, services d’honneur.',
     descriptionAr: 'مفروشات الضيوف، وسائد إضافية، أطقم الضيافة الفاخرة للزيارات العائلية.',
     icon: '☕',
+    image: 'assets/cat_hospitality.jpg',
     subcategories: [
       { id: 'couchage-invites', nameFr: 'Literie et coussins d’appoint', nameAr: 'أغطية ووسائد لضيوف البيت' },
       { id: 'service-honneur', nameFr: 'Services prestigieux', nameAr: 'أواني الشاي والحلويات الفاخرة' },
@@ -176,6 +183,7 @@ export const CATALOG_CATEGORIES: CatalogCategory[] = [
     descriptionFr: 'Trousse de secours, multiprises, outillage de base et sécurité.',
     descriptionAr: 'صندوق الإسعافات الأولية، التوصيلات الكهربائية، صندوق الأدوات البسيط.',
     icon: '🔧',
+    image: 'assets/cat_daily_essentials.jpg',
     subcategories: [
       { id: 'securite-sante', nameFr: 'Pharmacie et premiers soins', nameAr: 'الإسعافات الأولية والسلامة' },
       { id: 'bricolage-outils', nameFr: 'Petit outillage et quincaillerie', nameAr: 'مفكّات وأدوات الصيانة الخفيفة' },

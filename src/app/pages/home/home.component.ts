@@ -515,8 +515,8 @@ import { I18nService } from '../../services/i18n.service';
         grid-template-columns: repeat(2, 1fr);
       }
 
-      @media (min-width: 1000px) {
-        grid-template-columns: repeat(4, 1fr);
+      @media (min-width: 960px) {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
@@ -700,7 +700,14 @@ export class HomeComponent {
   i18n = inject(I18nService);
 
   get featuredCategories() {
-    const ids = ['cuisine-ustensiles', 'chambre-literie', 'salle-de-bain', 'trousseau-mariee'];
+    const ids = [
+      'cuisine-ustensiles',
+      'vaisselle-service',
+      'chambre-literie',
+      'salle-de-bain',
+      'salon-decoration',
+      'trousseau-mariee'
+    ];
     return ids.map(id => this.catalogService.getCategoryById(id)).filter(Boolean) as any[];
   }
 }
