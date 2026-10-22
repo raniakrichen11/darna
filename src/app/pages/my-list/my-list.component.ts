@@ -203,7 +203,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                     }
                     @if (group.estimatedTotal > 0) {
                       <span class="est-amount">
-                        est. {{ group.estimatedTotal | number:'1.0-2' }} {{ i18n.currency() }}
+                        {{ i18n.currentLang() === 'ar' ? 'تقديري: ' : 'est. ' }}{{ group.estimatedTotal | number:'1.0-2' }} {{ i18n.currency() }}
                       </span>
                     }
                   </div>
@@ -251,14 +251,14 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                             type="button"
                             class="stepper-btn"
                             (click)="decrementQty(item)"
-                            title="Diminuer"
+                            [title]="i18n.currentLang() === 'ar' ? 'إنقاص' : 'Diminuer'"
                           >−</button>
                           <span class="stepper-val">{{ item.quantity }}</span>
                           <button
                             type="button"
                             class="stepper-btn"
                             (click)="incrementQty(item)"
-                            title="Augmenter"
+                            [title]="i18n.currentLang() === 'ar' ? 'زيادة' : 'Augmenter'"
                           >+</button>
                         </div>
                       </div>
@@ -269,12 +269,12 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                           <span class="price-val text-sage">
                             {{ (item.actualUnitPrice * item.quantity) | number:'1.0-2' }} {{ i18n.currency() }}
                           </span>
-                          <small class="unit-sub">({{ item.actualUnitPrice }} /u)</small>
+                          <small class="unit-sub">({{ item.actualUnitPrice }} {{ i18n.currentLang() === 'ar' ? 'للوحدة' : '/u' }})</small>
                         } @else if (item.estimatedUnitPrice) {
                           <span class="price-val">
                             ~{{ (item.estimatedUnitPrice * item.quantity) | number:'1.0-2' }} {{ i18n.currency() }}
                           </span>
-                          <small class="unit-sub">({{ item.estimatedUnitPrice }} /u)</small>
+                          <small class="unit-sub">({{ item.estimatedUnitPrice }} {{ i18n.currentLang() === 'ar' ? 'للوحدة' : '/u' }})</small>
                         } @else {
                           <span class="price-unspecified">
                             {{ i18n.t('list.price_unknown') }}

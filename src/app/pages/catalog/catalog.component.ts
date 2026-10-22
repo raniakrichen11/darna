@@ -39,7 +39,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
               class="minimal-search-input"
             />
             @if (searchQuery()) {
-              <button type="button" class="clear-search-btn" (click)="searchQuery.set('')" title="Effacer">✕</button>
+              <button type="button" class="clear-search-btn" (click)="searchQuery.set('')" [title]="i18n.currentLang() === 'ar' ? 'مسح' : 'Effacer'">✕</button>
             }
           </div>
 
@@ -129,7 +129,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 
                   <a [routerLink]="['/catalog', cat.id]" class="explore-cat-btn">
                     <span>{{ i18n.currentLang() === 'ar' ? 'تصفح جميع عناصر القسم' : 'Explorer tous les articles' }}</span>
-                    <span>→</span>
+                    <span>{{ i18n.isRtl() ? '←' : '→' }}</span>
                   </a>
                 </div>
               </div>

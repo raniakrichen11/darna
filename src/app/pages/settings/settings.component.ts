@@ -87,7 +87,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
               type="text"
               [(ngModel)]="brideName"
               (ngModelChange)="onBrideNameChange($event)"
-              placeholder="Ex: Yasmine / ياسمين"
+              [placeholder]="i18n.currentLang() === 'ar' ? 'مثال: ياسمين' : 'Ex: Yasmine'"
             />
           </div>
 
@@ -98,7 +98,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
               type="text"
               [(ngModel)]="groomName"
               (ngModelChange)="onGroomNameChange($event)"
-              placeholder="Ex: Mohamed / محمد"
+              [placeholder]="i18n.currentLang() === 'ar' ? 'مثال: محمد' : 'Ex: Mohamed'"
             />
           </div>
 
@@ -119,7 +119,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
         <div class="card-header">
           <div class="header-icon-pill">📱</div>
           <div class="header-text">
-            <span class="section-eyebrow">APPLICATION PWA</span>
+            <span class="section-eyebrow">{{ i18n.currentLang() === 'ar' ? 'تطبيق الهاتف' : 'APPLICATION PWA' }}</span>
             <h2 class="section-title">{{ i18n.t('settings.pwa_section') }}</h2>
             <p class="section-desc">
               {{ i18n.currentLang() === 'ar'
@@ -184,7 +184,7 @@ import { AppLanguage } from '../../models/user-preferences.model';
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="culture-symbol">
             <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
           </svg>
-          <span>Darna Editorial Luxury Edition · Conçu pour les mariées de Tunisie</span>
+          <span>{{ i18n.currentLang() === 'ar' ? 'دارنا · طبعة فاخرة مصممة خصيصاً لعرائس تونس' : 'Darna Editorial Luxury Edition · Conçu pour les mariées de Tunisie' }}</span>
         </div>
       </section>
     </div>

@@ -114,7 +114,7 @@ import { I18nService } from '../../services/i18n.service';
               </span>
             } @else {
               <span class="kpi-value text-muted-link">
-                <a routerLink="/budget">{{ i18n.t('home.budget_undefined') }} →</a>
+                <a routerLink="/budget">{{ i18n.t('home.budget_undefined') }} {{ i18n.isRtl() ? '←' : '→' }}</a>
               </span>
             }
           </div>
@@ -129,7 +129,7 @@ import { I18nService } from '../../services/i18n.service';
             <p class="section-sub">{{ i18n.currentLang() === 'ar' ? 'استكشفي أركان وتجهيزات بيتكِ الجديد بكل تفاصيلها.' : 'Explorez chaque univers de votre futur intérieur avec soin et sérénité.' }}</p>
           </div>
           <a routerLink="/catalog" class="editorial-see-all">
-            {{ i18n.t('catalog.all_categories') }} →
+            {{ i18n.t('catalog.all_categories') }} {{ i18n.isRtl() ? '←' : '→' }}
           </a>
         </div>
 
@@ -161,7 +161,7 @@ import { I18nService } from '../../services/i18n.service';
             <p class="section-sub">{{ i18n.currentLang() === 'ar' ? 'تابعي آخر الإضافات وحددي ما تم شراؤه بنقرة واحدة.' : 'Vos dernières sélections prêtes à être cochées lors de vos visites.' }}</p>
           </div>
           <a routerLink="/my-list" class="editorial-see-all">
-            {{ i18n.t('action.continue_list') }} →
+            {{ i18n.t('action.continue_list') }} {{ i18n.isRtl() ? '←' : '→' }}
           </a>
         </div>
 

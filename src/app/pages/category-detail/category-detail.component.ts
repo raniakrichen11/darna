@@ -143,8 +143,8 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         </div>
       } @else {
         <div class="card not-found-box">
-          <h2>Catégorie introuvable</h2>
-          <a routerLink="/catalog" class="btn btn-primary">Retour au catalogue</a>
+          <h2>{{ i18n.currentLang() === 'ar' ? 'القسم غير موجود' : 'Catégorie introuvable' }}</h2>
+          <a routerLink="/catalog" class="btn btn-primary">{{ i18n.currentLang() === 'ar' ? 'العودة إلى الدليل' : 'Retour au catalogue' }}</a>
         </div>
       }
 

@@ -143,7 +143,7 @@ import { ToastService } from '../../services/toast.service';
                   @if (group.actualTotal > 0) {
                     <strong class="act">{{ group.actualTotal | number:'1.0-2' }} {{ i18n.currency() }}</strong>
                   }
-                  <span class="est">(est. {{ group.estimatedTotal | number:'1.0-2' }} {{ i18n.currency() }})</span>
+                  <span class="est">({{ i18n.currentLang() === 'ar' ? 'تقديري ' : 'est. ' }}{{ group.estimatedTotal | number:'1.0-2' }} {{ i18n.currency() }})</span>
                 </div>
               </div>
 
