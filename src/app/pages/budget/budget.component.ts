@@ -6,6 +6,7 @@ import { ShoppingListService } from '../../services/shopping-list.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { I18nService } from '../../services/i18n.service';
 import { ToastService } from '../../services/toast.service';
+import { ItemPriority } from '../../models/shopping-list.model';
 
 @Component({
   selector: 'app-budget',
@@ -109,6 +110,27 @@ import { ToastService } from '../../services/toast.service';
             </div>
           }
         </div>
+
+        <!-- Card 4: Realized Savings (if any) or Progress -->
+        <div class="summary-card">
+          <div class="card-top">
+            <span class="card-eyebrow">{{ i18n.t('budget.realized_savings') }}</span>
+            <div class="card-icon-pill pill-sand">🏷️</div>
+          </div>
+          @if (shoppingList.totalSavings() > 0) {
+            <div class="card-amount text-sage">
+              +{{ shoppingList.totalSavings() | number:'1.0-2' }} <small>{{ i18n.currency() }}</small>
+            </div>
+            <div class="card-footer text-sage">
+              ✨ {{ i18n.currentLang() === 'ar' ? 'مبالغ موفّرة بأقل من التقديرات' : 'Économisés sous vos prévisions' }}
+            </div>
+          } @else {
+            <div class="card-amount text-muted">0.00 <small>{{ i18n.currency() }}</small></div>
+            <div class="card-footer text-muted">
+              {{ i18n.currentLang() === 'ar' ? 'متابعة الصفقات والأسعار' : 'Achats au prix ou devis respectés' }}
+            </div>
+          }
+        </div>
       </section>
 
       <!-- Unknown Price Notice Warning -->
@@ -118,6 +140,47 @@ import { ToastService } from '../../services/toast.service';
           {{ i18n.t('budget.unknown_prices_note') }}
         </p>
       </div>
+
+      <!-- Top 5 Expense Drivers Section -->
+      @if (shoppingList.topExpenseItems().length > 0) {
+        <section class="breakdown-section top-expenses-section">
+          <div class="breakdown-header">
+            <div class="breakdown-title-wrap">
+              <span class="breakdown-eyebrow">TOP INVESTISSEMENTS</span>
+              <h2 class="breakdown-title">{{ i18n.t('budget.top_expenses') }}</h2>
+            </div>
+            <span class="badge-cat-count">
+              {{ shoppingList.topExpenseItems().length }} {{ i18n.currentLang() === 'ar' ? 'مستلزمات رئيسية' : 'postes majeurs' }}
+            </span>
+          </div>
+
+          <div class="top-expenses-list">
+            @for (item of shoppingList.topExpenseItems(); track item.id; let idx = $index) {
+              <div class="top-expense-row">
+                <div class="rank-badge">#{{ idx + 1 }}</div>
+                <div class="expense-info">
+                  <div class="expense-name">
+                    {{ shoppingList.getItemDisplayName(item) }}
+                  </div>
+                  <div class="expense-sub">
+                    <span>{{ item.quantity }} × {{ (item.actualUnitPrice ?? item.estimatedUnitPrice) | number:'1.0-2' }} {{ i18n.currency() }}</span>
+                    @if (item.priority) {
+                      <span class="expense-prio">{{ getPriorityLabel(item.priority) }}</span>
+                    }
+                    @if (item.purchaseLocation) {
+                      <span class="expense-store">📍 {{ item.purchaseLocation }}</span>
+                    }
+                  </div>
+                </div>
+                <div class="expense-total">
+                  <strong>{{ ((item.actualUnitPrice ?? item.estimatedUnitPrice ?? 0) * item.quantity) | number:'1.0-2' }}</strong>
+                  <small>{{ i18n.currency() }}</small>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+      }
 
       <!-- Category Spending Breakdown -->
       <section class="breakdown-section">
@@ -158,6 +221,51 @@ import { ToastService } from '../../services/toast.service';
               <div class="bar-sub">
                 <span>{{ group.purchasedCount }} / {{ group.totalItems }} {{ i18n.t('pdf.purchased') }}</span>
                 <span class="bar-percentage">{{ getBarPercentage(group.actualTotal || group.estimatedTotal) }}% {{ i18n.currentLang() === 'ar' ? 'من الإجمالي' : (i18n.currentLang() === 'en' ? 'of total' : 'du budget est.') }}</span>
+              </div>
+
+              <!-- Category Budget Target allocation & editor -->
+              <div class="cat-budget-target-row">
+                <div class="cat-target-display">
+                  <span class="cat-target-title">{{ i18n.t('budget.cat_budget_target') }}</span>
+                  @if (preferences.preferences().categoryBudgets?.[group.categoryId]; as catBudget) {
+                    <strong class="cat-target-num">{{ catBudget | number:'1.0-2' }} {{ i18n.currency() }}</strong>
+                    @if ((group.actualTotal || group.estimatedTotal) > catBudget) {
+                      <span class="badge-cat-warning">⚠️ {{ i18n.currentLang() === 'ar' ? 'تجاوز' : 'dépassement' }}</span>
+                    } @else {
+                      <span class="badge-cat-ok">✓ {{ i18n.currentLang() === 'ar' ? 'ضمن السقف' : 'respecté' }}</span>
+                    }
+                  } @else {
+                    <span class="text-muted">{{ i18n.currentLang() === 'ar' ? 'غير محدد' : 'Non alloué' }}</span>
+                  }
+                </div>
+
+                @if (editingCatId() === group.categoryId) {
+                  <div class="cat-budget-inline-edit">
+                    <input
+                      type="number"
+                      min="0"
+                      step="50"
+                      [ngModel]="catBudgetValue()"
+                      (ngModelChange)="catBudgetValue.set($event)"
+                      [placeholder]="'0 ' + i18n.currency()"
+                      class="cat-budget-input"
+                    />
+                    <button type="button" class="btn btn-sm btn-primary" (click)="saveCatBudget(group.categoryId)">
+                      OK
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline" (click)="editingCatId.set(null)">
+                      ✕
+                    </button>
+                  </div>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn-text-edit"
+                    (click)="editCatBudget(group.categoryId, preferences.preferences().categoryBudgets?.[group.categoryId])"
+                  >
+                    ✏️ {{ i18n.t('budget.set_cat_budget') }}
+                  </button>
+                }
               </div>
             </div>
           }
@@ -664,6 +772,177 @@ import { ToastService } from '../../services/toast.service';
         }
       }
     }
+
+    /* Top Expenses List Styles */
+    .top-expenses-section {
+      margin-top: -6px;
+
+      .top-expenses-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+
+        .top-expense-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 14px;
+          background: #FFFFFF;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-xs);
+          }
+
+          .rank-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-surface-subtle);
+            color: var(--color-primary);
+            font-weight: 700;
+            font-size: 0.76rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid var(--color-border);
+          }
+
+          .expense-info {
+            flex: 1;
+
+            .expense-name {
+              font-weight: 600;
+              font-size: 0.92rem;
+              color: var(--color-text-main);
+            }
+
+            .expense-sub {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              font-size: 0.76rem;
+              color: var(--color-text-muted);
+              margin-top: 2px;
+              flex-wrap: wrap;
+
+              .expense-prio {
+                padding: 1px 7px;
+                border-radius: var(--radius-full);
+                background: rgba(113, 56, 72, 0.08);
+                color: var(--color-primary);
+                font-weight: 600;
+                font-size: 0.68rem;
+              }
+
+              .expense-store {
+                background: var(--color-surface-subtle);
+                padding: 1px 6px;
+                border-radius: var(--radius-sm);
+              }
+            }
+          }
+
+          .expense-total {
+            text-align: end;
+
+            strong {
+              font-size: 1.05rem;
+              color: var(--color-primary);
+            }
+
+            small {
+              font-size: 0.78rem;
+              color: var(--color-text-muted);
+              margin-inline-start: 2px;
+            }
+          }
+        }
+      }
+    }
+
+    /* Category budget target row in category bars */
+    .cat-budget-target-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      margin-top: 6px;
+      border-top: 1px dashed var(--color-border-subtle);
+      font-size: 0.82rem;
+
+      .cat-target-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .cat-target-title {
+          color: var(--color-text-muted);
+          font-weight: 500;
+        }
+
+        .cat-target-num {
+          color: var(--color-text-main);
+          font-weight: 700;
+        }
+
+        .badge-cat-warning {
+          font-size: 0.72rem;
+          color: #D32F2F;
+          font-weight: 700;
+          background: #FFEBEE;
+          padding: 1px 6px;
+          border-radius: var(--radius-sm);
+        }
+
+        .badge-cat-ok {
+          font-size: 0.72rem;
+          color: var(--color-success);
+          font-weight: 700;
+          background: #E8F5E9;
+          padding: 1px 6px;
+          border-radius: var(--radius-sm);
+        }
+      }
+
+      .btn-text-edit {
+        background: none;
+        border: none;
+        color: var(--color-primary);
+        cursor: pointer;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-decoration: underline;
+
+        &:hover {
+          color: var(--color-terracotta);
+        }
+      }
+
+      .cat-budget-inline-edit {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .cat-budget-input {
+          width: 90px;
+          padding: 4px 8px;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-sm);
+          font-size: 0.8rem;
+          outline: none;
+
+          &:focus {
+            border-color: var(--color-primary);
+          }
+        }
+      }
+    }
   `]
 })
 export class BudgetComponent {
@@ -676,6 +955,33 @@ export class BudgetComponent {
   tempTargetBudget = signal<number | undefined>(
     this.preferences.preferences().totalBudget
   );
+
+  editingCatId = signal<string | null>(null);
+  catBudgetValue = signal<number | null>(null);
+
+  editCatBudget(catId: string, currentBudget?: number): void {
+    this.editingCatId.set(catId);
+    this.catBudgetValue.set(currentBudget ?? null);
+  }
+
+  saveCatBudget(catId: string): void {
+    const val = this.catBudgetValue();
+    const cleanVal = val !== null && val !== undefined && !isNaN(val) && val > 0 ? Number(val) : undefined;
+    this.preferences.setCategoryBudget(catId, cleanVal);
+    this.editingCatId.set(null);
+    const lang = this.i18n.currentLang();
+    const msg = lang === 'ar'
+      ? 'تم تحديث ميزانية القسم بنجاح'
+      : (lang === 'en' ? 'Category budget updated successfully' : 'Budget de la catégorie mis à jour');
+    this.toast.show(msg);
+  }
+
+  getPriorityLabel(prio?: ItemPriority): string {
+    if (!prio) return '';
+    return prio === 'essential' ? this.i18n.t('priority.essential')
+      : prio === 'useful' ? this.i18n.t('priority.useful')
+      : this.i18n.t('priority.optional');
+  }
 
   saveBudget(): void {
     const val = this.tempTargetBudget();

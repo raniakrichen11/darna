@@ -40,17 +40,30 @@ import { I18nService } from '../../services/i18n.service';
             }
           </div>
 
-          <!-- Category -->
-          <div class="form-group">
-            <label for="itemCategory">{{ i18n.t('modal.category_label') }} <span class="required">*</span></label>
-            <div class="select-wrapper">
-              <select id="itemCategory" formControlName="categoryId">
-                @for (cat of catalogService.categories(); track cat.id) {
-                  <option [value]="cat.id">
-                    {{ cat.icon }} {{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}
-                  </option>
-                }
-              </select>
+          <!-- Category and Priority (side-by-side) -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="itemCategory">{{ i18n.t('modal.category_label') }} <span class="required">*</span></label>
+              <div class="select-wrapper">
+                <select id="itemCategory" formControlName="categoryId">
+                  @for (cat of catalogService.categories(); track cat.id) {
+                    <option [value]="cat.id">
+                      {{ cat.icon }} {{ i18n.currentLang() === 'ar' ? cat.nameAr : cat.nameFr }}
+                    </option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group col-priority">
+              <label for="itemPriority">{{ i18n.currentLang() === 'ar' ? 'الأولوية' : (i18n.currentLang() === 'en' ? 'Priority' : 'Priorité') }}</label>
+              <div class="select-wrapper">
+                <select id="itemPriority" formControlName="priority">
+                  <option value="essential">💎 {{ i18n.currentLang() === 'ar' ? 'أساسي / ضروري' : 'Indispensable' }}</option>
+                  <option value="useful">✨ {{ i18n.currentLang() === 'ar' ? 'مهم / مفيد' : 'Recommandé' }}</option>
+                  <option value="optional">🌸 {{ i18n.currentLang() === 'ar' ? 'كمالي / إضافي' : 'Optionnel' }}</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -70,12 +83,37 @@ import { I18nService } from '../../services/i18n.service';
             </div>
           </div>
 
-          <!-- Actual Price (if purchased or known) -->
-          <div class="form-group">
-            <label for="itemActPrice">{{ i18n.t('modal.act_price_label') }}</label>
-            <div class="input-with-currency">
-              <input id="itemActPrice" type="number" min="0" step="0.5" formControlName="actualUnitPrice" placeholder="0.00" />
-              <span class="currency-tag">{{ i18n.currency() }}</span>
+          <!-- Actual Price & Store Location (side-by-side) -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="itemActPrice">{{ i18n.t('modal.act_price_label') }}</label>
+              <div class="input-with-currency">
+                <input id="itemActPrice" type="number" min="0" step="0.5" formControlName="actualUnitPrice" placeholder="0.00" />
+                <span class="currency-tag">{{ i18n.currency() }}</span>
+              </div>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="itemLocation">{{ i18n.currentLang() === 'ar' ? 'مكان أو متجر الشراء' : (i18n.currentLang() === 'en' ? 'Store / Location' : 'Magasin / Lieu d’achat') }}</label>
+              <input
+                id="itemLocation"
+                type="text"
+                formControlName="purchaseLocation"
+                [placeholder]="i18n.currentLang() === 'ar' ? 'مثال: سوق الغرانا، مونوبري...' : 'Ex: Souk El Grana, Monoprix, Darty...'"
+              />
+            </div>
+          </div>
+
+          <!-- Purchase Date & Target Date (side-by-side) -->
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="itemPurchaseDate">{{ i18n.currentLang() === 'ar' ? 'تاريخ الشراء' : 'Date d’achat (si acheté)' }}</label>
+              <input id="itemPurchaseDate" type="date" formControlName="purchaseDate" />
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="itemTargetDate">{{ i18n.currentLang() === 'ar' ? 'الموعد المستهدف' : 'Date cible souhaitée' }}</label>
+              <input id="itemTargetDate" type="date" formControlName="targetDate" />
             </div>
           </div>
 
@@ -84,7 +122,7 @@ import { I18nService } from '../../services/i18n.service';
             <label for="itemNotes">{{ i18n.t('modal.notes_label') }}</label>
             <textarea
               id="itemNotes"
-              rows="3"
+              rows="2"
               formControlName="notes"
               [placeholder]="i18n.t('list.notes_placeholder')"
             ></textarea>
@@ -316,9 +354,13 @@ export class ItemModalComponent implements OnInit, OnDestroy {
         this.existingItem?.categoryId || this.defaultCategoryId || 'cuisine-ustensiles',
         Validators.required
       ],
+      priority: [this.existingItem?.priority || 'useful'],
       quantity: [this.existingItem?.quantity || 1, [Validators.required, Validators.min(1)]],
       estimatedUnitPrice: [this.existingItem?.estimatedUnitPrice ?? null],
       actualUnitPrice: [this.existingItem?.actualUnitPrice ?? null],
+      purchaseLocation: [this.existingItem?.purchaseLocation || ''],
+      purchaseDate: [this.existingItem?.purchaseDate || ''],
+      targetDate: [this.existingItem?.targetDate || ''],
       notes: [this.existingItem?.notes || '']
     });
   }
@@ -330,9 +372,13 @@ export class ItemModalComponent implements OnInit, OnDestroy {
         id: this.existingItem?.id,
         name: val.name.trim(),
         categoryId: val.categoryId,
+        priority: val.priority || 'useful',
         quantity: Number(val.quantity),
         estimatedUnitPrice: val.estimatedUnitPrice !== null && val.estimatedUnitPrice !== '' ? Number(val.estimatedUnitPrice) : undefined,
         actualUnitPrice: val.actualUnitPrice !== null && val.actualUnitPrice !== '' ? Number(val.actualUnitPrice) : undefined,
+        purchaseLocation: val.purchaseLocation?.trim() || undefined,
+        purchaseDate: val.purchaseDate || undefined,
+        targetDate: val.targetDate || undefined,
         notes: val.notes?.trim() || ''
       });
     }

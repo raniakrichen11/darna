@@ -30,6 +30,11 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         </div>
 
         <div class="header-action-group">
+          <button type="button" class="btn btn-outline btn-sm share-btn" (click)="onShareWhatsApp()">
+            <span>💬</span>
+            <span>{{ i18n.t('action.share_whatsapp') }}</span>
+          </button>
+
           <button type="button" class="btn btn-outline btn-sm" (click)="onPrint()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -86,7 +91,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         </div>
       </section>
 
-      <!-- Search & Status Filter Strip -->
+      <!-- Search & Filters Strip -->
       <section class="list-filters-strip">
         <div class="search-field-wrap">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -136,10 +141,59 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           </button>
         </div>
 
-        <div class="toggle-all-wrap">
-          <button type="button" class="btn btn-outline btn-sm" (click)="toggleAllCategories()">
-            {{ allExpanded() ? i18n.t('list.collapse_all') : i18n.t('list.expand_all') }}
-          </button>
+        <!-- Priority Filters & Sorting Selection -->
+        <div class="secondary-filters-row">
+          <div class="priority-pills">
+            <button
+              type="button"
+              class="sub-pill"
+              [class.active]="priorityFilter() === 'all'"
+              (click)="priorityFilter.set('all')"
+            >
+              {{ i18n.t('action.filter_all') }}
+            </button>
+            <button
+              type="button"
+              class="sub-pill pill-essential"
+              [class.active]="priorityFilter() === 'essential'"
+              (click)="priorityFilter.set('essential')"
+            >
+              💎 {{ i18n.t('priority.essential') }}
+            </button>
+            <button
+              type="button"
+              class="sub-pill pill-useful"
+              [class.active]="priorityFilter() === 'useful'"
+              (click)="priorityFilter.set('useful')"
+            >
+              ✨ {{ i18n.t('priority.useful') }}
+            </button>
+            <button
+              type="button"
+              class="sub-pill pill-optional"
+              [class.active]="priorityFilter() === 'optional'"
+              (click)="priorityFilter.set('optional')"
+            >
+              🌸 {{ i18n.t('priority.optional') }}
+            </button>
+          </div>
+
+          <div class="sort-and-toggle-wrap">
+            <div class="sort-select-box">
+              <span class="sort-label">{{ i18n.t('action.sort_by') }} :</span>
+              <select [(ngModel)]="sortOrder" class="sort-select">
+                <option value="default">{{ i18n.t('sort.default') }}</option>
+                <option value="priority">{{ i18n.t('sort.priority') }}</option>
+                <option value="price_desc">{{ i18n.t('sort.price_desc') }}</option>
+                <option value="price_asc">{{ i18n.t('sort.price_asc') }}</option>
+                <option value="name">{{ i18n.t('sort.name') }}</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-outline btn-sm" (click)="toggleAllCategories()">
+              {{ allExpanded() ? i18n.t('list.collapse_all') : i18n.t('list.expand_all') }}
+            </button>
+          </div>
         </div>
       </section>
 
@@ -234,14 +288,32 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 
                       <!-- Item Name & Notes -->
                       <div class="row-info" (click)="openEditModal(item)">
-                        <span class="item-name-text">
-                          {{ shoppingList.getItemDisplayName(item) }}
-                        </span>
-                        @if (item.notes) {
-                          <span class="item-notes-text">
-                            💬 {{ item.notes }}
+                        <div class="item-name-line">
+                          <span class="item-name-text">
+                            {{ shoppingList.getItemDisplayName(item) }}
                           </span>
-                        }
+                          @if (item.priority) {
+                            <span class="priority-badge-pill" [class]="'pill-' + item.priority">
+                              {{ item.priority === 'essential' ? '💎 ' + i18n.t('priority.essential') : (item.priority === 'optional' ? '🌸 ' + i18n.t('priority.optional') : '✨ ' + i18n.t('priority.useful')) }}
+                            </span>
+                          }
+                        </div>
+                        <div class="item-meta-badges-row">
+                          @if (item.purchaseLocation) {
+                            <span class="item-meta-tag store-tag">📍 {{ item.purchaseLocation }}</span>
+                          }
+                          @if (item.purchaseDate) {
+                            <span class="item-meta-tag date-tag">✓ {{ item.purchaseDate }}</span>
+                          }
+                          @if (item.targetDate) {
+                            <span class="item-meta-tag target-tag">🎯 {{ item.targetDate }}</span>
+                          }
+                          @if (item.notes) {
+                            <span class="item-notes-text">
+                              💬 {{ item.notes }}
+                            </span>
+                          }
+                        </div>
                       </div>
 
                       <!-- Tactile Stepper -->
@@ -580,6 +652,96 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
       }
     }
 
+    .secondary-filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 2px;
+
+      .priority-pills {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+
+        .sub-pill {
+          border: 1px solid var(--color-border);
+          background: #FFFFFF;
+          border-radius: var(--radius-full);
+          padding: 5px 12px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: var(--color-text-muted);
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            border-color: var(--color-text-muted);
+            color: var(--color-text-main);
+          }
+
+          &.active {
+            background: var(--color-text-main);
+            color: #FFFFFF;
+            border-color: var(--color-text-main);
+          }
+
+          &.pill-essential.active {
+            background: #713848;
+            border-color: #713848;
+            color: #FFFFFF;
+          }
+
+          &.pill-useful.active {
+            background: #718875;
+            border-color: #718875;
+            color: #FFFFFF;
+          }
+
+          &.pill-optional.active {
+            background: #C87862;
+            border-color: #C87862;
+            color: #FFFFFF;
+          }
+        }
+      }
+
+      .sort-and-toggle-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+
+        .sort-select-box {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.82rem;
+          color: var(--color-text-muted);
+          font-weight: 600;
+
+          .sort-select {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: #FFFFFF;
+            padding: 5px 10px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            color: var(--color-text-main);
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.15s;
+
+            &:focus {
+              border-color: var(--color-primary);
+            }
+          }
+        }
+      }
+    }
+
     /* Category Blocks */
     .category-sections-container {
       display: flex;
@@ -732,6 +894,51 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           color: var(--color-text-muted);
           margin-top: 2px;
           display: block;
+        }
+
+        .item-meta-badges-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-wrap: wrap;
+          margin-top: 5px;
+
+          .priority-badge-pill {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+
+            &.prio-essential {
+              background: rgba(113, 56, 72, 0.1);
+              color: #713848;
+              border: 1px solid rgba(113, 56, 72, 0.25);
+            }
+
+            &.prio-useful {
+              background: rgba(113, 136, 117, 0.15);
+              color: #718875;
+              border: 1px solid rgba(113, 136, 117, 0.3);
+            }
+
+            &.prio-optional {
+              background: rgba(200, 120, 98, 0.12);
+              color: #C87862;
+              border: 1px solid rgba(200, 120, 98, 0.25);
+            }
+          }
+
+          .store-tag,
+          .date-tag {
+            font-size: 0.72rem;
+            color: var(--color-text-muted);
+            background: var(--color-surface-subtle);
+            padding: 1px 7px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border-subtle);
+          }
         }
       }
 
@@ -1191,6 +1398,8 @@ export class MyListComponent {
 
   searchQuery = signal<string>('');
   statusFilter = signal<'all' | 'remaining' | 'purchased'>('all');
+  priorityFilter = signal<'all' | 'essential' | 'useful' | 'optional'>('all');
+  sortOrder = signal<'default' | 'price_desc' | 'price_asc' | 'priority' | 'name'>('default');
   expandedCategories = signal<Record<string, boolean>>({});
   allExpanded = signal<boolean>(true);
 
@@ -1230,6 +1439,8 @@ export class MyListComponent {
   filteredCategoryGroups = computed(() => {
     const query = this.searchQuery().trim().toLowerCase();
     const filter = this.statusFilter();
+    const priority = this.priorityFilter();
+    const sort = this.sortOrder();
     const groups = this.shoppingList.categoryGroups();
 
     return groups
@@ -1242,12 +1453,39 @@ export class MyListComponent {
           items = items.filter(i => !i.isPurchased);
         }
 
+        if (priority !== 'all') {
+          items = items.filter(i => (i.priority || 'useful') === priority);
+        }
+
         if (query) {
           items = items.filter(i => {
             const name = this.shoppingList.getItemDisplayName(i).toLowerCase();
             const notes = (i.notes || '').toLowerCase();
-            return name.includes(query) || notes.includes(query);
+            const loc = (i.purchaseLocation || '').toLowerCase();
+            return name.includes(query) || notes.includes(query) || loc.includes(query);
           });
+        }
+
+        // Sorting
+        if (sort === 'price_desc') {
+          items = [...items].sort((a, b) => {
+            const pA = (a.actualUnitPrice || a.estimatedUnitPrice || 0) * a.quantity;
+            const pB = (b.actualUnitPrice || b.estimatedUnitPrice || 0) * b.quantity;
+            return pB - pA;
+          });
+        } else if (sort === 'price_asc') {
+          items = [...items].sort((a, b) => {
+            const pA = (a.actualUnitPrice || a.estimatedUnitPrice || 0) * a.quantity;
+            const pB = (b.actualUnitPrice || b.estimatedUnitPrice || 0) * b.quantity;
+            return pA - pB;
+          });
+        } else if (sort === 'priority') {
+          const rank: Record<string, number> = { essential: 1, useful: 2, optional: 3 };
+          items = [...items].sort((a, b) => (rank[a.priority || 'useful'] || 2) - (rank[b.priority || 'useful'] || 2));
+        } else if (sort === 'name') {
+          items = [...items].sort((a, b) =>
+            this.shoppingList.getItemDisplayName(a).localeCompare(this.shoppingList.getItemDisplayName(b))
+          );
         }
 
         return {
@@ -1319,6 +1557,10 @@ export class MyListComponent {
         quantity: formData.quantity,
         estimatedUnitPrice: formData.estimatedUnitPrice,
         actualUnitPrice: formData.actualUnitPrice,
+        priority: formData.priority,
+        purchaseLocation: formData.purchaseLocation,
+        purchaseDate: formData.purchaseDate,
+        targetDate: formData.targetDate,
         notes: formData.notes
       });
       const msg = lang === 'ar'
@@ -1332,6 +1574,10 @@ export class MyListComponent {
         quantity: formData.quantity,
         estimatedUnitPrice: formData.estimatedUnitPrice,
         actualUnitPrice: formData.actualUnitPrice,
+        priority: formData.priority,
+        purchaseLocation: formData.purchaseLocation,
+        purchaseDate: formData.purchaseDate,
+        targetDate: formData.targetDate,
         notes: formData.notes
       });
       const msg = lang === 'ar'
@@ -1345,18 +1591,30 @@ export class MyListComponent {
   onDeleteItem(item: ShoppingListItem): void {
     const name = this.shoppingList.getItemDisplayName(item);
     const lang = this.i18n.currentLang();
-    const confirmMsg =
-      lang === 'ar'
-        ? `هل تريدين حذف «${name}»؟`
-        : (lang === 'en' ? `Do you want to delete "${name}"?` : `Voulez-vous supprimer « ${name} » ?`);
+    this.shoppingList.removeItem(item.id);
+    const msg = lang === 'ar' ? `تم حذف «${name}»` : `« ${name} » a été supprimé`;
+    const undoLabel = lang === 'ar' ? 'تراجع' : (lang === 'en' ? 'Undo' : 'Annuler');
+    this.toast.show(msg, '🗑️', 4500, {
+      label: undoLabel,
+      onAction: () => {
+        this.shoppingList.undoLastRemoval();
+        this.toast.show(lang === 'ar' ? 'تمت استعادة العنصر ✓' : 'Article restauré ✓', '✓');
+      }
+    });
+  }
 
-    if (confirm(confirmMsg)) {
-      this.shoppingList.removeItem(item.id);
-      const msg = lang === 'ar'
-        ? 'تم حذف العنصر'
-        : (lang === 'en' ? 'Item removed' : 'Article supprimé');
-      this.toast.show(msg);
+  onShareWhatsApp(): void {
+    const text = this.shoppingList.generateShareableSummary();
+    if (typeof navigator !== 'undefined' && (navigator as any).share) {
+      (navigator as any).share({
+        title: 'Darna — Mon Trousseau',
+        text: text
+      }).catch(() => {});
+    } else {
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
     }
+    this.toast.show(this.i18n.t('action.share_copied'), '💬');
   }
 
   onClearAll(): void {

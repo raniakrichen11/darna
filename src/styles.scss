@@ -512,8 +512,21 @@ body.modal-open {
   z-index: 999;
   animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  @media (min-width: 768px) {
-    bottom: 36px;
+  .toast-action-btn {
+    background: var(--color-secondary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-inline-start: 8px;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 

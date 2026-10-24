@@ -23,7 +23,13 @@ import { I18nService } from '../../services/i18n.service';
             <strong>{{ i18n.t('pdf.title') }}</strong>
           </div>
           <div *ngIf="preferences.preferences().brideName" class="meta-item">
-            <span>{{ i18n.t('pdf.bride') }} <strong>{{ preferences.preferences().brideName }}</strong></span>
+            <span>
+              {{ i18n.t('pdf.bride') }} <strong>{{ preferences.preferences().brideName }}</strong>
+              <ng-container *ngIf="preferences.preferences().groomName"> &amp; {{ preferences.preferences().groomName }}</ng-container>
+            </span>
+          </div>
+          <div *ngIf="preferences.preferences().weddingDate" class="meta-item">
+            <span>💍 {{ i18n.currentLang() === 'ar' ? 'موعد الزفاف :' : 'Date du mariage :' }} <strong>{{ preferences.preferences().weddingDate }}</strong></span>
           </div>
           <div class="meta-item">
             <span>{{ i18n.t('pdf.date') }} {{ currentDate }}</span>
@@ -78,7 +84,7 @@ import { I18nService } from '../../services/i18n.service';
                   <th style="width: 48px; text-align: center;">{{ i18n.t('pdf.th_qty') }}</th>
                   <th style="width: 80px; text-align: end;">{{ i18n.t('pdf.th_est') }}</th>
                   <th style="width: 80px; text-align: end;">{{ i18n.t('pdf.th_act') }}</th>
-                  <th style="width: 130px;">{{ i18n.t('pdf.th_notes') }}</th>
+                  <th style="width: 140px;">{{ i18n.t('pdf.th_notes') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -91,6 +97,12 @@ import { I18nService } from '../../services/i18n.service';
                     </td>
                     <td class="item-name">
                       <strong>{{ shoppingList.getItemDisplayName(item) }}</strong>
+                      @if (item.priority) {
+                        <span class="print-prio-tag">[{{ item.priority === 'essential' ? 'Essentiel' : (item.priority === 'useful' ? 'Utile' : 'Optionnel') }}]</span>
+                      }
+                      @if (item.purchaseLocation) {
+                        <span class="print-store-tag">📍 {{ item.purchaseLocation }}</span>
+                      }
                     </td>
                     <td style="text-align: center;">{{ item.quantity }}</td>
                     <td style="text-align: end;">
@@ -268,6 +280,24 @@ import { I18nService } from '../../services/i18n.service';
         font-size: 8pt;
         color: #827872;
         font-style: italic;
+      }
+
+      .print-prio-tag {
+        display: inline-block;
+        font-size: 7pt;
+        color: #713B48;
+        background: #F4EBEB;
+        padding: 0 4px;
+        border-radius: 3px;
+        margin-inline-start: 4px;
+        font-weight: 600;
+      }
+
+      .print-store-tag {
+        display: inline-block;
+        font-size: 7.5pt;
+        color: #827872;
+        margin-inline-start: 6px;
       }
     }
 

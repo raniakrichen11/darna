@@ -27,20 +27,44 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 
         <!-- Understated Search & Category Filter Bar -->
         <div class="catalog-search-bar">
-          <div class="search-input-box">
-            <svg class="search-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input
-              type="text"
-              [(ngModel)]="searchQuery"
-              [placeholder]="i18n.t('action.search_placeholder')"
-              class="minimal-search-input"
-            />
-            @if (searchQuery()) {
-              <button type="button" class="clear-search-btn" (click)="searchQuery.set('')" [title]="i18n.currentLang() === 'ar' ? 'مسح' : 'Effacer'">✕</button>
-            }
+          <div class="search-and-controls-row">
+            <div class="search-input-box">
+              <svg class="search-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                [placeholder]="i18n.t('action.search_placeholder')"
+                class="minimal-search-input"
+              />
+              @if (searchQuery()) {
+                <button type="button" class="clear-search-btn" (click)="searchQuery.set('')" [title]="i18n.currentLang() === 'ar' ? 'مسح' : 'Effacer'">✕</button>
+              }
+            </div>
+
+            <!-- Traditional filter & sort -->
+            <div class="quick-filter-actions">
+              <button
+                type="button"
+                class="filter-toggle-btn"
+                [class.active]="onlyTraditional()"
+                (click)="onlyTraditional.set(!onlyTraditional())"
+              >
+                <span>🇹🇳</span>
+                <span>{{ i18n.t('catalog.filter_traditional') }}</span>
+              </button>
+
+              <div class="sort-selector-wrap">
+                <select [(ngModel)]="sortBy" class="sort-select">
+                  <option value="default">{{ i18n.t('catalog.sort_by') }}: {{ i18n.t('sort.default') }}</option>
+                  <option value="price_asc">{{ i18n.t('catalog.sort_by') }}: {{ i18n.t('sort.price_asc') }}</option>
+                  <option value="price_desc">{{ i18n.t('catalog.sort_by') }}: {{ i18n.t('sort.price_desc') }}</option>
+                  <option value="name">{{ i18n.t('catalog.sort_by') }}: {{ i18n.t('sort.name') }}</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <!-- Category Filter Pills (Horizontal Scroll) -->
@@ -51,7 +75,8 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
               [class.active]="selectedCategory() === 'all'"
               (click)="selectedCategory.set('all')"
             >
-              {{ i18n.t('catalog.all_categories') }}
+              <span>{{ i18n.t('catalog.all_categories') }}</span>
+              <span class="pill-count">({{ catalogService.items().length }})</span>
             </button>
             @for (cat of catalogService.categories(); track cat.id) {
               <button
@@ -62,14 +87,15 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
               >
                 <span class="pill-icon">{{ cat.icon }}</span>
                 <span>{{ catalogService.getCategoryName(cat) }}</span>
+                <span class="pill-count">({{ catalogService.getCategoryItemCount(cat.id) }})</span>
               </button>
             }
           </div>
         </div>
       </header>
 
-      <!-- Category Boutique Showcase (When browsing 'all' and no search) -->
-      @if (!searchQuery() && selectedCategory() === 'all') {
+      <!-- Category Boutique Showcase (When browsing 'all', no search and not onlyTraditional) -->
+      @if (!searchQuery() && selectedCategory() === 'all' && !onlyTraditional()) {
         <section class="boutique-showcase-section">
           <div class="categories-editorial-grid">
             @for (cat of catalogService.categories(); track cat.id) {
@@ -94,8 +120,27 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 
                 <div class="cat-footer-preview">
                   <p class="cat-desc">{{ catalogService.getCategoryDesc(cat) }}</p>
+
+                  <!-- Subcategories tags -->
+                  @if (cat.subcategories && cat.subcategories.length > 0) {
+                    <div class="cat-subcategories-chips">
+                      <span class="subcat-title-hint">{{ i18n.t('catalog.explore_subcategories') }}:</span>
+                      <div class="subcat-chips-wrap">
+                        @for (sub of cat.subcategories; track sub.id) {
+                          <a
+                            [routerLink]="['/catalog', cat.id]"
+                            [queryParams]="{ subcategory: sub.id }"
+                            class="subcat-chip"
+                          >
+                            <span class="subcat-chip-name">{{ catalogService.getSubcategoryName(sub) }}</span>
+                            <span class="subcat-chip-count">{{ getSubcategoryCount(cat.id, sub.id) }}</span>
+                          </a>
+                        }
+                      </div>
+                    </div>
+                  }
                   
-                  <!-- Curated item snippets -->
+                  <!-- Curated item snippets (5 preview items) -->
                   <div class="snippets-list">
                     @for (item of getPreviewItems(cat.id); track item.id) {
                       <div class="snippet-item" (click)="openArticlePreview(item)">
@@ -103,7 +148,12 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                           <img [src]="catalogService.getItemImage(item)" class="snippet-mini-img" [alt]="catalogService.getItemName(item)" />
                         </div>
                         <div class="snippet-info">
-                          <span class="snippet-name">{{ catalogService.getItemName(item) }}</span>
+                          <div class="snippet-name-row">
+                            <span class="snippet-name">{{ catalogService.getItemName(item) }}</span>
+                            @if (item.isTraditional) {
+                              <span class="mini-trad-badge" title="Patrimoine Tunisien">🇹🇳</span>
+                            }
+                          </div>
                           @if (item.estimatedUnitPrice) {
                             <span class="snippet-price">{{ item.estimatedUnitPrice }} {{ i18n.currency() }}</span>
                           }
@@ -128,7 +178,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                   </div>
 
                   <a [routerLink]="['/catalog', cat.id]" class="explore-cat-btn">
-                    <span>{{ i18n.currentLang() === 'ar' ? 'تصفح جميع عناصر القسم' : (i18n.currentLang() === 'en' ? 'Explore all items in category' : 'Explorer tous les articles') }}</span>
+                    <span>{{ i18n.currentLang() === 'ar' ? 'تصفح جميع عناصر القسم (' + catalogService.getCategoryItemCount(cat.id) + ')' : (i18n.currentLang() === 'en' ? 'Explore all ' + catalogService.getCategoryItemCount(cat.id) + ' items' : 'Explorer tous les ' + catalogService.getCategoryItemCount(cat.id) + ' articles') }}</span>
                     <span>{{ i18n.isRtl() ? '←' : '→' }}</span>
                   </a>
                 </div>
@@ -138,8 +188,8 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
         </section>
       }
 
-      <!-- Filtered Items List (When searching or category selected) -->
-      @if (searchQuery() || selectedCategory() !== 'all') {
+      <!-- Filtered Items List (When searching, category selected, or traditional filter active) -->
+      @if (searchQuery() || selectedCategory() !== 'all' || onlyTraditional()) {
         <section class="catalog-items-section">
           <div class="results-header">
             <span class="results-tally">
@@ -286,7 +336,19 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
       box-shadow: var(--shadow-xs);
     }
 
+    .search-and-controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
     .search-input-box {
+      flex: 1;
       position: relative;
       display: flex;
       align-items: center;
@@ -328,6 +390,66 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           color: var(--color-text-main);
         }
       }
+    }
+
+    .quick-filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+
+      &:hover {
+        background: var(--color-surface-hover);
+        border-color: var(--color-primary);
+      }
+
+      &.active {
+        background: #FDF2F4;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        box-shadow: 0 1px 4px rgba(113, 59, 72, 0.12);
+      }
+    }
+
+    .sort-selector-wrap {
+      .sort-select {
+        padding: 9px 14px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--color-text-main);
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:focus {
+          border-color: var(--color-primary);
+        }
+      }
+    }
+
+    .pill-count {
+      font-size: 0.74rem;
+      opacity: 0.82;
+      font-weight: 500;
     }
 
     .category-pills-row {
@@ -474,6 +596,61 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           line-height: 1.5;
         }
 
+        .cat-subcategories-chips {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          padding: 4px 0;
+
+          .subcat-title-hint {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            font-weight: 700;
+          }
+
+          .subcat-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+          }
+
+          .subcat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            color: var(--color-text-main);
+            text-decoration: none;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: #FFFFFF;
+              border-color: var(--color-primary);
+              color: var(--color-primary);
+              transform: translateY(-1px);
+            }
+
+            .subcat-chip-name {
+              font-weight: 500;
+            }
+
+            .subcat-chip-count {
+              font-size: 0.7rem;
+              background: rgba(113, 59, 72, 0.08);
+              color: var(--color-primary);
+              padding: 1px 6px;
+              border-radius: var(--radius-full);
+              font-weight: 700;
+            }
+          }
+        }
+
         .snippets-list {
           display: flex;
           flex-direction: column;
@@ -521,6 +698,16 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
             display: flex;
             flex-direction: column;
             flex: 1;
+
+            .snippet-name-row {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+
+              .mini-trad-badge {
+                font-size: 0.82rem;
+              }
+            }
 
             .snippet-name {
               font-size: 0.88rem;
@@ -836,14 +1023,33 @@ export class CatalogComponent {
 
   searchQuery = signal<string>('');
   selectedCategory = signal<string>('all');
+  onlyTraditional = signal<boolean>(false);
+  sortBy = signal<string>('default');
   previewItem = signal<CatalogItem | undefined>(undefined);
 
   filteredItems = computed(() => {
-    return this.catalogService.searchItems(this.searchQuery(), this.selectedCategory());
+    let items = this.catalogService.searchItems(this.searchQuery(), this.selectedCategory());
+    if (this.onlyTraditional()) {
+      items = items.filter(i => i.isTraditional);
+    }
+    const sort = this.sortBy();
+    if (sort === 'price_asc') {
+      items = [...items].sort((a, b) => (a.estimatedUnitPrice || 0) - (b.estimatedUnitPrice || 0));
+    } else if (sort === 'price_desc') {
+      items = [...items].sort((a, b) => (b.estimatedUnitPrice || 0) - (a.estimatedUnitPrice || 0));
+    } else if (sort === 'name') {
+      const isAr = this.i18n.currentLang() === 'ar';
+      items = [...items].sort((a, b) => isAr ? a.nameAr.localeCompare(b.nameAr) : a.nameFr.localeCompare(b.nameFr));
+    }
+    return items;
   });
 
   getPreviewItems(categoryId: string): CatalogItem[] {
-    return this.catalogService.getItemsByCategory(categoryId).slice(0, 3);
+    return this.catalogService.getItemsByCategory(categoryId).slice(0, 5);
+  }
+
+  getSubcategoryCount(categoryId: string, subcategoryId: string): number {
+    return this.catalogService.getItemsByCategory(categoryId).filter(i => i.subcategoryId === subcategoryId).length;
   }
 
   openArticlePreview(item: CatalogItem): void {
@@ -875,5 +1081,7 @@ export class CatalogComponent {
   resetFilters(): void {
     this.searchQuery.set('');
     this.selectedCategory.set('all');
+    this.onlyTraditional.set(false);
+    this.sortBy.set('default');
   }
 }

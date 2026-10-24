@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { CatalogService } from '../../services/catalog.service';
 import { ShoppingListService } from '../../services/shopping-list.service';
 import { I18nService } from '../../services/i18n.service';
@@ -11,7 +12,7 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
 @Component({
   selector: 'app-category-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ArticlePreviewModalComponent],
+  imports: [CommonModule, RouterLink, FormsModule, ArticlePreviewModalComponent],
   template: `
     <div class="category-detail-page" [attr.dir]="i18n.dir()">
       <!-- Back Link -->
@@ -54,7 +55,8 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
               [class.active]="selectedSubcategory() === 'all'"
               (click)="selectedSubcategory.set('all')"
             >
-              {{ i18n.t('catalog.all_categories') }}
+              <span>{{ i18n.t('catalog.all_categories') }}</span>
+              <span class="subcat-badge-count">{{ categoryItems().length }}</span>
             </button>
             @for (sub of cat.subcategories; track sub.id) {
               <button
@@ -63,9 +65,63 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
                 [class.active]="selectedSubcategory() === sub.id"
                 (click)="selectedSubcategory.set(sub.id)"
               >
-                {{ catalogService.getSubcategoryName(sub) }}
+                <span>{{ catalogService.getSubcategoryName(sub) }}</span>
+                <span class="subcat-badge-count">{{ getSubcategoryCount(cat.id, sub.id) }}</span>
               </button>
             }
+          </div>
+        }
+
+        <!-- In-Category Search & Controls Bar -->
+        <div class="category-controls-bar">
+          <div class="cat-search-box">
+            <svg class="search-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              [placeholder]="i18n.t('catalog.in_category_search')"
+              class="cat-search-input"
+            />
+            @if (searchQuery()) {
+              <button type="button" class="clear-btn" (click)="searchQuery.set('')">✕</button>
+            }
+          </div>
+
+          <div class="controls-actions">
+            <!-- Traditional toggle -->
+            <button
+              type="button"
+              class="filter-toggle-btn"
+              [class.active]="onlyTraditional()"
+              (click)="onlyTraditional.set(!onlyTraditional())"
+            >
+              <span>{{ i18n.t('catalog.filter_traditional') }}</span>
+            </button>
+
+            <!-- Sort selector -->
+            <div class="sort-selector-wrap">
+              <label class="sort-label">{{ i18n.t('catalog.sort_by') }}</label>
+              <select [(ngModel)]="sortBy" class="sort-select">
+                <option value="default">{{ i18n.t('sort.default') }}</option>
+                <option value="price_asc">{{ i18n.t('sort.price_asc') }}</option>
+                <option value="price_desc">{{ i18n.t('sort.price_desc') }}</option>
+                <option value="name">{{ i18n.t('sort.name') }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        @if (filteredCategoryItems().length === 0) {
+          <div class="no-results-box card">
+            <span class="no-res-icon">🔍</span>
+            <h3>{{ i18n.t('catalog.no_results') }}</h3>
+            <p>{{ i18n.t('catalog.search_empty_hint') }}</p>
+            <button type="button" class="btn btn-outline btn-sm" (click)="resetFilters()">
+              {{ i18n.t('catalog.all_categories') }}
+            </button>
           </div>
         }
 
@@ -255,11 +311,14 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding-bottom: 6px;
 
       .subcat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         white-space: nowrap;
-        padding: 8px 18px;
+        padding: 8px 16px;
         border-radius: var(--radius-full);
         background: var(--color-surface);
         border: 1px solid var(--color-border);
@@ -277,7 +336,153 @@ import { ArticlePreviewModalComponent } from '../../components/article-preview-m
           border-color: var(--color-primary);
           color: #FFFFFF;
           box-shadow: 0 2px 8px rgba(113, 59, 72, 0.22);
+
+          .subcat-badge-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+          }
         }
+
+        .subcat-badge-count {
+          font-size: 0.72rem;
+          padding: 2px 6px;
+          border-radius: var(--radius-full);
+          background: var(--color-bg-sand);
+          color: var(--color-primary);
+          font-weight: 700;
+        }
+      }
+    }
+
+    /* In-Category Controls Bar */
+    .category-controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      flex-wrap: wrap;
+
+      .cat-search-box {
+        position: relative;
+        flex: 1;
+        min-width: 220px;
+        display: flex;
+        align-items: center;
+
+        .search-svg {
+          position: absolute;
+          inset-inline-start: 12px;
+          color: var(--color-text-muted);
+          pointer-events: none;
+        }
+
+        .cat-search-input {
+          width: 100%;
+          padding: 8px 36px;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          font-size: 0.9rem;
+          outline: none;
+          background: var(--color-surface);
+
+          &:focus {
+            border-color: var(--color-primary);
+            background: #FFFFFF;
+          }
+        }
+
+        .clear-btn {
+          position: absolute;
+          inset-inline-end: 10px;
+          background: none;
+          border: none;
+          color: var(--color-text-muted);
+          cursor: pointer;
+          font-size: 0.85rem;
+        }
+      }
+
+      .controls-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+
+        .filter-toggle-btn {
+          display: inline-flex;
+          align-items: center;
+          padding: 7px 14px;
+          border-radius: var(--radius-full);
+          border: 1px solid var(--color-border);
+          background: #FFFFFF;
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: var(--color-text-main);
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            border-color: var(--color-primary);
+          }
+
+          &.active {
+            background: rgba(113, 59, 72, 0.1);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+          }
+        }
+
+        .sort-selector-wrap {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+
+          .sort-label {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+          }
+
+          .sort-select {
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+            font-size: 0.82rem;
+            background: #FFFFFF;
+            color: var(--color-text-main);
+            outline: none;
+            cursor: pointer;
+
+            &:focus {
+              border-color: var(--color-primary);
+            }
+          }
+        }
+      }
+    }
+
+    .no-results-box {
+      text-align: center;
+      padding: var(--space-2xl);
+      background: #FFFFFF;
+
+      .no-res-icon {
+        font-size: 2.2rem;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      h3 {
+        margin-bottom: 8px;
+      }
+
+      p {
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-md);
       }
     }
 
@@ -517,6 +722,9 @@ export class CategoryDetailComponent {
 
   categoryId = signal<string>('');
   selectedSubcategory = signal<string>('all');
+  searchQuery = signal<string>('');
+  onlyTraditional = signal<boolean>(false);
+  sortBy = signal<string>('default');
   previewItem = signal<CatalogItem | undefined>(undefined);
 
   openArticlePreview(item: CatalogItem): void {
@@ -532,8 +740,18 @@ export class CategoryDetailComponent {
       const id = params.get('categoryId') || '';
       this.categoryId.set(id);
       this.selectedSubcategory.set('all');
+      this.searchQuery.set('');
+      this.onlyTraditional.set(false);
+      this.sortBy.set('default');
       if (typeof window !== 'undefined') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+
+    this.route.queryParamMap.subscribe(qParams => {
+      const sub = qParams.get('subcategory');
+      if (sub) {
+        this.selectedSubcategory.set(sub);
       }
     });
   }
@@ -544,10 +762,49 @@ export class CategoryDetailComponent {
 
   filteredCategoryItems = computed(() => {
     const sub = this.selectedSubcategory();
-    const items = this.categoryItems();
-    if (sub === 'all') return items;
-    return items.filter(i => i.subcategoryId === sub);
+    const q = this.searchQuery().trim().toLowerCase();
+    const trad = this.onlyTraditional();
+    const sort = this.sortBy();
+    let items = this.categoryItems();
+
+    if (sub !== 'all') {
+      items = items.filter(i => i.subcategoryId === sub);
+    }
+    if (trad) {
+      items = items.filter(i => i.isTraditional);
+    }
+    if (q) {
+      items = items.filter(i => {
+        const nFr = i.nameFr.toLowerCase();
+        const nAr = i.nameAr;
+        const nEn = (i.nameEn || '').toLowerCase();
+        const dFr = (i.descriptionFr || '').toLowerCase();
+        const dAr = i.descriptionAr || '';
+        return nFr.includes(q) || nAr.includes(q) || nEn.includes(q) || dFr.includes(q) || dAr.includes(q);
+      });
+    }
+
+    if (sort === 'price_asc') {
+      items = [...items].sort((a, b) => (a.estimatedUnitPrice || 0) - (b.estimatedUnitPrice || 0));
+    } else if (sort === 'price_desc') {
+      items = [...items].sort((a, b) => (b.estimatedUnitPrice || 0) - (a.estimatedUnitPrice || 0));
+    } else if (sort === 'name') {
+      const isAr = this.i18n.currentLang() === 'ar';
+      items = [...items].sort((a, b) => isAr ? a.nameAr.localeCompare(b.nameAr) : a.nameFr.localeCompare(b.nameFr));
+    }
+    return items;
   });
+
+  getSubcategoryCount(catId: string, subId: string): number {
+    return this.categoryItems().filter(i => i.subcategoryId === subId).length;
+  }
+
+  resetFilters(): void {
+    this.selectedSubcategory.set('all');
+    this.searchQuery.set('');
+    this.onlyTraditional.set(false);
+    this.sortBy.set('default');
+  }
 
   onAddItem(item: CatalogItem): void {
     const result = this.shoppingList.addCatalogItem(item);

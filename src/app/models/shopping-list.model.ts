@@ -1,3 +1,5 @@
+export type ItemPriority = 'essential' | 'useful' | 'optional';
+
 export interface ShoppingListItem {
   id: string;
   catalogItemId?: string;
@@ -10,6 +12,10 @@ export interface ShoppingListItem {
   estimatedUnitPrice?: number; // In TND
   actualUnitPrice?: number;    // In TND
   isPurchased: boolean;
+  priority?: ItemPriority;     // 'essential' | 'useful' | 'optional'
+  purchaseLocation?: string;   // e.g. "Monoprix", "Souk El Grana", "Darty"
+  purchaseDate?: string;       // YYYY-MM-DD
+  targetDate?: string;         // YYYY-MM-DD
   notes?: string;
   createdAt: number;
   updatedAt?: number;
@@ -26,6 +32,7 @@ export interface CategoryGroup {
   purchasedCount: number;
   estimatedTotal: number;
   actualTotal: number;
+  targetBudget?: number;
   isExpanded: boolean;
 }
 
@@ -34,6 +41,7 @@ export interface BudgetSummary {
   totalEstimatedCost: number;
   totalActualSpent: number;
   remainingBudget?: number;
+  totalSavings?: number;
   itemsWithEstimatedPrice: number;
   itemsWithActualPrice: number;
   totalItemsCount: number;
@@ -41,3 +49,4 @@ export interface BudgetSummary {
   remainingItemsCount: number;
   progressPercentage: number;
 }
+

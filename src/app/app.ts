@@ -8,12 +8,14 @@ import { CatalogService } from './services/catalog.service';
 import { PwaService } from './services/pwa.service';
 import { ToastService } from './services/toast.service';
 import { PrintViewComponent } from './components/print-view/print-view.component';
+import { OnboardingModalComponent } from './components/onboarding-modal/onboarding-modal.component';
+import { TimelineService } from './services/timeline.service';
 import { AppLanguage } from './models/user-preferences.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, PrintViewComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, PrintViewComponent, OnboardingModalComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -22,6 +24,7 @@ export class App {
   preferences = inject(PreferencesService);
   shoppingList = inject(ShoppingListService);
   catalogService = inject(CatalogService);
+  timelineService = inject(TimelineService);
   pwa = inject(PwaService);
   toast = inject(ToastService);
 

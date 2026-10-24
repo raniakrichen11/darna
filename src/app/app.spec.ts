@@ -4,12 +4,16 @@ import { App } from './app';
 import { I18nService } from './services/i18n.service';
 import { ShoppingListService } from './services/shopping-list.service';
 import { CatalogService } from './services/catalog.service';
+import { TimelineService } from './services/timeline.service';
+import { PreferencesService } from './services/preferences.service';
 
 describe('App & Core Services', () => {
   let app: App;
   let i18n: I18nService;
   let shoppingList: ShoppingListService;
   let catalog: CatalogService;
+  let timeline: TimelineService;
+  let preferences: PreferencesService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,6 +26,8 @@ describe('App & Core Services', () => {
     i18n = TestBed.inject(I18nService);
     shoppingList = TestBed.inject(ShoppingListService);
     catalog = TestBed.inject(CatalogService);
+    timeline = TestBed.inject(TimelineService);
+    preferences = TestBed.inject(PreferencesService);
   });
 
   it('should create the App component', () => {
@@ -72,4 +78,62 @@ describe('App & Core Services', () => {
       expect(shoppingList.purchasedItemsCount()).not.toBe(initialPurchased);
     }
   });
+
+  it('should support priority levels and undo removal', () => {
+    const testCustom = shoppingList.addCustomItem({
+      name: 'Rideaux salon en lin',
+      categoryId: 'lin',
+      quantity: 2,
+      estimatedUnitPrice: 180,
+      priority: 'essential',
+      purchaseLocation: 'Souk El Grana'
+    });
+
+    expect(testCustom.priority).toBe('essential');
+    expect(testCustom.purchaseLocation).toBe('Souk El Grana');
+
+    const countBeforeRemoval = shoppingList.totalItemsCount();
+    shoppingList.removeItem(testCustom.id);
+    expect(shoppingList.totalItemsCount()).toBe(countBeforeRemoval - 1);
+    expect(shoppingList.lastRemovedItem()?.id).toBe(testCustom.id);
+
+    // Undo removal
+    shoppingList.undoLastRemoval();
+    expect(shoppingList.totalItemsCount()).toBe(countBeforeRemoval);
+  });
+
+  it('should initialize timeline with 5 preparation stages and allow custom tasks', () => {
+    expect(timeline.milestones().length).toBe(5);
+    expect(timeline.tasks().length).toBeGreaterThanOrEqual(10);
+
+    const initialTotal = timeline.totalTasksCount();
+    const newTask = timeline.addTask({
+      title: 'Réserver la negafa / ziyena',
+      stage: 'phase_3m',
+      categoryIcon: '👰'
+    });
+
+    expect(timeline.totalTasksCount()).toBe(initialTotal + 1);
+    expect(newTask.id).toBeTruthy();
+
+    timeline.toggleTask(newTask.id);
+    expect(timeline.tasks().find(t => t.id === newTask.id)?.isCompleted).toBeTrue();
+  });
+
+  it('should manage category budgets and onboarding flow', () => {
+    preferences.setCategoryBudget('cui', 3500);
+    expect(preferences.preferences().categoryBudgets?.['cui']).toBe(3500);
+
+    preferences.completeOnboarding({
+      brideName: 'Meriem',
+      weddingDate: '2027-06-15',
+      homeType: 'apartment',
+      totalBudget: 25000
+    });
+
+    expect(preferences.preferences().hasCompletedOnboarding).toBeTrue();
+    expect(preferences.preferences().brideName).toBe('Meriem');
+    expect(preferences.preferences().totalBudget).toBe(25000);
+  });
 });
+

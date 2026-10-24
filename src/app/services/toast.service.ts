@@ -5,6 +5,8 @@ export interface ToastMessage {
   text: string;
   icon?: string;
   type?: 'success' | 'info' | 'warning';
+  actionLabel?: string;
+  onAction?: () => void;
 }
 
 @Injectable({
@@ -14,7 +16,12 @@ export class ToastService {
   readonly currentToast = signal<ToastMessage | null>(null);
   private timeoutId: any = null;
 
-  show(text: string, icon: string = '✓', durationMs: number = 2800): void {
+  show(
+    text: string,
+    icon: string = '✓',
+    durationMs: number = 3200,
+    action?: { label: string; onAction: () => void }
+  ): void {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
@@ -22,13 +29,23 @@ export class ToastService {
       id: Date.now(),
       text,
       icon,
-      type: 'success'
+      type: 'success',
+      actionLabel: action?.label,
+      onAction: action?.onAction
     });
 
     this.timeoutId = setTimeout(() => {
       this.currentToast.set(null);
       this.timeoutId = null;
     }, durationMs);
+  }
+
+  triggerAction(): void {
+    const toast = this.currentToast();
+    if (toast?.onAction) {
+      toast.onAction();
+    }
+    this.hide();
   }
 
   hide(): void {
@@ -39,3 +56,4 @@ export class ToastService {
     this.currentToast.set(null);
   }
 }
+

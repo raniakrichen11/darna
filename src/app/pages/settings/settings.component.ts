@@ -185,6 +185,10 @@ import { AppLanguage } from '../../models/user-preferences.model';
             <input type="file" accept=".json" (change)="onImportFile($event)" style="display: none;" />
           </label>
 
+          <button type="button" class="btn btn-outline" (click)="relaunchOnboarding()">
+            ✨ {{ i18n.currentLang() === 'ar' ? 'إعادة تشغيل دليل البداية' : 'Relancer le guide d’accueil' }}
+          </button>
+
           <button type="button" class="btn btn-subtle reset-btn" (click)="onResetStarter()">
             🔄 {{ i18n.t('settings.reset_starter') }}
           </button>
@@ -599,7 +603,13 @@ export class SettingsComponent {
     const jsonStr = this.storage.exportAllData([
       'darna_shopping_list',
       'darna_user_preferences',
-      'darna_lang_pref'
+      'darna_lang_pref',
+      'darna_timeline_tasks',
+      'darna_diary_events',
+      'darna_diary_tasks',
+      'darna_diary_notes',
+      'darna_diary_providers',
+      'darna_diary_profile'
     ]);
     const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -610,6 +620,13 @@ export class SettingsComponent {
     URL.revokeObjectURL(url);
     this.toast.show(
       this.i18n.currentLang() === 'ar' ? 'تم تحميل ملف النسخ الاحتياطي' : 'Sauvegarde exportée avec succès'
+    );
+  }
+
+  relaunchOnboarding(): void {
+    this.preferences.updatePreferences({ hasCompletedOnboarding: false });
+    this.toast.show(
+      this.i18n.currentLang() === 'ar' ? 'تمت إعادة تشغيل دليل الاستقبال' : 'Guide d’accueil réactivé'
     );
   }
 

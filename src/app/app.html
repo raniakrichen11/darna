@@ -58,6 +58,12 @@
         <a routerLink="/budget" routerLinkActive="active" class="nav-item">
           <span>{{ i18n.t('nav.budget') }}</span>
         </a>
+        <a routerLink="/timeline" routerLinkActive="active" class="nav-item">
+          <span>{{ i18n.t('nav.timeline') }}</span>
+        </a>
+        <a routerLink="/diary" routerLinkActive="active" class="nav-item">
+          <span>{{ i18n.t('nav.diary') }}</span>
+        </a>
         <a routerLink="/settings" routerLinkActive="active" class="nav-item">
           <span>{{ i18n.t('nav.settings') }}</span>
         </a>
@@ -187,6 +193,27 @@
                   <line x1="2" x2="22" y1="10" y2="10"></line>
                 </svg>
                 <span>{{ i18n.t('nav.budget') }}</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/timeline" class="footer-nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>{{ i18n.t('nav.timeline') }}</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/diary" class="footer-nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                  <path d="M6 6h10"></path>
+                  <path d="M6 10h10"></path>
+                </svg>
+                <span>{{ i18n.t('nav.diary') }}</span>
               </a>
             </li>
             <li>
@@ -339,6 +366,30 @@
       <span class="mob-label">{{ i18n.t('nav.budget') }}</span>
     </a>
 
+    <a routerLink="/timeline" routerLinkActive="active" class="mobile-nav-item">
+      <span class="mob-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </span>
+      <span class="mob-label">{{ i18n.t('nav.timeline') }}</span>
+    </a>
+
+    <a routerLink="/diary" routerLinkActive="active" class="mobile-nav-item">
+      <span class="mob-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+          <path d="M6 6h10"></path>
+          <path d="M6 10h10"></path>
+          <path d="m9 16 2 2 4-4"></path>
+        </svg>
+      </span>
+      <span class="mob-label">{{ i18n.t('nav.diary') }}</span>
+    </a>
+
     <a routerLink="/settings" routerLinkActive="active" class="mobile-nav-item">
       <span class="mob-icon">
         <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -355,36 +406,17 @@
     <div class="toast-banner">
       <span class="toast-icon">{{ msg.icon || '✓' }}</span>
       <span class="toast-text">{{ msg.text }}</span>
+      @if (msg.actionLabel) {
+        <button type="button" class="toast-action-btn" (click)="toast.triggerAction()">
+          {{ msg.actionLabel }}
+        </button>
+      }
     </div>
   }
 
-  <!-- Welcome Language Modal -->
-  @if (!preferences.preferences().hasChosenLanguage) {
-    <div class="modal-overlay">
-      <div class="modal-card welcome-modal text-center">
-        <div class="welcome-emblem">🕊️</div>
-        <h2>Bienvenue sur Darna · مرحباً بكِ في دارنا · Welcome to Darna</h2>
-        <p class="welcome-intro">
-          Le planificateur d’exception pour préparer votre trousseau de mariage et équiper votre nouveau chez-vous avec sérénité.
-          <br>
-          رفيقكِ الأمثل لإعداد جهاز العروس وتأثيث بيتك الجديد بكل هدوء وأناقة.
-          <br>
-          The premier planner to organize your bridal trousseau and furnish your new home with complete peace of mind.
-        </p>
-
-        <div class="welcome-lang-grid">
-          <button type="button" class="btn btn-outline welcome-btn" (click)="setInitialLanguage('fr')">
-            <span>🇫🇷</span> Continuer en Français
-          </button>
-          <button type="button" class="btn btn-primary welcome-btn" (click)="setInitialLanguage('ar')">
-            <span>🇹🇳</span> المتابعة باللغة العربية
-          </button>
-          <button type="button" class="btn btn-outline welcome-btn" (click)="setInitialLanguage('en')">
-            <span>🇬🇧</span> Continue in English
-          </button>
-        </div>
-      </div>
-    </div>
+  <!-- Welcome / Personalized Onboarding Flow -->
+  @if (!preferences.preferences().hasCompletedOnboarding) {
+    <app-onboarding-modal></app-onboarding-modal>
   }
 
   <!-- Hidden Container for High Resolution A4 PDF Export -->

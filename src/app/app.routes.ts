@@ -32,6 +32,16 @@ export const routes: Routes = [
     title: 'Darna | دارنا — Budget & Finances'
   },
   {
+    path: 'timeline',
+    loadComponent: () => import('./pages/timeline/timeline.component').then(m => m.TimelineComponent),
+    title: 'Darna | دارنا — Planning & Étapes'
+  },
+  {
+    path: 'diary',
+    loadComponent: () => import('./pages/wedding-diary/wedding-diary.component').then(m => m.WeddingDiaryComponent),
+    title: 'Darna | دارنا — Mon Carnet de Mariage'
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent),
     title: 'Darna | دارنا — Paramètres'
@@ -41,3 +51,4 @@ export const routes: Routes = [
     redirectTo: 'home'
   }
 ];
+

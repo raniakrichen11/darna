@@ -32,8 +32,42 @@ export class PreferencesService {
     }));
   }
 
+  savePreferences(prefs: UserPreferences): void {
+    this.preferences.set(prefs);
+    if (prefs.language) {
+      this.i18n.setLanguage(prefs.language);
+    }
+  }
+
   setTargetBudget(budget: number | undefined): void {
     this.updatePreferences({ totalBudget: budget });
+  }
+
+  setCategoryBudget(categoryId: string, amount: number | undefined): void {
+    const current = this.preferences().categoryBudgets || {};
+    const updated = { ...current };
+    if (amount !== undefined && amount > 0) {
+      updated[categoryId] = amount;
+    } else {
+      delete updated[categoryId];
+    }
+    this.updatePreferences({ categoryBudgets: updated });
+  }
+
+  completeOnboarding(data: {
+    brideName?: string;
+    groomName?: string;
+    weddingDate?: string;
+    totalBudget?: number;
+    homeType?: 'apartment' | 'house' | 'villa' | 'other';
+    roomCount?: number;
+    pacePreference?: 'relaxed' | 'moderate' | 'express';
+  }): void {
+    this.updatePreferences({
+      ...data,
+      hasChosenLanguage: true,
+      hasCompletedOnboarding: true
+    });
   }
 
   setBrideName(name: string): void {
@@ -49,3 +83,4 @@ export class PreferencesService {
     this.i18n.setLanguage(lang);
   }
 }
+

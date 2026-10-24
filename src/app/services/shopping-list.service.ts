@@ -17,6 +17,7 @@ export class ShoppingListService {
   private i18n = inject(I18nService);
 
   readonly items = signal<ShoppingListItem[]>(this.loadInitialItems());
+  readonly lastRemovedItem = signal<ShoppingListItem | null>(null);
 
   constructor() {
     effect(() => {
@@ -68,6 +69,7 @@ export class ShoppingListService {
           estimatedUnitPrice: catItem.estimatedUnitPrice,
           actualUnitPrice: undefined,
           isPurchased: false,
+          priority: catItem.isTraditional ? 'essential' : 'useful',
           notes: '',
           createdAt: now
         });
@@ -103,6 +105,7 @@ export class ShoppingListService {
       estimatedUnitPrice: catalogItem.estimatedUnitPrice,
       actualUnitPrice: undefined,
       isPurchased: false,
+      priority: catalogItem.isTraditional ? 'essential' : 'useful',
       notes: '',
       createdAt: Date.now()
     };
@@ -119,6 +122,10 @@ export class ShoppingListService {
     quantity: number;
     estimatedUnitPrice?: number;
     actualUnitPrice?: number;
+    priority?: 'essential' | 'useful' | 'optional';
+    purchaseLocation?: string;
+    purchaseDate?: string;
+    targetDate?: string;
     notes?: string;
   }): ShoppingListItem {
     const lang = this.i18n.currentLang();
@@ -133,6 +140,10 @@ export class ShoppingListService {
       estimatedUnitPrice: params.estimatedUnitPrice,
       actualUnitPrice: params.actualUnitPrice,
       isPurchased: false,
+      priority: params.priority || 'useful',
+      purchaseLocation: params.purchaseLocation?.trim() || undefined,
+      purchaseDate: params.purchaseDate || undefined,
+      targetDate: params.targetDate || undefined,
       notes: params.notes?.trim() || '',
       createdAt: Date.now()
     };
@@ -159,10 +170,12 @@ export class ShoppingListService {
           if (nextState && (actualPrice === undefined || actualPrice === null) && item.estimatedUnitPrice) {
             actualPrice = item.estimatedUnitPrice;
           }
+          const todayDate = new Date().toISOString().slice(0, 10);
           return {
             ...item,
             isPurchased: nextState,
             actualUnitPrice: actualPrice,
+            purchaseDate: nextState ? (item.purchaseDate || todayDate) : undefined,
             updatedAt: Date.now()
           };
         }
@@ -177,9 +190,24 @@ export class ShoppingListService {
     this.updateItem(id, { quantity: qty });
   }
 
-  // Delete item
+  // Delete item with undo support
   removeItem(id: string): void {
+    const itemToDelete = this.items().find(i => i.id === id);
+    if (itemToDelete) {
+      this.lastRemovedItem.set(itemToDelete);
+    }
     this.items.update(list => list.filter(item => item.id !== id));
+  }
+
+  // Undo delete
+  undoLastRemoval(): boolean {
+    const item = this.lastRemovedItem();
+    if (item) {
+      this.items.update(list => [item, ...list]);
+      this.lastRemovedItem.set(null);
+      return true;
+    }
+    return false;
   }
 
   // Clear list
@@ -257,6 +285,21 @@ export class ShoppingListService {
     }, 0);
   });
 
+  // Total savings realized: when actual price was less than estimated on purchased items
+  readonly totalSavings = computed(() => {
+    return this.items().reduce((acc, item) => {
+      if (
+        item.isPurchased &&
+        item.actualUnitPrice !== undefined &&
+        item.estimatedUnitPrice !== undefined &&
+        item.actualUnitPrice < item.estimatedUnitPrice
+      ) {
+        return acc + (item.estimatedUnitPrice - item.actualUnitPrice) * item.quantity;
+      }
+      return acc;
+    }, 0);
+  });
+
   readonly budgetSummary = computed<BudgetSummary>(() => {
     const targetBudget = this.preferencesService.preferences().totalBudget;
     const est = this.totalEstimatedCost();
@@ -271,6 +314,7 @@ export class ShoppingListService {
       totalEstimatedCost: est,
       totalActualSpent: act,
       remainingBudget,
+      totalSavings: this.totalSavings(),
       itemsWithEstimatedPrice: itemsWithEst,
       itemsWithActualPrice: itemsWithAct,
       totalItemsCount: this.totalItemsCount(),
@@ -280,10 +324,11 @@ export class ShoppingListService {
     };
   });
 
-  // Grouped by Category
+  // Grouped by Category with category-level budget target support
   readonly categoryGroups = computed<CategoryGroup[]>(() => {
     const allCategories = this.catalogService.categories();
     const currentItems = this.items();
+    const catBudgets = this.preferencesService.preferences().categoryBudgets || {};
     const groups: CategoryGroup[] = [];
 
     for (const cat of allCategories) {
@@ -310,6 +355,7 @@ export class ShoppingListService {
           purchasedCount: purchased,
           estimatedTotal: estTotal,
           actualTotal: actTotal,
+          targetBudget: catBudgets[cat.id],
           isExpanded: true
         });
       }
@@ -330,6 +376,7 @@ export class ShoppingListService {
         purchasedCount: purchased,
         estimatedTotal: orphanItems.reduce((acc, i) => acc + (i.estimatedUnitPrice ? i.quantity * i.estimatedUnitPrice : 0), 0),
         actualTotal: orphanItems.reduce((acc, i) => acc + (i.isPurchased && i.actualUnitPrice ? i.quantity * i.actualUnitPrice : 0), 0),
+        targetBudget: catBudgets['other'],
         isExpanded: true
       });
     }
@@ -341,4 +388,86 @@ export class ShoppingListService {
   readonly recentItems = computed<ShoppingListItem[]>(() => {
     return [...this.items()].sort((a, b) => b.createdAt - a.createdAt).slice(0, 5);
   });
+
+  // Top expensive items in list (for budget optimization)
+  readonly topExpenseItems = computed<ShoppingListItem[]>(() => {
+    return [...this.items()]
+      .filter(i => (i.actualUnitPrice || i.estimatedUnitPrice))
+      .sort((a, b) => {
+        const valA = (a.actualUnitPrice || a.estimatedUnitPrice || 0) * a.quantity;
+        const valB = (b.actualUnitPrice || b.estimatedUnitPrice || 0) * b.quantity;
+        return valB - valA;
+      })
+      .slice(0, 5);
+  });
+
+  // Generate shareable WhatsApp / Messenger plain text summary
+  generateShareableSummary(): string {
+    const lang = this.i18n.currentLang();
+    const bride = this.preferencesService.preferences().brideName;
+    const currency = this.i18n.currency();
+    const date = new Date().toLocaleDateString(lang === 'ar' ? 'ar-TN' : 'fr-FR');
+
+    let text = '';
+    if (lang === 'ar') {
+      text += `🕊️ *قائمة جهاز العروس — دارنا (Darna)*\n`;
+      if (bride) text += `👰 العروس: ${bride}\n`;
+      text += `📅 التاريخ: ${date}\n`;
+      text += `📊 التقدم: ${this.purchasedItemsCount()} من أصل ${this.totalItemsCount()} (${this.progressPercentage()}%)\n`;
+      text += `💸 المصاريف المسجلة: ${this.totalActualSpent().toLocaleString()} ${currency}\n\n`;
+      text += `*أهم المشتريات المتبقية:*\n`;
+      const remaining = this.items().filter(i => !i.isPurchased).slice(0, 10);
+      remaining.forEach(item => {
+        text += `▫️ ${this.getItemDisplayName(item)} (كمية: ${item.quantity})\n`;
+      });
+      if (this.remainingItemsCount() > 10) {
+        text += `... و ${this.remainingItemsCount() - 10} أغراض أخرى.\n`;
+      }
+      text += `\n✨ تم إعدادها عبر تطبيق دارنا (Darna) — رفيق جهاز العروس في تونس`;
+    } else {
+      text += `🕊️ *Mon Trousseau de Mariage — Darna*\n`;
+      if (bride) text += `👰 Mariée: ${bride}\n`;
+      text += `📅 Date: ${date}\n`;
+      text += `📊 Avancement: ${this.purchasedItemsCount()}/${this.totalItemsCount()} (${this.progressPercentage()}%)\n`;
+      text += `💸 Dépenses réelles: ${this.totalActualSpent().toLocaleString()} ${currency}\n\n`;
+      text += `*Prochains achats planifiés:*\n`;
+      const remaining = this.items().filter(i => !i.isPurchased).slice(0, 10);
+      remaining.forEach(item => {
+        text += `▫️ ${this.getItemDisplayName(item)} (Qté: ${item.quantity})\n`;
+      });
+      if (this.remainingItemsCount() > 10) {
+        text += `... et ${this.remainingItemsCount() - 10} autres articles.\n`;
+      }
+      text += `\n✨ Préparé avec amour sur Darna — L'application du trousseau tunisien`;
+    }
+    return text;
+  }
+
+  // Export data as JSON string for backup
+  exportBackupJson(): string {
+    const backup = {
+      version: '1.2',
+      exportDate: new Date().toISOString(),
+      preferences: this.preferencesService.preferences(),
+      items: this.items()
+    };
+    return JSON.stringify(backup, null, 2);
+  }
+
+  // Restore data from backup JSON
+  importBackupJson(jsonStr: string): { success: boolean; message: string } {
+    try {
+      const data = JSON.parse(jsonStr);
+      if (data && Array.isArray(data.items)) {
+        this.items.set(data.items);
+        if (data.preferences) {
+          this.preferencesService.savePreferences(data.preferences);
+        }
+        return { success: true, message: 'Restauration réussie' };
+      }
+      return { success: false, message: 'Format de fichier non valide' };
+    } catch {
+      return { success: false, message: 'Erreur lors de la lecture du fichier JSON' };
+    }
+  }
 }
