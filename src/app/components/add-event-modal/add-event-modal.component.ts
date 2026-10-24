@@ -197,18 +197,28 @@ import { I18nService } from '../../services/i18n.service';
       }
 
       .close-btn {
-        background: transparent;
-        border: none;
-        font-size: 1.2rem;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: var(--radius-full);
+        background: var(--color-surface-hover);
+        border: 1px solid var(--color-border);
+        font-size: 1.25rem;
+        font-weight: 700;
         color: var(--color-text-muted);
         cursor: pointer;
-        padding: 4px 8px;
-        border-radius: var(--radius-sm);
-        transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        transition: all 0.2s ease;
 
-        &:hover {
-          background: var(--color-surface-hover);
-          color: var(--color-text-main);
+        &:hover, &:active {
+          background: #FFFFFF;
+          color: var(--color-primary);
+          border-color: var(--color-primary);
         }
       }
     }
@@ -335,6 +345,32 @@ import { I18nService } from '../../services/i18n.service';
         font-weight: 600;
         font-size: 0.88rem;
         cursor: pointer;
+      }
+
+      @media (max-width: 600px) {
+        flex-direction: column-reverse;
+        gap: 10px;
+
+        .btn {
+          width: 100%;
+          min-height: 48px;
+          justify-content: center;
+          font-size: 0.95rem;
+        }
+      }
+    }
+
+    @media (max-width: 600px) {
+      .modal-card {
+        border-radius: 24px 24px 0 0 !important;
+        margin: 0 !important;
+        max-height: 92vh !important;
+        max-height: 92dvh !important;
+      }
+
+      .modal-form {
+        padding: 16px;
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
       }
     }
 

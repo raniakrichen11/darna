@@ -192,28 +192,34 @@ import { I18nService } from '../../services/i18n.service';
 
       .modal-close-floating {
         position: absolute;
-        top: 14px;
-        inset-inline-end: 14px;
-        z-index: 10;
-        width: 36px;
-        height: 36px;
+        top: 12px;
+        inset-inline-end: 12px;
+        z-index: 25;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
         border-radius: var(--radius-full);
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.9);
         color: var(--color-charcoal);
-        font-size: 1.1rem;
+        font-size: 1.25rem;
+        font-weight: 700;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: var(--shadow-sm);
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 
-        &:hover {
+        &:hover, &:active {
           background: #FFFFFF;
           transform: scale(1.08);
-          color: var(--color-burgundy);
+          color: var(--color-primary);
         }
       }
 
@@ -375,18 +381,26 @@ import { I18nService } from '../../services/i18n.service';
       }
     }
 
-    @media (max-width: 540px) {
+    @media (max-width: 600px) {
+      .article-modal-card {
+        border-radius: 24px 24px 0 0 !important;
+        margin: 0 !important;
+        max-height: 92vh !important;
+        max-height: 92dvh !important;
+      }
+
       .article-image-hero {
-        height: 220px;
+        height: 200px;
       }
 
       .article-modal-body {
         padding: 16px;
-        gap: 14px;
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+        gap: 12px;
       }
 
       .article-title {
-        font-size: 1.35rem;
+        font-size: 1.25rem;
       }
 
       .specs-grid {
@@ -396,11 +410,13 @@ import { I18nService } from '../../services/i18n.service';
 
       .article-modal-actions {
         flex-direction: column-reverse;
-        gap: 8px;
+        gap: 10px;
 
         .btn {
           width: 100%;
+          min-height: 48px;
           justify-content: center;
+          font-size: 0.95rem;
         }
       }
     }

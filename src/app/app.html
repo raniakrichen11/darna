@@ -108,9 +108,105 @@
             EN
           </button>
         </div>
+
+        <!-- Mobile Menu Toggle Button (Visible on screens < 860px) -->
+        <button
+          type="button"
+          class="mobile-menu-toggle-btn"
+          (click)="toggleMobileMenu()"
+          [attr.aria-label]="i18n.currentLang() === 'ar' ? 'القائمة الرئيسية' : 'Menu principal'"
+          [class.active]="mobileMenuOpen()"
+        >
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Drawer Backdrop & Full Slide-Over Menu -->
+  @if (mobileMenuOpen()) {
+    <div class="mobile-drawer-backdrop" (click)="closeMobileMenu()">
+      <nav class="mobile-drawer-card" (click)="$event.stopPropagation()" [attr.dir]="i18n.dir()">
+        <div class="drawer-header">
+          <div class="drawer-brand">
+            <div class="drawer-monogram">
+              <svg viewBox="0 0 100 100" fill="none" class="brand-emblem-svg" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 22 84 L 22 56 C 22 36, 34 20, 50 12 C 66 20, 78 36, 78 56 L 78 84 L 70 84 L 70 56 C 70 39, 60 26, 50 20 C 40 26, 30 39, 30 56 L 30 84 Z" fill="currentColor" />
+                <path d="M 36 84 L 36 52 C 36 45, 41 40, 47 40 C 47.5 40, 48 40.5, 48 41 L 48 84 Z" fill="currentColor" />
+                <path d="M 48 70 Q 52 58, 62 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span class="drawer-brand-title">Darna | دارنا</span>
+          </div>
+          <button type="button" class="drawer-close-btn" (click)="closeMobileMenu()" [attr.aria-label]="i18n.t('action.close')">
+            ✕
+          </button>
+        </div>
+
+        <div class="drawer-links-list">
+          <a routerLink="/home" (click)="closeMobileMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="drawer-link-item">
+            <span class="drawer-link-icon">🏠</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.home') }}</span>
+          </a>
+          <a routerLink="/catalog" (click)="closeMobileMenu()" routerLinkActive="active" class="drawer-link-item">
+            <span class="drawer-link-icon">🛍️</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.catalog') }}</span>
+            <span class="drawer-pill-badge">{{ catalogService.items().length }}</span>
+          </a>
+          <a routerLink="/my-list" (click)="closeMobileMenu()" routerLinkActive="active" class="drawer-link-item">
+            <span class="drawer-link-icon">📋</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.my_list') }}</span>
+            @if (shoppingList.totalItemsCount() > 0) {
+              <span class="drawer-pill-badge badge-primary">{{ shoppingList.totalItemsCount() }}</span>
+            }
+          </a>
+          <a routerLink="/budget" (click)="closeMobileMenu()" routerLinkActive="active" class="drawer-link-item">
+            <span class="drawer-link-icon">💰</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.budget') }}</span>
+          </a>
+          <a routerLink="/timeline" (click)="closeMobileMenu()" routerLinkActive="active" class="drawer-link-item">
+            <span class="drawer-link-icon">📅</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.timeline') }}</span>
+          </a>
+          <a routerLink="/diary" (click)="closeMobileMenu()" routerLinkActive="active" class="drawer-link-item">
+            <span class="drawer-link-icon">💍</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.diary') }}</span>
+            <span class="drawer-pill-badge badge-hot">جديد</span>
+          </a>
+          <a routerLink="/settings" (click)="closeMobileMenu()" routerLinkActive="active" class="drawer-link-item">
+            <span class="drawer-link-icon">⚙️</span>
+            <span class="drawer-link-text">{{ i18n.t('nav.settings') }}</span>
+          </a>
+        </div>
+
+        <div class="drawer-footer-actions">
+          <div class="drawer-section-title">
+            {{ i18n.currentLang() === 'ar' ? 'اللغة' : 'Langue' }}
+          </div>
+          <div class="lang-segmented-bar w-full">
+            <button type="button" class="lang-seg-btn flex-1" [class.active]="i18n.currentLang() === 'fr'" (click)="setLanguage('fr')">
+              Français
+            </button>
+            <button type="button" class="lang-seg-btn flex-1" [class.active]="i18n.currentLang() === 'ar'" (click)="setLanguage('ar')">
+              عربي
+            </button>
+            <button type="button" class="lang-seg-btn flex-1" [class.active]="i18n.currentLang() === 'en'" (click)="setLanguage('en')">
+              English
+            </button>
+          </div>
+
+          @if (pwa.canInstall()) {
+            <button type="button" class="btn btn-primary w-full mt-3" (click)="onInstallClick(); closeMobileMenu()">
+              <span>📲</span>
+              <span>{{ i18n.t('action.install_app') }}</span>
+            </button>
+          }
+        </div>
+      </nav>
+    </div>
+  }
 
   <!-- Main Content Area -->
   <main class="main-content">

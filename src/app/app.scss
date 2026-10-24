@@ -135,9 +135,11 @@
       color: var(--color-text-muted);
       margin-top: 2px;
       font-weight: 600;
-      white-space: nowrap !important;
       line-height: 1.2;
-      display: block !important;
+
+      @media (max-width: 640px) {
+        display: none !important;
+      }
     }
   }
 
@@ -145,8 +147,8 @@
     gap: 8px;
 
     .brand-monogram {
-      width: 35px;
-      height: 35px;
+      width: 36px;
+      height: 36px;
 
       .brand-emblem-svg {
         width: 22px;
@@ -161,13 +163,6 @@
         .brand-arabic {
           font-size: 1.05rem;
         }
-      }
-
-      .brand-tagline {
-        font-size: 0.58rem;
-        letter-spacing: 0.04em;
-        display: block !important;
-        white-space: nowrap !important;
       }
     }
   }
@@ -187,16 +182,11 @@
 
     .brand-text {
       .brand-title {
-        font-size: 1.02rem;
+        font-size: 1.05rem;
 
         .brand-arabic {
-          font-size: 0.95rem;
+          font-size: 0.98rem;
         }
-      }
-
-      .brand-tagline {
-        font-size: 0.52rem;
-        letter-spacing: 0.02em;
       }
     }
   }
@@ -708,23 +698,221 @@
   }
 }
 
-/* Mobile Bottom Navigation Bar (Modern Monochrome & Symbolic) */
+/* Mobile Menu Hamburger Button */
+.mobile-menu-toggle-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s ease;
+
+  @media (max-width: 860px) {
+    display: flex;
+  }
+
+  .hamburger-bar {
+    width: 20px;
+    height: 2px;
+    background: var(--color-text-main);
+    border-radius: 2px;
+    transition: all 0.2s ease;
+  }
+
+  &.active {
+    background: var(--color-surface-hover);
+    border-color: var(--color-primary);
+    .hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger-bar:nth-child(2) { opacity: 0; }
+    .hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+}
+
+/* Mobile Drawer Menu (Slide-Over from Start) */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 24, 22, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  display: flex;
+}
+
+.mobile-drawer-card {
+  width: 320px;
+  max-width: 86vw;
+  height: 100%;
+  background: var(--color-surface);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  animation: slideDrawer 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+
+    .drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .drawer-monogram {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-sm);
+        background: var(--color-primary-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-primary);
+
+        svg { width: 22px; height: 22px; }
+      }
+
+      .drawer-brand-title {
+        font-family: var(--font-serif);
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  .drawer-links-list {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 10px;
+    gap: 4px;
+    flex: 1;
+
+    .drawer-link-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+      text-decoration: none;
+      transition: all 0.18s;
+
+      .drawer-link-icon {
+        font-size: 1.2rem;
+      }
+
+      .drawer-link-text {
+        flex: 1;
+      }
+
+      .drawer-pill-badge {
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: var(--radius-full);
+        background: var(--color-surface-subtle);
+        color: var(--color-text-muted);
+
+        &.badge-primary {
+          background: var(--color-primary);
+          color: #FFFFFF;
+        }
+
+        &.badge-hot {
+          background: #E8F5E9;
+          color: #2E7D32;
+        }
+      }
+
+      &:hover, &:active {
+        background: var(--color-surface-hover);
+        color: var(--color-primary);
+      }
+
+      &.active {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        font-weight: 700;
+      }
+    }
+  }
+
+  .drawer-footer-actions {
+    padding: 16px 18px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-subtle);
+
+    .drawer-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+@keyframes slideDrawer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+[dir="rtl"] .mobile-drawer-card {
+  animation: slideDrawerRtl 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDrawerRtl {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Mobile Bottom Navigation Bar (Modern Touch-Friendly Horizontal Swipe) */
 .mobile-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 500;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--color-border);
   display: flex;
-  justify-content: space-around;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
   align-items: center;
-  height: 60px;
+  height: 62px;
   padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -4px 16px rgba(40, 35, 33, 0.05);
+  box-shadow: 0 -4px 16px rgba(40, 35, 33, 0.06);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media (min-width: 860px) {
     display: none;
@@ -735,15 +923,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex: 1;
+    min-width: 56px;
+    flex: 1 0 auto;
     height: 100%;
     color: var(--color-text-muted);
     text-decoration: none;
-    font-size: 0.69rem;
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1.15;
     position: relative;
+    padding: 0 4px;
     transition: color 0.15s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 
     .mob-icon {
       display: flex;
@@ -755,6 +947,8 @@
 
       svg {
         stroke: currentColor;
+        width: 20px;
+        height: 20px;
       }
     }
 
@@ -763,16 +957,16 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 90%;
+      max-width: 100%;
     }
 
-    /* Active: Pure modern dark neutral contrast, NOT colored! */
+    /* Active: Primary burgundy brand accent */
     &.active {
-      color: #1F1B19;
+      color: var(--color-primary);
       font-weight: 700;
 
       .mob-icon {
-        color: #1F1B19;
+        color: var(--color-primary);
         transform: translateY(-1px);
 
         svg {
@@ -784,20 +978,20 @@
         content: '';
         position: absolute;
         bottom: 3px;
-        width: 12px;
-        height: 2px;
-        background: #1F1B19;
+        width: 14px;
+        height: 2.5px;
+        background: var(--color-primary);
         border-radius: var(--radius-full);
       }
     }
 
     .mob-counter {
       position: absolute;
-      top: 5px;
-      inset-inline-end: calc(50% - 16px);
-      background: #1F1B19; // Modern monochrome, not colored!
+      top: 4px;
+      inset-inline-end: calc(50% - 15px);
+      background: var(--color-primary);
       color: #FFFFFF;
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       font-weight: 800;
       padding: 1px 5px;
       border-radius: var(--radius-full);

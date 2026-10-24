@@ -197,18 +197,29 @@ import { ToastService } from '../../services/toast.service';
       }
 
       .close-btn {
-        background: transparent;
-        border: none;
-        font-size: 1.2rem;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        background: #FFFFFF;
+        border: 1px solid var(--color-border);
+        font-size: 1.15rem;
         color: var(--color-text-muted);
         cursor: pointer;
-        padding: 4px 8px;
-        border-radius: var(--radius-sm);
-        transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-full);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
 
-        &:hover {
+        &:hover, &:active {
           background: var(--color-surface-hover);
-          color: var(--color-text-main);
+          border-color: var(--color-primary);
+          color: var(--color-primary);
         }
       }
     }
@@ -482,6 +493,62 @@ import { ToastService } from '../../services/toast.service';
         padding: 10px 20px;
         font-weight: 700;
         border-radius: var(--radius-md);
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .modal-backdrop {
+        padding: 0;
+        align-items: flex-end;
+      }
+
+      .modal-card {
+        border-radius: 24px 24px 0 0;
+        max-height: 92dvh;
+        width: 100%;
+        max-width: 100%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-inline: none;
+        border-bottom: none;
+
+        &::before {
+          content: '';
+          display: block;
+          width: 40px;
+          height: 4px;
+          border-radius: 99px;
+          background: var(--color-border-strong);
+          margin: 10px auto 4px auto;
+          opacity: 0.75;
+        }
+      }
+
+      .modal-header {
+        padding: 12px 16px;
+      }
+
+      .modal-body {
+        padding: 14px 14px max(24px, env(safe-area-inset-bottom, 24px)) 14px;
+        gap: 14px;
+      }
+
+      .traditions-layout {
+        gap: 14px;
+      }
+
+      .regions-list {
+        max-height: 190px;
+      }
+
+      .region-action-bar {
+        .btn {
+          width: 100%;
+          min-height: 48px;
+          justify-content: center;
+        }
       }
     }
 

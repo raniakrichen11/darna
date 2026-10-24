@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { I18nService } from './services/i18n.service';
@@ -27,6 +27,16 @@ export class App {
   timelineService = inject(TimelineService);
   pwa = inject(PwaService);
   toast = inject(ToastService);
+
+  mobileMenuOpen = signal<boolean>(false);
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.set(!this.mobileMenuOpen());
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
 
   toggleLanguage(): void {
     const current = this.i18n.currentLang();

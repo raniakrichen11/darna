@@ -573,10 +573,61 @@ import { AppLanguage } from '../../models/user-preferences.model';
     @media (max-width: 520px) {
       .onboarding-card {
         padding: 24px 16px;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 20px;
+        max-height: 92dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       .lang-selection-grid {
         grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .step-footer-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+
+        .btn {
+          width: 100%;
+          min-height: 48px;
+        }
+      }
+
+      .pill-options-grid {
+        gap: 6px;
+      }
+
+      .pill-option {
+        font-size: 0.78rem;
+        padding: 7px 10px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .budget-presets-row {
+        flex-wrap: wrap;
+        gap: 6px;
+
+        .preset-btn {
+          min-height: 36px;
+          touch-action: manipulation;
+        }
+      }
+
+      .lang-choice-card {
+        padding: 10px 12px;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+
+        .flag-icon {
+          font-size: 1.3rem;
+        }
       }
     }
   `]

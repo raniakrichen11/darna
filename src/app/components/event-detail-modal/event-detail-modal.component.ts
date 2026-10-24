@@ -575,18 +575,28 @@ import { ToastService } from '../../services/toast.service';
       }
 
       .close-btn {
-        background: transparent;
-        border: none;
-        font-size: 1.2rem;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: var(--radius-full);
+        background: var(--color-surface-hover);
+        border: 1px solid var(--color-border);
+        font-size: 1.25rem;
+        font-weight: 700;
         color: var(--color-text-muted);
         cursor: pointer;
-        padding: 4px 8px;
-        border-radius: var(--radius-sm);
-        transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        transition: all 0.2s ease;
 
-        &:hover {
-          background: var(--color-surface-hover);
-          color: var(--color-text-main);
+        &:hover, &:active {
+          background: #FFFFFF;
+          color: var(--color-primary);
+          border-color: var(--color-primary);
         }
       }
     }
@@ -598,6 +608,12 @@ import { ToastService } from '../../services/toast.service';
       padding: 0 12px;
       gap: 4px;
       overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .tab-btn {
         padding: 11px 14px;
@@ -635,6 +651,50 @@ import { ToastService } from '../../services/toast.service';
       padding: 20px 22px;
       overflow-y: auto;
       flex: 1;
+
+      @media (max-width: 600px) {
+        padding: 16px 14px;
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .modal-card {
+        border-radius: 24px 24px 0 0 !important;
+        margin: 0 !important;
+        max-height: 92vh !important;
+        max-height: 92dvh !important;
+      }
+
+      .modal-header {
+        padding: 14px 16px;
+
+        .header-main {
+          gap: 10px;
+
+          .event-icon-badge {
+            font-size: 1.5rem;
+          }
+
+          .event-title-wrap {
+            .event-title {
+              font-size: 1.15rem;
+            }
+          }
+        }
+      }
+
+      .quick-add-task-box {
+        flex-direction: column;
+
+        .add-task-input,
+        .select-assignee,
+        .add-task-date,
+        .btn {
+          width: 100% !important;
+          min-height: 42px;
+        }
+      }
     }
 
     /* TAB 1: OVERVIEW */

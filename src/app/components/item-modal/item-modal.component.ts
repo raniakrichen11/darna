@@ -298,20 +298,32 @@ import { I18nService } from '../../services/i18n.service';
       }
     }
 
-    @media (max-width: 540px) {
+    @media (max-width: 600px) {
       .modal-header {
         margin-bottom: var(--space-md);
         padding-bottom: var(--space-sm);
       }
 
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+
+        .col-qty, .col-price, .col-priority, .flex-1 {
+          flex: unset;
+          width: 100%;
+        }
+      }
+
       .modal-actions {
         flex-direction: column-reverse;
-        gap: 8px;
+        gap: 10px;
         margin-top: var(--space-lg);
 
         .btn {
           width: 100%;
+          min-height: 48px;
           justify-content: center;
+          font-size: 0.95rem;
         }
       }
     }

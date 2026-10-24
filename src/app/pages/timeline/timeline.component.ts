@@ -622,6 +622,45 @@ import { TimelineStage, TimelineTask } from '../../models/timeline.model';
     }
 
     /* Modal Styling */
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+
+      h2 {
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        margin: 0;
+      }
+
+      .close-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        border-radius: var(--radius-full);
+        background: var(--color-surface-hover);
+        border: 1px solid var(--color-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        color: var(--color-text-main);
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        flex-shrink: 0;
+
+        &:hover, &:active {
+          background: #FFFFFF;
+          border-color: var(--color-primary);
+          color: var(--color-primary);
+        }
+      }
+    }
+
     .input-custom {
       width: 100%;
       padding: 10px 14px;
@@ -643,6 +682,16 @@ import { TimelineStage, TimelineTask } from '../../models/timeline.model';
       justify-content: flex-end;
       gap: 12px;
       margin-top: 20px;
+
+      @media (max-width: 580px) {
+        flex-direction: column-reverse;
+
+        .btn {
+          width: 100%;
+          min-height: 48px;
+          justify-content: center;
+        }
+      }
     }
   `]
 })
